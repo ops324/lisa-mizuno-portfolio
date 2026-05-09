@@ -4,18 +4,25 @@ const bioEn = document.getElementById('bio-en');
 const bioJp = document.getElementById('bio-jp');
 let currentLang = 'en';
 
+function setLang(lang) {
+  currentLang = lang;
+  const isJp = lang === 'jp';
+
+  // Bio toggle
+  bioEn.classList.toggle('active', !isJp);
+  bioJp.classList.toggle('active', isJp);
+
+  // Toggle button label
+  langToggle.textContent = isJp ? 'JP / EN' : 'EN / JP';
+
+  // Nav links + section labels with data-en / data-jp
+  document.querySelectorAll('[data-en][data-jp]').forEach(el => {
+    el.textContent = isJp ? el.dataset.jp : el.dataset.en;
+  });
+}
+
 langToggle.addEventListener('click', () => {
-  if (currentLang === 'en') {
-    bioEn.classList.remove('active');
-    bioJp.classList.add('active');
-    currentLang = 'jp';
-    langToggle.textContent = 'JP / EN';
-  } else {
-    bioJp.classList.remove('active');
-    bioEn.classList.add('active');
-    currentLang = 'en';
-    langToggle.textContent = 'EN / JP';
-  }
+  setLang(currentLang === 'en' ? 'jp' : 'en');
 });
 
 // Nav scroll effect

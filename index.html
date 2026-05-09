@@ -5,6 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LISA MIZUNO — DJ · ARTIST</title>
   <meta name="description" content="LISA MIZUNO is a DJ and artist based in Tokyo. Organizer of the Resonance event series." />
+
+  <!-- Favicon -->
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+
+  <!-- OGP / SNS -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://ops324.github.io/lisa-mizuno-portfolio/" />
+  <meta property="og:title" content="LISA MIZUNO — DJ · ARTIST" />
+  <meta property="og:description" content="LISA MIZUNO is a DJ and artist based in Tokyo. Organizer of the Resonance event series." />
+  <meta property="og:image" content="https://ops324.github.io/lisa-mizuno-portfolio/images/lisa-photo-web.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="LISA MIZUNO — DJ · ARTIST" />
+  <meta name="twitter:description" content="LISA MIZUNO is a DJ and artist based in Tokyo. Organizer of the Resonance event series." />
+  <meta name="twitter:image" content="https://ops324.github.io/lisa-mizuno-portfolio/images/lisa-photo-web.jpg" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Noto+Sans+JP:wght@300;400;700&display=swap" rel="stylesheet" />
@@ -16,9 +31,9 @@
   <nav id="nav">
     <a href="#" class="nav-logo">LISA MIZUNO</a>
     <div class="nav-links">
-      <a href="#about">About</a>
-      <a href="#music">Music</a>
-      <a href="#connect">Connect</a>
+      <a href="#about" data-en="About" data-jp="プロフィール">About</a>
+      <a href="#music" data-en="Music" data-jp="音楽">Music</a>
+      <a href="#connect" data-en="Connect" data-jp="リンク">Connect</a>
       <button class="lang-toggle" id="langToggle" aria-label="Toggle language">EN / JP</button>
     </div>
   </nav>
@@ -26,7 +41,7 @@
   <!-- Hero Section -->
   <section id="hero">
     <div class="hero-image">
-      <img src="imade/lisa-photo-web.jpg" alt="Lisa Mizuno" />
+      <img src="images/lisa-photo-web.jpg" alt="Lisa Mizuno" />
     </div>
     <div class="hero-text">
       <h1 class="hero-name">LISA<br />MIZUNO</h1>
@@ -39,7 +54,7 @@
 
   <!-- About Section -->
   <section id="about">
-    <div class="section-label fade-in">About</div>
+    <div class="section-label fade-in" data-en="About" data-jp="プロフィール">About</div>
     <div class="about-content fade-in">
 
       <div class="bio en active" id="bio-en">
@@ -59,7 +74,7 @@
 
   <!-- Music Section -->
   <section id="music">
-    <div class="section-label fade-in">Music</div>
+    <div class="section-label fade-in" data-en="Music" data-jp="音楽">Music</div>
     <div class="music-content fade-in">
       <iframe
         width="100%"
@@ -75,18 +90,18 @@
 
   <!-- Connect Section -->
   <section id="connect">
-    <div class="section-label fade-in">Connect</div>
+    <div class="section-label fade-in" data-en="Connect" data-jp="リンク">Connect</div>
     <div class="connect-links fade-in">
       <a href="https://linktr.ee/Lisa.m1026" target="_blank" rel="noopener noreferrer" class="connect-item">
-        <span class="connect-name">Linktree</span>
+        <span class="connect-name" data-en="Booking &amp; Info" data-jp="ブッキング・お問い合わせ">Booking &amp; Info</span>
         <span class="connect-arrow">→</span>
       </a>
       <a href="https://soundcloud.com/lisamizuno" target="_blank" rel="noopener noreferrer" class="connect-item">
-        <span class="connect-name">SoundCloud</span>
+        <span class="connect-name" data-en="SoundCloud" data-jp="SoundCloud">SoundCloud</span>
         <span class="connect-arrow">→</span>
       </a>
       <a href="https://ra.co/dj/lisamizuno" target="_blank" rel="noopener noreferrer" class="connect-item">
-        <span class="connect-name">Resident Advisor</span>
+        <span class="connect-name" data-en="Resident Advisor" data-jp="Resident Advisor">Resident Advisor</span>
         <span class="connect-arrow">→</span>
       </a>
     </div>
