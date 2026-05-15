@@ -97,6 +97,7 @@ body {
 /* ─── HERO ─── */
 #hero {
   height: 100vh;
+  height: 100dvh;
   display: grid;
   grid-template-columns: 1fr 1fr;
   position: relative;
@@ -339,16 +340,24 @@ footer p {
 @media (max-width: 900px) {
   #hero {
     grid-template-columns: 1fr;
+    height: 100vh;
+    height: 100dvh;
+    grid-template-rows: 65dvh 1fr;
   }
 
   .hero-image {
-    height: 55vh;
+    height: 65vh;
+    height: 65dvh;
+  }
+
+  .hero-image img {
+    object-position: center 20%;
   }
 
   .hero-text {
     height: auto;
-    padding: 3.5rem 2.5rem;
-    justify-content: flex-start;
+    padding: 2.5rem 2.5rem;
+    justify-content: center;
   }
 
   .hero-name {
@@ -382,7 +391,8 @@ footer p {
   }
 
   .hero-image {
-    height: 50vh;
+    height: 65vh;
+    height: 65dvh;
   }
 
   .works-grid {
