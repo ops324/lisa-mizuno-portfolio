@@ -165,7 +165,7 @@ body {
 
 /* ─── SHARED SECTION STYLES ─── */
 #about,
-#music,
+#works,
 #connect {
   max-width: 840px;
   margin: 0 auto;
@@ -212,10 +212,30 @@ body {
   line-height: 2.1;
 }
 
-/* ─── MUSIC ─── */
-.music-content {
-  background: #f7f7f7;
-  overflow: hidden;
+/* ─── WORKS ─── */
+.works-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 3rem 2.5rem;
+  align-items: center;
+}
+
+.works-logo-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.works-logo-item img {
+  width: 100%;
+  max-height: 40px;
+  object-fit: contain;
+  filter: grayscale(100%);
+  transition: filter 0.3s ease;
+}
+
+.works-logo-item img:hover {
+  filter: grayscale(0%);
 }
 
 /* ─── CONNECT ─── */
@@ -235,8 +255,21 @@ body {
   transition: padding-left 0.35s ease;
 }
 
-.connect-item:first-child {
+.connect-category:first-child .connect-item:first-child {
   border-top: 1px solid var(--border);
+}
+
+.connect-category-label {
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--text-sub);
+  padding-bottom: 0.5rem;
+}
+
+.connect-category + .connect-category {
+  margin-top: 2.5rem;
 }
 
 .connect-item:hover {
@@ -313,8 +346,14 @@ footer {
 
   #about,
   #music,
+  #works,
   #connect {
     padding: 5rem 1.5rem;
+  }
+
+  .works-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem 2rem;
   }
 }
 
@@ -325,5 +364,10 @@ footer {
 
   .hero-image {
     height: 50vh;
+  }
+
+  .works-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem 1.5rem;
   }
 }
