@@ -9,7 +9,7 @@
   --text: #1a1714;
   --text-sub: #8a7f76;
   --border: #d9d0c6;
-  --accent: #b89a6e;
+
   --font-en: 'Space Grotesk', sans-serif;
   --font-serif: 'Cormorant Garamond', serif;
   --font-jp: 'Noto Sans JP', sans-serif;
@@ -82,7 +82,7 @@ body {
   left: 0;
   width: 0;
   height: 1px;
-  background: var(--accent);
+  background: var(--text);
   transition: width 0.4s ease;
 }
 
@@ -144,7 +144,7 @@ body {
   font-weight: 400;
   letter-spacing: 0.45em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--text-sub);
 }
 
 .scroll-indicator {
@@ -161,7 +161,7 @@ body {
   display: block;
   width: 1px;
   height: 60px;
-  background: var(--accent);
+  background: var(--text-sub);
   animation: scrollLine 2.4s ease-in-out infinite;
   transform-origin: top;
   opacity: 0.7;
@@ -192,8 +192,8 @@ body {
   color: var(--text-sub);
   margin-bottom: 3.8rem;
   padding-bottom: 1.2rem;
-  border-bottom: 1px solid var(--accent);
-  opacity: 0.9;
+  border-bottom: 1px solid var(--border);
+  opacity: 1;
 }
 
 /* ─── ABOUT ─── */
@@ -232,7 +232,7 @@ body {
   font-size: 1.1rem;
   font-weight: 400;
   letter-spacing: 0.2em;
-  color: var(--accent);
+  color: var(--text);
   margin-bottom: 2rem;
 }
 
@@ -285,7 +285,7 @@ body {
 
 .connect-item:hover {
   padding-left: 1rem;
-  border-bottom-color: var(--accent);
+  border-bottom-color: var(--text);
 }
 
 .connect-category-label {
@@ -316,7 +316,7 @@ body {
 
 .connect-item:hover .connect-arrow {
   transform: translateX(0.5rem);
-  color: var(--accent);
+  color: var(--text);
 }
 
 /* ─── FOOTER ─── */
@@ -330,7 +330,7 @@ footer p {
   font-family: var(--font-serif);
   font-size: 0.8rem;
   letter-spacing: 0.18em;
-  color: var(--accent);
+  color: var(--text-sub);
   opacity: 0.8;
 }
 
