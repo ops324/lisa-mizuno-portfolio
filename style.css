@@ -97,7 +97,7 @@ body {
 /* ─── HERO ─── */
 #hero {
   height: 100vh;
-  height: 100dvh;
+  height: calc(var(--vh, 1vh) * 100);
   display: grid;
   grid-template-columns: 1fr 1fr;
   position: relative;
@@ -341,13 +341,12 @@ footer p {
   #hero {
     grid-template-columns: 1fr;
     height: 100vh;
-    height: 100dvh;
-    grid-template-rows: 65dvh 1fr;
+    height: calc(var(--vh, 1vh) * 100);
+    grid-template-rows: 65% 35%;
   }
 
   .hero-image {
-    height: 65vh;
-    height: 65dvh;
+    height: auto;
   }
 
   .hero-image img {
@@ -358,6 +357,7 @@ footer p {
     height: auto;
     padding: 2.5rem 2.5rem;
     justify-content: center;
+    overflow: hidden;
   }
 
   .hero-name {
@@ -391,8 +391,7 @@ footer p {
   }
 
   .hero-image {
-    height: 65vh;
-    height: 65dvh;
+    height: auto;
   }
 
   .works-grid {
