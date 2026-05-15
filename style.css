@@ -5,11 +5,13 @@
 }
 
 :root {
-  --bg: #ffffff;
-  --text: #111111;
-  --text-sub: #666666;
-  --border: #e0e0e0;
+  --bg: #faf8f4;
+  --text: #1a1714;
+  --text-sub: #8a7f76;
+  --border: #d9d0c6;
+  --accent: #b89a6e;
   --font-en: 'Space Grotesk', sans-serif;
+  --font-serif: 'Cormorant Garamond', serif;
   --font-jp: 'Noto Sans JP', sans-serif;
 }
 
@@ -35,12 +37,12 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 3rem;
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  padding: 1.6rem 3rem;
+  background: rgba(250, 248, 244, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid transparent;
-  transition: border-color 0.3s;
+  transition: border-color 0.4s;
 }
 
 #nav.scrolled {
@@ -48,9 +50,10 @@ body {
 }
 
 .nav-logo {
-  font-size: 0.8rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
+  font-family: var(--font-serif);
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.25em;
   text-decoration: none;
   color: var(--text);
 }
@@ -58,38 +61,37 @@ body {
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 2.5rem;
+  gap: 2.8rem;
 }
 
 .nav-links a {
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   font-weight: 400;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
   text-decoration: none;
   color: var(--text-sub);
-  transition: color 0.2s;
+  transition: color 0.4s;
+  position: relative;
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--accent);
+  transition: width 0.4s ease;
 }
 
 .nav-links a:hover {
   color: var(--text);
 }
 
-.lang-toggle {
-  font-family: var(--font-en);
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  background: none;
-  border: 1px solid var(--text);
-  color: var(--text);
-  padding: 0.4rem 1rem;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s;
-}
-
-.lang-toggle:hover {
-  background: var(--text);
-  color: var(--bg);
+.nav-links a:hover::after {
+  width: 100%;
 }
 
 /* ─── HERO ─── */
@@ -111,30 +113,38 @@ body {
   height: 100%;
   object-fit: cover;
   object-position: center top;
-  filter: grayscale(100%);
+  filter: grayscale(100%) brightness(0.96);
   display: block;
+  transition: filter 1.2s ease;
+}
+
+.hero-image:hover img {
+  filter: grayscale(60%) brightness(0.98);
 }
 
 .hero-text {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 0 5rem 0 4rem;
+  padding: 0 5rem 0 4.5rem;
 }
 
 .hero-name {
-  font-size: clamp(3.5rem, 6.5vw, 7.5rem);
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  line-height: 0.95;
-  margin-bottom: 2rem;
+  font-family: var(--font-serif);
+  font-size: clamp(4rem, 7vw, 8.5rem);
+  font-weight: 300;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  margin-bottom: 2.2rem;
+  color: var(--text);
 }
 
 .hero-title {
-  font-size: 0.8rem;
+  font-size: 0.72rem;
   font-weight: 400;
-  letter-spacing: 0.35em;
-  color: var(--text-sub);
+  letter-spacing: 0.45em;
+  text-transform: uppercase;
+  color: var(--accent);
 }
 
 .scroll-indicator {
@@ -150,16 +160,17 @@ body {
 .scroll-indicator span {
   display: block;
   width: 1px;
-  height: 64px;
-  background: var(--text);
-  animation: scrollLine 2s ease-in-out infinite;
+  height: 60px;
+  background: var(--accent);
+  animation: scrollLine 2.4s ease-in-out infinite;
   transform-origin: top;
+  opacity: 0.7;
 }
 
 @keyframes scrollLine {
   0%   { transform: scaleY(0); opacity: 0; }
-  30%  { opacity: 1; }
-  70%  { transform: scaleY(1); opacity: 1; }
+  30%  { opacity: 0.7; }
+  70%  { transform: scaleY(1); opacity: 0.7; }
   100% { transform: scaleY(1); opacity: 0; }
 }
 
@@ -167,20 +178,22 @@ body {
 #about,
 #works,
 #connect {
-  max-width: 840px;
+  max-width: 860px;
   margin: 0 auto;
-  padding: 8rem 3rem;
+  padding: 9rem 3rem;
 }
 
 .section-label {
-  font-size: 0.68rem;
-  font-weight: 500;
-  letter-spacing: 0.3em;
+  font-family: var(--font-serif);
+  font-size: 0.82rem;
+  font-weight: 400;
+  letter-spacing: 0.35em;
   text-transform: uppercase;
   color: var(--text-sub);
-  margin-bottom: 3.5rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--border);
+  margin-bottom: 3.8rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid var(--accent);
+  opacity: 0.9;
 }
 
 /* ─── ABOUT ─── */
@@ -193,10 +206,11 @@ body {
 }
 
 .bio p {
-  font-size: 1.05rem;
-  line-height: 1.95;
+  font-size: 1.02rem;
+  line-height: 2.05;
   color: var(--text);
-  margin-bottom: 1.8rem;
+  margin-bottom: 2rem;
+  font-weight: 300;
 }
 
 .bio p:last-child {
@@ -208,23 +222,25 @@ body {
 }
 
 .bio.jp p {
-  font-size: 1rem;
-  line-height: 2.1;
+  font-size: 0.97rem;
+  line-height: 2.2;
+  font-weight: 300;
 }
 
 .bio-name {
-  font-size: 0.8rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--text-sub);
-  margin-bottom: 1.6rem;
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+  margin-bottom: 2rem;
 }
 
 /* ─── WORKS ─── */
 .works-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 3rem 2.5rem;
+  gap: 3.5rem 3rem;
   align-items: center;
 }
 
@@ -236,14 +252,14 @@ body {
 
 .works-logo-item img {
   width: 100%;
-  max-height: 40px;
+  max-height: 38px;
   object-fit: contain;
-  filter: grayscale(100%);
-  transition: filter 0.3s ease;
+  filter: grayscale(100%) opacity(0.5);
+  transition: filter 0.5s ease;
 }
 
 .works-logo-item img:hover {
-  filter: grayscale(0%);
+  filter: grayscale(0%) opacity(1);
 }
 
 /* ─── CONNECT ─── */
@@ -256,49 +272,51 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.6rem 0;
+  padding: 1.7rem 0;
   border-bottom: 1px solid var(--border);
   text-decoration: none;
   color: var(--text);
-  transition: padding-left 0.35s ease;
+  transition: padding-left 0.4s ease, border-color 0.4s ease;
 }
 
 .connect-category:first-child .connect-item:first-child {
   border-top: 1px solid var(--border);
 }
 
+.connect-item:hover {
+  padding-left: 1rem;
+  border-bottom-color: var(--accent);
+}
+
 .connect-category-label {
-  font-size: 0.62rem;
-  font-weight: 500;
-  letter-spacing: 0.28em;
+  font-family: var(--font-serif);
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.3em;
   text-transform: uppercase;
   color: var(--text-sub);
   padding-bottom: 0.5rem;
 }
 
 .connect-category + .connect-category {
-  margin-top: 2.5rem;
-}
-
-.connect-item:hover {
-  padding-left: 1.2rem;
+  margin-top: 2.8rem;
 }
 
 .connect-name {
-  font-size: 1rem;
-  font-weight: 500;
-  letter-spacing: 0.05em;
+  font-size: 0.95rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
 }
 
 .connect-arrow {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: var(--text-sub);
-  transition: transform 0.35s ease, color 0.35s ease;
+  transition: transform 0.4s ease, color 0.4s ease;
 }
 
 .connect-item:hover .connect-arrow {
-  transform: translateX(0.6rem);
-  color: var(--text);
+  transform: translateX(0.5rem);
+  color: var(--accent);
 }
 
 /* ─── FOOTER ─── */
@@ -306,16 +324,21 @@ footer {
   border-top: 1px solid var(--border);
   padding: 3rem;
   text-align: center;
-  font-size: 0.72rem;
-  letter-spacing: 0.12em;
-  color: var(--text-sub);
+}
+
+footer p {
+  font-family: var(--font-serif);
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  opacity: 0.8;
 }
 
 /* ─── FADE IN ─── */
 .fade-in {
   opacity: 0;
-  transform: translateY(24px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
+  transform: translateY(16px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
 }
 
 .fade-in.visible {
@@ -340,8 +363,8 @@ footer {
   }
 
   .hero-name {
-    font-size: clamp(3rem, 14vw, 5.5rem);
-    margin-bottom: 1.2rem;
+    font-size: clamp(3.5rem, 14vw, 6rem);
+    margin-bottom: 1.4rem;
   }
 
   #nav {
@@ -349,19 +372,18 @@ footer {
   }
 
   .nav-links {
-    gap: 1.5rem;
+    gap: 1.8rem;
   }
 
   #about,
-  #music,
   #works,
   #connect {
-    padding: 5rem 1.5rem;
+    padding: 5.5rem 1.5rem;
   }
 
   .works-grid {
     grid-template-columns: repeat(3, 1fr);
-    gap: 2.5rem 2rem;
+    gap: 2.8rem 2rem;
   }
 }
 
