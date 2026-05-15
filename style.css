@@ -212,6 +212,14 @@ body {
   line-height: 2.1;
 }
 
+.bio-name {
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-sub);
+  margin-bottom: 1.6rem;
+}
+
 /* ─── WORKS ─── */
 .works-grid {
   display: grid;
