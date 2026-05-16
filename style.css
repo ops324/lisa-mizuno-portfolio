@@ -185,8 +185,8 @@ body {
 }
 
 .section-label {
-  font-family: var(--font-serif);
-  font-size: 0.82rem;
+  font-family: var(--font-en);
+  font-size: 0.75rem;
   font-weight: 400;
   letter-spacing: 0.35em;
   text-transform: uppercase;
@@ -211,7 +211,7 @@ body {
   line-height: 2.05;
   color: var(--text);
   margin-bottom: 2rem;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 .bio p:last-child {
@@ -304,7 +304,7 @@ body {
 }
 
 .connect-name {
-  font-family: var(--font-serif);
+  font-family: var(--font-serif), var(--font-jp);
   font-size: 1.1rem;
   font-weight: 400;
   letter-spacing: 0.08em;
