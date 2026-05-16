@@ -15,6 +15,11 @@
   --font-jp: 'Noto Sans JP', sans-serif;
 }
 
+::selection {
+  background: var(--text);
+  color: var(--bg);
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -25,6 +30,7 @@ body {
   font-family: var(--font-en);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  counter-reset: section-index;
 }
 
 /* ─── NAV ─── */
@@ -187,7 +193,7 @@ body {
 .section-label {
   font-family: var(--font-en);
   font-size: 0.75rem;
-  font-weight: 400;
+  font-weight: 500;
   letter-spacing: 0.35em;
   text-transform: uppercase;
   color: var(--text-sub);
@@ -195,6 +201,21 @@ body {
   padding-bottom: 1.2rem;
   border-bottom: 1px solid var(--border);
   opacity: 1;
+  display: flex;
+  align-items: baseline;
+  gap: 1.3rem;
+  counter-increment: section-index;
+}
+
+.section-label::before {
+  content: "0" counter(section-index);
+  font-size: 0.55rem;
+  letter-spacing: 0.1em;
+  font-weight: 400;
+  color: var(--text-sub);
+  opacity: 0.45;
+  flex-shrink: 0;
+  text-transform: none;
 }
 
 /* ─── ABOUT ─── */
@@ -208,7 +229,7 @@ body {
 
 .bio p {
   font-size: 1.02rem;
-  line-height: 2.05;
+  line-height: 1.85;
   color: var(--text);
   margin-bottom: 2rem;
   font-weight: 400;
@@ -224,7 +245,7 @@ body {
 
 .bio.jp p {
   font-size: 0.97rem;
-  line-height: 2.2;
+  line-height: 2.0;
   font-weight: 300;
 }
 
@@ -289,6 +310,23 @@ body {
   border-bottom-color: var(--text);
 }
 
+.connect-item::after {
+  content: '↗';
+  font-family: var(--font-en);
+  font-size: 0.72rem;
+  color: var(--text-sub);
+  opacity: 0;
+  transform: translate(-4px, 4px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.connect-item:hover::after {
+  opacity: 0.5;
+  transform: translate(0, 0);
+}
+
 .connect-category-label {
   font-family: var(--font-en);
   font-size: 0.62rem;
@@ -310,6 +348,11 @@ body {
   letter-spacing: 0.08em;
 }
 
+/* Works: center the orphaned last item in a 4-col grid */
+.works-logo-item:last-child:nth-child(4n + 1) {
+  grid-column: 2 / 4;
+}
+
 /* ─── FOOTER ─── */
 footer {
   border-top: 1px solid var(--border);
@@ -323,6 +366,23 @@ footer p {
   letter-spacing: 0.18em;
   color: var(--text-sub);
   opacity: 0.8;
+}
+
+/* ─── HERO SCROLL CUE ─── */
+#hero::after {
+  content: 'scroll';
+  position: absolute;
+  bottom: 2.8rem;
+  right: 3.5rem;
+  font-family: var(--font-en);
+  font-size: 0.58rem;
+  font-weight: 400;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--text-sub);
+  opacity: 0.45;
+  writing-mode: vertical-rl;
+  pointer-events: none;
 }
 
 /* ─── FADE IN ─── */
@@ -384,6 +444,19 @@ footer p {
     grid-template-columns: repeat(3, 1fr);
     gap: 2.8rem 2rem;
   }
+
+  /* Reset desktop orphan rule, apply 3-col orphan rule */
+  .works-logo-item:last-child:nth-child(4n + 1) {
+    grid-column: auto;
+  }
+
+  .works-logo-item:last-child:nth-child(3n + 1) {
+    grid-column: 2 / 3;
+  }
+
+  #hero::after {
+    display: none;
+  }
 }
 
 @media (max-width: 480px) {
@@ -398,5 +471,10 @@ footer p {
   .works-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 2rem 1.5rem;
+  }
+
+  .works-logo-item:last-child:nth-child(3n + 1),
+  .works-logo-item:last-child:nth-child(4n + 1) {
+    grid-column: auto;
   }
 }
