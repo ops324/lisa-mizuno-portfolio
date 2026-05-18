@@ -286,7 +286,7 @@ body {
 
 .works-logo-item--dommune {
   flex-direction: row;
-  gap: 0.4rem;
+  gap: 0.25rem;
 }
 
 .works-logo-item--dommune img {
@@ -295,12 +295,12 @@ body {
 }
 
 .dommune-icon {
-  height: 44px;
+  height: 30px;
   flex-shrink: 0;
 }
 
 .dommune-text {
-  height: 28px;
+  height: 38px;
 }
 
 /* ─── CONNECT ─── */
