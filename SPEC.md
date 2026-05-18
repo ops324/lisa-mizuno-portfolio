@@ -75,10 +75,12 @@ images/
 - Full-bleed dark section (`background: #111009`)
 - **Block 1** (`dj-portrait.jpg`): `height: 90vh`, vertical parallax via GSAP ScrollTrigger
   - Ghost counter `"01"` overlaid, Cormorant Garamond `clamp(12rem, 22vw, 28rem)`, `3% opacity`, parallaxes upward independently
-  - Editorial meta row bottom-left: `01 ── Tokyo · 2024`
+  - Editorial meta row bottom-left: `01 ── raster.focus Asia tour`
 - **Block 2** (`tokyo-node.png`): `height: 75vh`, clip-path reveal from bottom on scroll enter + parallax
-  - Editorial meta row: `02 ── Tokyo Node`
-- Image wrappers `height: 120%` / `top: -10%` to provide parallax travel room
+  - Editorial meta row: `02 ── 攻殻機動隊 Ghost in the Shell — REFLEX 4 / MUTEK.JP`
+- Image wrappers `height: 120%` / `top: -10%` to provide parallax travel room (desktop only)
+- **Mobile (≤900px):** image wrappers reset to `height: 100%; top: 0` — prevents unwanted crop/zoom
+- **Mobile:** GSAP parallax (`yPercent`) disabled; clip-path reveal and meta fade-up run on all devices
 - GSAP 3.12 + ScrollTrigger loaded via CDN
 
 ### Connect
@@ -100,10 +102,10 @@ images/
 |---|---|
 | Fade-in on scroll | `IntersectionObserver` → `.fade-in.visible` (opacity + translateY) |
 | Nav border on scroll | `window.scroll` → `.scrolled` class at 50px |
-| Gallery Image 1 parallax | GSAP `yPercent: 20`, `scrub: true` ScrollTrigger |
-| Ghost counter parallax | GSAP `yPercent: -40`, `scrub: true` ScrollTrigger |
-| Gallery Image 2 clip-path reveal | GSAP `fromTo` `inset(100% 0 0 0)` → `inset(0% 0 0 0)`, `power3.out` |
-| Gallery Image 2 parallax | GSAP `yPercent: 15`, `scrub: true` ScrollTrigger |
+| Gallery Image 1 parallax | GSAP `yPercent: 20`, `scrub: true` ScrollTrigger — desktop only |
+| Ghost counter parallax | GSAP `yPercent: -40`, `scrub: true` ScrollTrigger — desktop only |
+| Gallery Image 2 clip-path reveal | GSAP `fromTo` `inset(100% 0 0 0)` → `inset(0% 0 0 0)`, `power3.out` — all devices |
+| Gallery Image 2 parallax | GSAP `yPercent: 15`, `scrub: true` ScrollTrigger — desktop only |
 | Meta fade-up | GSAP stagger `y: 18 → 0`, `duration: 0.9`, `power2.out` |
 | Logo hover | CSS `filter: grayscale(0%)` transition |
 | Connect link hover | CSS `padding-left` + `::after` opacity |

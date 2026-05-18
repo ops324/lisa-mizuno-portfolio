@@ -639,7 +639,8 @@ footer p {
   right: 0;
   display: flex;
   align-items: center;
-  gap: 1.4rem;
+  flex-wrap: wrap;
+  gap: 0.8rem 1.4rem;
   padding: 1.8rem 3rem;
   background: linear-gradient(to top, rgba(17, 16, 9, 0.72) 0%, transparent 100%);
   z-index: 3;
@@ -676,6 +677,12 @@ footer p {
   .g-block-1 { height: 80vh; }
   .g-block-2 { height: 65vh; }
   .g-meta { padding: 1.4rem 1.5rem; }
+
+  /* Disable parallax travel room on mobile — prevents unwanted crop/zoom */
+  .g-img-wrap {
+    height: 100%;
+    top: 0;
+  }
 }
 
 @media (max-width: 480px) {

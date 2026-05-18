@@ -32,31 +32,48 @@ document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 if (document.getElementById('gallery') && typeof gsap !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 
-  // Image 1 parallax
-  gsap.to(".g-img-1", {
-    yPercent: 20,
-    ease: "none",
-    scrollTrigger: {
-      trigger: ".g-block-1",
-      start: "top bottom",
-      end: "bottom top",
-      scrub: true
-    }
-  });
+  const isDesktop = window.matchMedia('(min-width: 901px)').matches;
 
-  // Ghost counter parallax
-  gsap.to(".g-counter", {
-    yPercent: -40,
-    ease: "none",
-    scrollTrigger: {
-      trigger: ".g-block-1",
-      start: "top bottom",
-      end: "bottom top",
-      scrub: true
-    }
-  });
+  // Parallax only on desktop — mobile uses 100% height images (no crop/zoom)
+  if (isDesktop) {
+    // Image 1 parallax
+    gsap.to(".g-img-1", {
+      yPercent: 20,
+      ease: "none",
+      scrollTrigger: {
+        trigger: ".g-block-1",
+        start: "top bottom",
+        end: "bottom top",
+        scrub: true
+      }
+    });
 
-  // Image 2 clip-path reveal from bottom
+    // Ghost counter parallax
+    gsap.to(".g-counter", {
+      yPercent: -40,
+      ease: "none",
+      scrollTrigger: {
+        trigger: ".g-block-1",
+        start: "top bottom",
+        end: "bottom top",
+        scrub: true
+      }
+    });
+
+    // Image 2 parallax
+    gsap.to(".g-img-2", {
+      yPercent: 15,
+      ease: "none",
+      scrollTrigger: {
+        trigger: ".g-block-2",
+        start: "top bottom",
+        end: "bottom top",
+        scrub: true
+      }
+    });
+  }
+
+  // Image 2 clip-path reveal — all devices
   gsap.fromTo(".g-block-2",
     { clipPath: "inset(100% 0 0 0)" },
     {
@@ -70,19 +87,7 @@ if (document.getElementById('gallery') && typeof gsap !== 'undefined') {
     }
   );
 
-  // Image 2 parallax
-  gsap.to(".g-img-2", {
-    yPercent: 15,
-    ease: "none",
-    scrollTrigger: {
-      trigger: ".g-block-2",
-      start: "top bottom",
-      end: "bottom top",
-      scrub: true
-    }
-  });
-
-  // Meta rows staggered fade-up
+  // Meta rows staggered fade-up — all devices
   gsap.fromTo(".g-meta",
     { opacity: 0, y: 18 },
     {
