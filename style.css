@@ -284,10 +284,27 @@ body {
   filter: grayscale(0%);
 }
 
-/* DOMMUNE: badge/shield layout needs more height */
-.works-logo-item img[alt="DOMMUNE"] {
-  max-height: 56px;
-  mix-blend-mode: multiply; /* removes gray background on cream page */
+.works-logo-item--dommune {
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.works-logo-item--dommune img {
+  width: auto;
+  mix-blend-mode: multiply;
+}
+
+.dommune-icon {
+  height: 44px;
+  flex-shrink: 0;
+}
+
+.dommune-text {
+  height: 28px;
+}
+
+.works-logo-item--dommune:hover img {
+  filter: grayscale(0%);
 }
 
 /* ─── CONNECT ─── */
