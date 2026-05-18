@@ -33,6 +33,7 @@
     <div class="nav-links">
       <a href="#about" data-en="About" data-jp="プロフィール">About</a>
       <a href="#works" data-en="Works" data-jp="実績">Works</a>
+      <a href="#gallery" data-en="Live" data-jp="ライブ">Live</a>
       <a href="#connect" data-en="Connect" data-jp="リンク">Connect</a>
     </div>
   </nav>
@@ -116,6 +117,44 @@
     </div>
   </section>
 
+  <!-- Gallery / Live Section -->
+  <section id="gallery">
+
+    <div class="gallery-header fade-in">
+      <div class="section-label gallery-label" data-en="Live" data-jp="ライブ">Live</div>
+    </div>
+
+    <!-- Block 1: DJ Portrait — full-bleed with parallax -->
+    <div class="g-block g-block-1">
+      <div class="g-img-wrap g-img-1">
+        <img src="images/dj-portrait.jpg"
+             alt="Lisa Mizuno — DJ performance"
+             loading="lazy" />
+      </div>
+      <span class="g-counter" aria-hidden="true">01</span>
+      <div class="g-meta g-meta-1">
+        <span class="g-meta-num">01</span>
+        <span class="g-meta-rule"></span>
+        <span class="g-meta-label">Tokyo · 2024</span>
+      </div>
+    </div>
+
+    <!-- Block 2: Tokyo Node — clip-path reveal -->
+    <div class="g-block g-block-2">
+      <div class="g-img-wrap g-img-2">
+        <img src="images/tokyo-node.png"
+             alt="Lisa Mizuno — Tokyo Node"
+             loading="lazy" />
+      </div>
+      <div class="g-meta g-meta-2">
+        <span class="g-meta-num">02</span>
+        <span class="g-meta-rule"></span>
+        <span class="g-meta-label">Tokyo Node</span>
+      </div>
+    </div>
+
+  </section>
+
   <!-- Connect Section -->
   <section id="connect">
     <div class="section-label fade-in" data-en="Connect" data-jp="リンク">Connect</div>
@@ -161,6 +200,8 @@
     <p>© 2025 LISA MIZUNO</p>
   </footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
