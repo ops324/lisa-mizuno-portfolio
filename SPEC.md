@@ -77,7 +77,7 @@ images/
   - Ghost counter `"01"` overlaid, Cormorant Garamond `clamp(12rem, 22vw, 28rem)`, `3% opacity`, parallaxes upward independently
   - Editorial meta row bottom-left: `01 ── raster.focus Asia tour`
 - **Block 2** (`tokyo-node.png`): `height: 75vh`, clip-path reveal from bottom on scroll enter + parallax
-  - Editorial meta row: `02 ── 攻殻機動隊展 · REFLEX 4 · MUTEK.JP`
+  - Editorial meta row: `02 ── 攻殻機動隊展 Ghost and the Shell Collaboration REFLEX 4 - MUTEK.JP`
 - Image wrappers `height: 120%` / `top: -10%` to provide parallax travel room (desktop only)
 - **Mobile (≤900px):** image wrappers reset to `height: 100%; top: 0` — prevents unwanted crop/zoom
 - **Mobile:** GSAP parallax (`yPercent`) disabled; clip-path reveal and meta fade-up run on all devices
@@ -90,8 +90,7 @@ images/
   - **Media row** — image left (38%), links right (1fr): `media-editorial.png` (3:4 portrait, `object-position: center 20%`)
 - Link items: slide-right on hover (`padding-left: 1rem`) + `↗` arrow reveal
 - `↗` arrow hidden on touch devices via `@media (hover: none)`
-- Photo hover: `scale(1.03)` with `cubic-bezier(0.25, 0.46, 0.45, 0.94)` over `1.2s`
-- Photo centered via `margin: 0 auto` + `align-self: center`
+- Photo centered via `margin: 0 auto` + `align-self: center`; no hover effect
 - Mobile (≤900px): collapses to 1-column; photos constrained to `max-width: 58%`
 - Mobile (≤480px): photos `max-width: 80%`
 
