@@ -285,7 +285,7 @@ body {
 }
 
 /* ─── CONNECT ─── */
-.connect-links {
+.connect-category {
   display: flex;
   flex-direction: column;
 }
@@ -479,48 +479,83 @@ footer p {
   }
 }
 
-/* ─── CONNECT: 2-COLUMN BODY ─── */
+/* ─── CONNECT: ROWS WITH IMAGES ─── */
 .connect-body {
-  display: grid;
-  grid-template-columns: 1fr 34%;
-  gap: 5rem;
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  gap: 5.5rem;
 }
 
-/* ─── CONNECT: EDITORIAL PHOTO (sticky) ─── */
-.connect-editorial {
-  position: sticky;
-  top: 7rem;
+.connect-row {
+  display: grid;
+  grid-template-columns: 1fr 38%;
+  gap: 4.5rem;
+  align-items: center;
+}
+
+/* Reverse row: image on the left, links on the right */
+.connect-row--reverse {
+  grid-template-columns: 38% 1fr;
+}
+
+.connect-row--reverse .connect-category {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.connect-row--reverse .connect-photo {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.connect-photo {
   overflow: hidden;
 }
 
-.connect-editorial img {
+.connect-photo img {
   width: 100%;
-  aspect-ratio: 3 / 4;
-  object-fit: cover;
-  object-position: center 20%;
   display: block;
+  object-fit: cover;
   transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-.connect-editorial:hover img {
+.connect-photo:hover img {
   transform: scale(1.03);
+}
+
+.connect-photo--music img {
+  aspect-ratio: 1 / 1;
+}
+
+.connect-photo--media img {
+  aspect-ratio: 3 / 4;
+  object-position: center 20%;
 }
 
 @media (max-width: 900px) {
   .connect-body {
-    grid-template-columns: 1fr;
-    gap: 0;
+    gap: 4rem;
   }
-  .connect-editorial {
-    position: static;
-    margin-top: 4rem;
-    max-width: 60%;
+  .connect-row,
+  .connect-row--reverse {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .connect-row--reverse .connect-category {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .connect-row--reverse .connect-photo {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .connect-photo {
+    max-width: 58%;
   }
 }
 
 @media (max-width: 480px) {
-  .connect-editorial {
+  .connect-photo {
     max-width: 80%;
   }
 }
