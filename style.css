@@ -496,6 +496,20 @@ footer p {
   .works-logo-item:last-child:nth-child(4n + 1) {
     grid-column: auto;
   }
+
+  /* 2-col orphan: center sole item in last row */
+  .works-logo-item:last-child:nth-child(2n + 1) {
+    grid-column: 1 / -1;
+  }
+
+  /* DOMMUNE: scale down for narrow screens */
+  .dommune-icon {
+    height: 22px;
+  }
+
+  .dommune-text {
+    height: 30px;
+  }
 }
 
 /* ─── CONNECT: ROWS WITH IMAGES ─── */
