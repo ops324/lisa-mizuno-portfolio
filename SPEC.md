@@ -82,6 +82,13 @@ images/
 - **Mobile (≤900px):** image wrappers reset to `height: 100%; top: 0` — prevents unwanted crop/zoom
 - **Mobile:** GSAP parallax (`yPercent`) disabled; clip-path reveal and meta fade-up run on all devices
 - GSAP 3.12 + ScrollTrigger loaded via CDN
+- **Block gap:** `margin-bottom: 0` — no gap between blocks (dark background never bleeds through)
+
+#### Block 2 reveal detail
+- Clip direction: `inset(0 0 100% 0)` → `inset(0 0 0% 0)` (clips from bottom; top of image always exposed first)
+- Trigger: `start: 'top bottom'` / `end: 'bottom bottom'` / `scrub: 1.2`
+- Mathematical guarantee: revealed area == visible viewport area at all times → no dark background visible at any scroll position
+- Brightness fade: `0.4 → 1.0` (`scrub: 2`, end: `top center`) — image emerges from darkness cinematically
 
 ### Connect
 - 2 categories: **Music** / **Media**
@@ -107,7 +114,8 @@ images/
 | Fade-in on scroll | `IntersectionObserver` → `.fade-in.visible` (opacity + translateY) |
 | Gallery Image 1 parallax | GSAP `yPercent: 20`, `scrub: 1.5` — desktop only |
 | Ghost counter parallax | GSAP `yPercent: -40`, `scrub: 1.5` — desktop only |
-| Gallery Image 2 clip-path reveal | GSAP `fromTo` `inset(100% → 0%)`, `power3.out` — all devices |
+| Gallery Image 2 clip-path reveal | GSAP `inset(0 0 100% 0)` → `inset(0 0 0% 0)`, `scrub: 1.2`, `start:'top bottom'` `end:'bottom bottom'` — all devices |
+| Gallery Image 2 brightness fade | GSAP `brightness(0.4 → 1)`, `scrub: 2`, `end:'top center'` — cinematic dark emergence |
 | Gallery Image 2 parallax | GSAP `yPercent: 15`, `scrub: 1.5` — desktop only |
 | Meta fade-up | GSAP stagger `y: 18 → 0`, `duration: 0.9`, `power2.out` |
 | Logo hover | CSS `filter: grayscale(0%)` transition |
