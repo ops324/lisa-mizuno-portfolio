@@ -479,26 +479,27 @@ footer p {
   }
 }
 
-/* ─── CONNECT: LINK LIST WIDTH ─── */
-.connect-links {
-  max-width: 520px;
+/* ─── CONNECT: 2-COLUMN BODY ─── */
+.connect-body {
+  display: grid;
+  grid-template-columns: 1fr 34%;
+  gap: 5rem;
+  align-items: start;
 }
 
-/* ─── CONNECT: EDITORIAL PHOTO ─── */
+/* ─── CONNECT: EDITORIAL PHOTO (sticky) ─── */
 .connect-editorial {
-  max-width: 860px;
-  margin: 5rem auto 0;
-  padding: 0 3rem;
-  display: flex;
-  justify-content: flex-end;
+  position: sticky;
+  top: 7rem;
+  overflow: hidden;
 }
 
 .connect-editorial img {
-  width: 42%;
+  width: 100%;
   aspect-ratio: 3 / 4;
   object-fit: cover;
+  object-position: center 20%;
   display: block;
-  overflow: hidden;
   transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
@@ -507,18 +508,20 @@ footer p {
 }
 
 @media (max-width: 900px) {
-  .connect-editorial {
-    padding: 0 1.5rem;
-    margin-top: 4rem;
+  .connect-body {
+    grid-template-columns: 1fr;
+    gap: 0;
   }
-  .connect-editorial img {
-    width: 55%;
+  .connect-editorial {
+    position: static;
+    margin-top: 4rem;
+    max-width: 60%;
   }
 }
 
 @media (max-width: 480px) {
-  .connect-editorial img {
-    width: 78%;
+  .connect-editorial {
+    max-width: 80%;
   }
 }
 
@@ -534,13 +537,13 @@ footer p {
   background: #111009;
   position: relative;
   overflow: hidden;
-  padding-top: 9rem;
-  padding-bottom: 10rem;
+  padding-top: 6rem;
+  padding-bottom: 8rem;
 }
 
 #gallery .gallery-header {
   max-width: 860px;
-  margin: 0 auto 6rem;
+  margin: 0 auto 4rem;
   padding: 0 3rem;
 }
 
@@ -633,8 +636,8 @@ footer p {
 }
 
 @media (max-width: 900px) {
-  #gallery { padding-top: 6rem; padding-bottom: 7rem; }
-  #gallery .gallery-header { padding: 0 1.5rem; margin-bottom: 4rem; }
+  #gallery { padding-top: 4.5rem; padding-bottom: 5.5rem; }
+  #gallery .gallery-header { padding: 0 1.5rem; margin-bottom: 3rem; }
   .g-block-1 { height: 80vh; }
   .g-block-2 { height: 65vh; }
   .g-meta { padding: 1.4rem 1.5rem; }
