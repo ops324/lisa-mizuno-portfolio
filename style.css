@@ -478,3 +478,120 @@ footer p {
     grid-column: auto;
   }
 }
+
+/* ─── GALLERY / LIVE (Cinematic) ─── */
+#gallery {
+  background: #111009;
+  position: relative;
+  overflow: hidden;
+  padding-top: 9rem;
+  padding-bottom: 10rem;
+}
+
+#gallery .gallery-header {
+  max-width: 860px;
+  margin: 0 auto 6rem;
+  padding: 0 3rem;
+}
+
+#gallery .gallery-label {
+  color: rgba(232, 226, 216, 0.4);
+  border-bottom-color: rgba(232, 226, 216, 0.12);
+  margin-bottom: 0;
+}
+
+#gallery .gallery-label::before {
+  color: rgba(232, 226, 216, 0.25);
+}
+
+.g-block {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.g-block-1 { height: 90vh; margin-bottom: 2px; }
+.g-block-2 { height: 75vh; }
+
+.g-img-wrap {
+  width: 100%;
+  height: 120%;
+  position: absolute;
+  top: -10%;
+  left: 0;
+}
+
+.g-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.g-counter {
+  position: absolute;
+  top: 50%;
+  right: 5vw;
+  transform: translateY(-50%);
+  font-family: var(--font-serif);
+  font-size: clamp(12rem, 22vw, 28rem);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: rgba(250, 248, 244, 0.03);
+  pointer-events: none;
+  z-index: 2;
+  user-select: none;
+}
+
+.g-meta {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 1.4rem;
+  padding: 1.8rem 3rem;
+  background: linear-gradient(to top, rgba(17, 16, 9, 0.72) 0%, transparent 100%);
+  z-index: 3;
+}
+
+.g-meta-num {
+  font-family: var(--font-en);
+  font-size: 0.55rem;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  color: rgba(232, 226, 216, 0.38);
+  flex-shrink: 0;
+}
+
+.g-meta-rule {
+  flex: 1;
+  max-width: 80px;
+  height: 1px;
+  background: rgba(232, 226, 216, 0.18);
+}
+
+.g-meta-label {
+  font-family: var(--font-en);
+  font-size: 0.6rem;
+  font-weight: 400;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: rgba(232, 226, 216, 0.55);
+}
+
+@media (max-width: 900px) {
+  #gallery { padding-top: 6rem; padding-bottom: 7rem; }
+  #gallery .gallery-header { padding: 0 1.5rem; margin-bottom: 4rem; }
+  .g-block-1 { height: 80vh; }
+  .g-block-2 { height: 65vh; }
+  .g-meta { padding: 1.4rem 1.5rem; }
+}
+
+@media (max-width: 480px) {
+  .g-block-1 { height: 70vh; }
+  .g-block-2 { height: 60vh; }
+  .g-counter { font-size: clamp(8rem, 30vw, 14rem); }
+}
