@@ -284,6 +284,12 @@ body {
   filter: grayscale(0%);
 }
 
+/* DOMMUNE: badge/shield layout needs more height */
+.works-logo-item img[alt="DOMMUNE"] {
+  max-height: 56px;
+  mix-blend-mode: multiply; /* removes gray background on cream page */
+}
+
 /* ─── CONNECT ─── */
 .connect-category {
   display: flex;
