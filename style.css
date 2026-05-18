@@ -510,6 +510,8 @@ footer p {
 
 .connect-photo {
   overflow: hidden;
+  margin: 0 auto;
+  align-self: center;
 }
 
 .connect-photo img {
