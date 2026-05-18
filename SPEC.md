@@ -3,7 +3,7 @@
 **URL (GitHub Pages):** https://ops324.github.io/lisa-mizuno-portfolio/  
 **URL (Vercel):** https://lisa-mizuno.vercel.app/  
 **Hosting:** GitHub Pages (`main` branch, root `/`) + Vercel (`serene-leavitt-d01939`)  
-**Last updated:** 2026-05-18
+**Last updated:** 2026-05-18 (rev 3)
 
 ---
 
@@ -72,8 +72,9 @@ images/
 ### Works
 - 13 partner logos, 4-col grid → 3-col (≤900px) → 2-col (≤480px)
 - Grayscale → color on hover
-- Orphaned last item auto-centered via `grid-column` nth-child rules
-- **DOMMUNE**: shield icon (`dommune/Logo-1.png`) + wordmark (`dommune/Logo-2.png`) displayed side-by-side in one grid cell via `flex-direction: row`; backgrounds are cream (`#faf8f4`) baked in — no blend mode needed; grayscale filter excluded via `filter: none`
+- Orphaned last item auto-centered via `grid-column` nth-child rules (4n+1→col 2/4, 3n+1→col 2/3, 2n+1→col 1/-1)
+- **DOMMUNE**: shield icon (`dommune/Logo-1.png`) + wordmark (`dommune/Logo-2.png`) side-by-side in one grid cell (`flex-direction: row`); canvas background removal at load time (script.js `removeDommuneBackground`) makes PNG backgrounds transparent; desktop icon/text: 30px/38px; mobile (≤480px): 22px/30px; grayscale excluded via `filter: none`
+- **IGNITE SVG**: `text-anchor="middle" x="123"` to center text within 240px viewBox
 
 ### Gallery
 - Full-bleed dark section (`background: #111009`)
