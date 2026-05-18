@@ -46,9 +46,12 @@ images/
   music-artwork.png      — Connect / Music row artwork (square cosmic abstract)
   media-editorial.png    — Connect / Media row photo (B&W staircase portrait)
   logos/                 — 13 partner brand SVG/PNG logos
-    pioneerdj.svg  mutek.svg  parco.svg  dommune_logo1.png  dommune_logo2.png
-    keisukeyoshida.png  shogakukan.png  shibuyanoradio.svg  ignite.svg
-    oizumi.png  malakai.png  tokyonode.svg  morimori.svg  shibuyatv.png
+    pioneerdj.svg  mutek.svg  parco.svg  keisukeyoshida.png
+    shogakukan.png  shibuyanoradio.svg  ignite.svg  oizumi.png  malakai.png
+    tokyonode.svg  morimori.svg  shibuyatv.png
+    dommune/
+      Logo-1.png   — shield icon (1254×1254, cream bg)
+      Logo-2.png   — wordmark (2171×724, cream bg)
 ```
 
 ---
@@ -70,7 +73,7 @@ images/
 - 13 partner logos, 4-col grid → 3-col (≤900px) → 2-col (≤480px)
 - Grayscale → color on hover
 - Orphaned last item auto-centered via `grid-column` nth-child rules
-- **DOMMUNE**: shield icon (`dommune_logo1.png`) + wordmark (`dommune_logo2.png`) displayed side-by-side in one grid cell via `flex-direction: row`; `mix-blend-mode: multiply` removes white backgrounds on cream page
+- **DOMMUNE**: shield icon (`dommune/Logo-1.png`) + wordmark (`dommune/Logo-2.png`) displayed side-by-side in one grid cell via `flex-direction: row`; backgrounds are cream (`#faf8f4`) baked in — no blend mode needed; grayscale filter excluded via `filter: none`
 
 ### Gallery
 - Full-bleed dark section (`background: #111009`)
