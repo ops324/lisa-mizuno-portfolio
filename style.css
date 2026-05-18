@@ -285,7 +285,7 @@ body {
 }
 
 /* ─── CONNECT ─── */
-.connect-links {
+.connect-category {
   display: flex;
   flex-direction: column;
 }
@@ -479,18 +479,106 @@ footer p {
   }
 }
 
+/* ─── CONNECT: ROWS WITH IMAGES ─── */
+.connect-body {
+  display: flex;
+  flex-direction: column;
+  gap: 5.5rem;
+}
+
+.connect-row {
+  display: grid;
+  grid-template-columns: 1fr 38%;
+  gap: 4.5rem;
+  align-items: center;
+}
+
+/* Reverse row: image on the left, links on the right */
+.connect-row--reverse {
+  grid-template-columns: 38% 1fr;
+}
+
+.connect-row--reverse .connect-category {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.connect-row--reverse .connect-photo {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.connect-photo {
+  overflow: hidden;
+}
+
+.connect-photo img {
+  width: 100%;
+  display: block;
+  object-fit: cover;
+  transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.connect-photo:hover img {
+  transform: scale(1.03);
+}
+
+.connect-photo--music img {
+  aspect-ratio: 1 / 1;
+}
+
+.connect-photo--media img {
+  aspect-ratio: 3 / 4;
+  object-position: center 20%;
+}
+
+@media (max-width: 900px) {
+  .connect-body {
+    gap: 4rem;
+  }
+  .connect-row,
+  .connect-row--reverse {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .connect-row--reverse .connect-category {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .connect-row--reverse .connect-photo {
+    grid-column: 1;
+    grid-row: 2;
+  }
+  .connect-photo {
+    max-width: 58%;
+  }
+}
+
+@media (max-width: 480px) {
+  .connect-photo {
+    max-width: 80%;
+  }
+}
+
+/* ─── CONNECT: NO ARROW ON TOUCH ─── */
+@media (hover: none) {
+  .connect-item::after {
+    display: none;
+  }
+}
+
 /* ─── GALLERY / LIVE (Cinematic) ─── */
 #gallery {
   background: #111009;
   position: relative;
   overflow: hidden;
-  padding-top: 9rem;
-  padding-bottom: 10rem;
+  padding-top: 6rem;
+  padding-bottom: 8rem;
 }
 
 #gallery .gallery-header {
   max-width: 860px;
-  margin: 0 auto 6rem;
+  margin: 0 auto 4rem;
   padding: 0 3rem;
 }
 
@@ -583,8 +671,8 @@ footer p {
 }
 
 @media (max-width: 900px) {
-  #gallery { padding-top: 6rem; padding-bottom: 7rem; }
-  #gallery .gallery-header { padding: 0 1.5rem; margin-bottom: 4rem; }
+  #gallery { padding-top: 4.5rem; padding-bottom: 5.5rem; }
+  #gallery .gallery-header { padding: 0 1.5rem; margin-bottom: 3rem; }
   .g-block-1 { height: 80vh; }
   .g-block-2 { height: 65vh; }
   .g-meta { padding: 1.4rem 1.5rem; }
