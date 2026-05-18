@@ -21,7 +21,7 @@
 }
 
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto; /* Lenis handles smooth scroll */
 }
 
 body {
@@ -604,6 +604,7 @@ footer p {
   position: absolute;
   top: -10%;
   left: 0;
+  will-change: transform;
 }
 
 .g-img-wrap img {
@@ -627,6 +628,7 @@ footer p {
   pointer-events: none;
   z-index: 2;
   user-select: none;
+  will-change: transform;
 }
 
 .g-meta {

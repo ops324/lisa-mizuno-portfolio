@@ -100,17 +100,20 @@ images/
 
 | Effect | Implementation |
 |---|---|
+| Smooth scroll | **Lenis 1.1.14** — expo ease-out, `duration: 1.2`, `smoothTouch: false` |
+| Anchor nav links | `lenis.scrollTo(target, { offset: -72, duration: 1.4 })` |
+| Nav border on scroll | `lenis.on('scroll')` → `.scrolled` class at 50px |
+| Page load hero entrance | GSAP timeline: nav ↓, image fade, name slide-up, title fade |
 | Fade-in on scroll | `IntersectionObserver` → `.fade-in.visible` (opacity + translateY) |
-| Nav border on scroll | `window.scroll` → `.scrolled` class at 50px |
-| Gallery Image 1 parallax | GSAP `yPercent: 20`, `scrub: true` ScrollTrigger — desktop only |
-| Ghost counter parallax | GSAP `yPercent: -40`, `scrub: true` ScrollTrigger — desktop only |
-| Gallery Image 2 clip-path reveal | GSAP `fromTo` `inset(100% 0 0 0)` → `inset(0% 0 0 0)`, `power3.out` — all devices |
-| Gallery Image 2 parallax | GSAP `yPercent: 15`, `scrub: true` ScrollTrigger — desktop only |
+| Gallery Image 1 parallax | GSAP `yPercent: 20`, `scrub: 1.5` — desktop only |
+| Ghost counter parallax | GSAP `yPercent: -40`, `scrub: 1.5` — desktop only |
+| Gallery Image 2 clip-path reveal | GSAP `fromTo` `inset(100% → 0%)`, `power3.out` — all devices |
+| Gallery Image 2 parallax | GSAP `yPercent: 15`, `scrub: 1.5` — desktop only |
 | Meta fade-up | GSAP stagger `y: 18 → 0`, `duration: 0.9`, `power2.out` |
 | Logo hover | CSS `filter: grayscale(0%)` transition |
 | Connect link hover | CSS `padding-left` + `::after` opacity |
-| Connect photo hover | CSS `transform: scale(1.03)` transition |
 | iOS vh fix | `--vh` CSS variable updated on resize via JS |
+| GPU hints | `will-change: transform` on `.g-img-wrap`, `.g-counter` |
 
 ---
 
@@ -120,6 +123,7 @@ images/
 |---|---|---|
 | GSAP | 3.12.5 | CDN (cdnjs) |
 | ScrollTrigger | 3.12.5 | CDN (cdnjs) |
+| Lenis | 1.1.14 | CDN (jsDelivr) |
 | Google Fonts | — | Cormorant Garamond, Space Grotesk, Noto Sans JP |
 
 ---

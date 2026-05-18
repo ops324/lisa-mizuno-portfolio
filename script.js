@@ -1,105 +1,143 @@
-// iOS Safari: disable scroll restoration and force top on load
+// ─── iOS Safari: scroll restoration + top ───
 if ('scrollRestoration' in history) {
   history.scrollRestoration = 'manual';
 }
 window.scrollTo(0, 0);
 
-// iOS Safari: set --vh based on actual visible window height
+// ─── iOS Safari: --vh fix ───
 const setVh = () => {
   document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
 };
 setVh();
 window.addEventListener('resize', setVh, { passive: true });
 
-// Nav scroll effect
-const nav = document.getElementById('nav');
-window.addEventListener('scroll', () => {
-  nav.classList.toggle('scrolled', window.scrollY > 50);
-}, { passive: true });
+// ─── SMOOTH SCROLL: Lenis ───
+const lenis = new Lenis({
+  duration: 1.2,
+  easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // expo ease-out
+  smoothWheel: true,
+  smoothTouch: false,   // native touch on mobile
+  wheelMultiplier: 0.9,
+});
 
-// Fade in on scroll
+// ─── NAV: show border on scroll ───
+const nav = document.getElementById('nav');
+lenis.on('scroll', ({ scroll }) => {
+  nav.classList.toggle('scrolled', scroll > 50);
+});
+
+// ─── ANCHOR LINKS: smooth via Lenis ───
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', e => {
+    const href = anchor.getAttribute('href');
+    if (href === '#') return;
+    const target = document.querySelector(href);
+    if (!target) return;
+    e.preventDefault();
+    lenis.scrollTo(target, { offset: -72, duration: 1.4 });
+  });
+});
+
+// ─── GSAP ───
+if (typeof gsap !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Sync Lenis with GSAP ticker so ScrollTrigger stays accurate
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add((time) => lenis.raf(time * 1000));
+  gsap.ticker.lagSmoothing(0);
+
+  // ─── PAGE LOAD: hero entrance ───
+  gsap.timeline({ defaults: { ease: 'power3.out' } })
+    .from('#nav',         { y: -20, opacity: 0, duration: 0.7 }, 0.1)
+    .from('.hero-image',  { opacity: 0,          duration: 1.8 }, 0.2)
+    .from('.hero-name',   { y: 44, opacity: 0,   duration: 1.4 }, 0.6)
+    .from('.hero-title',  { y: 18, opacity: 0,   duration: 0.9 }, 1.2);
+
+  // ─── GALLERY ANIMATIONS ───
+  if (document.getElementById('gallery')) {
+    const isDesktop = window.matchMedia('(min-width: 901px)').matches;
+
+    // Parallax — desktop only (mobile resets to 100% height)
+    if (isDesktop) {
+      gsap.to('.g-img-1', {
+        yPercent: 20,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.g-block-1',
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1.5,
+        },
+      });
+
+      gsap.to('.g-counter', {
+        yPercent: -40,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.g-block-1',
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1.5,
+        },
+      });
+
+      gsap.to('.g-img-2', {
+        yPercent: 15,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.g-block-2',
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1.5,
+        },
+      });
+    }
+
+    // Clip-path reveal — all devices
+    gsap.fromTo('.g-block-2',
+      { clipPath: 'inset(100% 0 0 0)' },
+      {
+        clipPath: 'inset(0% 0 0 0)',
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: '.g-block-2',
+          start: 'top 75%',
+          toggleActions: 'play none none reverse',
+        },
+      }
+    );
+
+    // Meta rows staggered fade-up — all devices
+    gsap.fromTo('.g-meta',
+      { opacity: 0, y: 18 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.9,
+        stagger: 0.15,
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '.g-block-1',
+          start: 'top 60%',
+        },
+      }
+    );
+  }
+
+} else {
+  // Fallback: run Lenis via rAF if GSAP unavailable
+  (function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  })(performance.now());
+}
+
+// ─── FADE IN: IntersectionObserver ───
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
+    if (entry.isIntersecting) entry.target.classList.add('visible');
   });
 }, { threshold: 0.1 });
 
 document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-// Gallery: GSAP ScrollTrigger animations
-if (document.getElementById('gallery') && typeof gsap !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger);
-
-  const isDesktop = window.matchMedia('(min-width: 901px)').matches;
-
-  // Parallax only on desktop — mobile uses 100% height images (no crop/zoom)
-  if (isDesktop) {
-    // Image 1 parallax
-    gsap.to(".g-img-1", {
-      yPercent: 20,
-      ease: "none",
-      scrollTrigger: {
-        trigger: ".g-block-1",
-        start: "top bottom",
-        end: "bottom top",
-        scrub: true
-      }
-    });
-
-    // Ghost counter parallax
-    gsap.to(".g-counter", {
-      yPercent: -40,
-      ease: "none",
-      scrollTrigger: {
-        trigger: ".g-block-1",
-        start: "top bottom",
-        end: "bottom top",
-        scrub: true
-      }
-    });
-
-    // Image 2 parallax
-    gsap.to(".g-img-2", {
-      yPercent: 15,
-      ease: "none",
-      scrollTrigger: {
-        trigger: ".g-block-2",
-        start: "top bottom",
-        end: "bottom top",
-        scrub: true
-      }
-    });
-  }
-
-  // Image 2 clip-path reveal — all devices
-  gsap.fromTo(".g-block-2",
-    { clipPath: "inset(100% 0 0 0)" },
-    {
-      clipPath: "inset(0% 0 0 0)",
-      ease: "power3.out",
-      scrollTrigger: {
-        trigger: ".g-block-2",
-        start: "top 75%",
-        toggleActions: "play none none reverse"
-      }
-    }
-  );
-
-  // Meta rows staggered fade-up — all devices
-  gsap.fromTo(".g-meta",
-    { opacity: 0, y: 18 },
-    {
-      opacity: 1,
-      y: 0,
-      duration: 0.9,
-      stagger: 0.15,
-      ease: "power2.out",
-      scrollTrigger: {
-        trigger: ".g-block-1",
-        start: "top 60%"
-      }
-    }
-  );
-}
