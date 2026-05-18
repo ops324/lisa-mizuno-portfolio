@@ -94,16 +94,35 @@ if (typeof gsap !== 'undefined') {
       });
     }
 
-    // Clip-path reveal — all devices
+    // Clip-path reveal — scrub-based, synced to viewport entry
+    // inset(0 0 B 0): clips from bottom → top of image always exposed first.
+    // start:'top bottom' / end:'bottom bottom' ensures revealed area == visible area at all times.
+    // No dark background ever shows through.
     gsap.fromTo('.g-block-2',
-      { clipPath: 'inset(100% 0 0 0)' },
+      { clipPath: 'inset(0 0 100% 0)' },
       {
-        clipPath: 'inset(0% 0 0 0)',
-        ease: 'power3.out',
+        clipPath: 'inset(0 0 0% 0)',
+        ease: 'none',
         scrollTrigger: {
           trigger: '.g-block-2',
-          start: 'top 75%',
-          toggleActions: 'play none none reverse',
+          start: 'top bottom',
+          end: 'bottom bottom',
+          scrub: 1.2,
+        },
+      }
+    );
+
+    // Brightness emergence — image rises from dark to full
+    gsap.fromTo('.g-img-2',
+      { filter: 'brightness(0.4)' },
+      {
+        filter: 'brightness(1)',
+        ease: 'power2.out',
+        scrollTrigger: {
+          trigger: '.g-block-2',
+          start: 'top bottom',
+          end: 'top center',
+          scrub: 2,
         },
       }
     );
