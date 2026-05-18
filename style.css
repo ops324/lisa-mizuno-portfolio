@@ -286,12 +286,12 @@ body {
 
 .works-logo-item--dommune {
   flex-direction: row;
-  gap: 0.5rem;
+  gap: 0.4rem;
 }
 
 .works-logo-item--dommune img {
   width: auto;
-  mix-blend-mode: multiply;
+  filter: none;
 }
 
 .dommune-icon {
@@ -301,10 +301,6 @@ body {
 
 .dommune-text {
   height: 28px;
-}
-
-.works-logo-item--dommune:hover img {
-  filter: grayscale(0%);
 }
 
 /* ─── CONNECT ─── */
