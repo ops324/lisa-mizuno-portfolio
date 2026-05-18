@@ -479,46 +479,53 @@ footer p {
   }
 }
 
-/* ─── CONNECT: MEDIA WITH IMAGE ─── */
-.connect-category--media .connect-media-inner {
-  display: grid;
-  grid-template-columns: 1fr 36%;
-  gap: 3.5rem;
-  align-items: start;
+/* ─── CONNECT: LINK LIST WIDTH ─── */
+.connect-links {
+  max-width: 520px;
 }
 
-.connect-media-image {
-  overflow: hidden;
-  margin-top: 0.5rem;
+/* ─── CONNECT: EDITORIAL PHOTO ─── */
+.connect-editorial {
+  max-width: 860px;
+  margin: 5rem auto 0;
+  padding: 0 3rem;
+  display: flex;
+  justify-content: flex-end;
 }
 
-.connect-media-image img {
-  width: 100%;
+.connect-editorial img {
+  width: 42%;
   aspect-ratio: 3 / 4;
   object-fit: cover;
   display: block;
-  filter: brightness(0.97);
+  overflow: hidden;
   transition: transform 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-.connect-media-image:hover img {
+.connect-editorial:hover img {
   transform: scale(1.03);
 }
 
 @media (max-width: 900px) {
-  .connect-category--media .connect-media-inner {
-    grid-template-columns: 1fr;
-    gap: 0;
+  .connect-editorial {
+    padding: 0 1.5rem;
+    margin-top: 4rem;
   }
-  .connect-media-image {
-    margin-top: 2.5rem;
-    max-width: 55%;
+  .connect-editorial img {
+    width: 55%;
   }
 }
 
 @media (max-width: 480px) {
-  .connect-media-image {
-    max-width: 80%;
+  .connect-editorial img {
+    width: 78%;
+  }
+}
+
+/* ─── CONNECT: NO ARROW ON TOUCH ─── */
+@media (hover: none) {
+  .connect-item::after {
+    display: none;
   }
 }
 
