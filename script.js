@@ -152,6 +152,31 @@ if (typeof gsap !== 'undefined') {
   })(performance.now());
 }
 
+// ─── DOMMUNE: remove baked-in background via canvas ───
+(function removeDommuneBg() {
+  document.querySelectorAll('.dommune-icon, .dommune-text').forEach(img => {
+    const process = () => {
+      if (img.dataset.bgRemoved) return;
+      img.dataset.bgRemoved = '1';
+      const c = document.createElement('canvas');
+      c.width = img.naturalWidth;
+      c.height = img.naturalHeight;
+      const ctx = c.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      const bg = ctx.getImageData(5, 5, 1, 1).data;
+      const id = ctx.getImageData(0, 0, c.width, c.height);
+      const d = id.data;
+      for (let i = 0; i < d.length; i += 4) {
+        const dr = d[i] - bg[0], dg = d[i+1] - bg[1], db = d[i+2] - bg[2];
+        if (dr*dr + dg*dg + db*db < 400) d[i+3] = 0; // tolerance 20
+      }
+      ctx.putImageData(id, 0, 0);
+      c.toBlob(blob => { img.src = URL.createObjectURL(blob); });
+    };
+    img.complete && img.naturalWidth ? process() : img.addEventListener('load', process, { once: true });
+  });
+})();
+
 // ─── FADE IN: IntersectionObserver ───
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
