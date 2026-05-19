@@ -3,7 +3,7 @@
 **URL (GitHub Pages):** https://ops324.github.io/lisa-mizuno-portfolio/  
 **URL (Vercel):** https://lisa-mizuno.vercel.app/  
 **Hosting:** GitHub Pages (`main` branch, root `/`) + Vercel (`serene-leavitt-d01939`)  
-**Last updated:** 2026-05-18 (rev 3)
+**Last updated:** 2026-05-20 (rev 4)
 
 ---
 
@@ -65,9 +65,10 @@ images/
 - Scroll cue: vertical "SCROLL" text `::after`, bottom-right (hidden on mobile)
 
 ### About
-- Bilingual bio (JP active by default, EN hidden via `.bio` / `.bio.active`)
+- Bilingual bio with **JP / EN toggle** (JP active by default)
+- `.about-header`: serif name "Lisa Mizuno" (left) + `.lang-toggle` JP / EN buttons (right) — name shared across both languages, stays fixed above the body text
+- Toggle switches `.bio.active` between `#bio-jp` / `#bio-en`; active language button styled via `aria-pressed="true"`; `ScrollTrigger.refresh()` runs after each switch to re-sync gallery triggers to the new page height
 - `max-width: 860px`, `padding: 9rem 3rem`
-- JP name displayed as serif heading above body text
 
 ### Works
 - 13 partner logos, 4-col grid → 3-col (≤900px) → 2-col (≤480px)
@@ -117,6 +118,7 @@ images/
 | Nav border on scroll | `lenis.on('scroll')` → `.scrolled` class at 50px |
 | Page load hero entrance | GSAP timeline: nav ↓, image fade, name slide-up, title fade |
 | Fade-in on scroll | `IntersectionObserver` → `.fade-in.visible` (opacity + translateY) |
+| About language toggle | JP / EN buttons swap `.bio.active`, update `aria-pressed`, then `ScrollTrigger.refresh()` |
 | Gallery Image 1 parallax | GSAP `yPercent: 20`, `scrub: 1.5` — desktop only |
 | Ghost counter parallax | GSAP `yPercent: -40`, `scrub: 1.5` — desktop only |
 | Gallery Image 2 clip-path reveal | GSAP `inset(0 0 100% 0)` → `inset(0 0 0% 0)`, `scrub: 1.2`, `start:'top bottom'` `end:'bottom bottom'` — all devices |
