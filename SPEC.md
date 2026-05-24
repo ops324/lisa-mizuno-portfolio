@@ -3,7 +3,7 @@
 **URL (GitHub Pages):** https://ops324.github.io/lisa-mizuno-portfolio/  
 **URL (Vercel):** https://lisa-mizuno.vercel.app/  
 **Hosting:** GitHub Pages (`main` branch, root `/`) + Vercel (`serene-leavitt-d01939`)  
-**Last updated:** 2026-05-25 (rev 6)
+**Last updated:** 2026-05-25 (rev 7)
 
 ---
 
@@ -58,6 +58,13 @@ images/
 
 ## Sections
 
+### Navigation
+- Fixed header (`position: fixed`), logo left + links right
+- Scroll > 50px → `.scrolled` class adds bottom border
+- **Scroll-spy:** `IntersectionObserver` (`rootMargin: '-50% 0px -50% 0px'`) adds `.active` to the nav link matching the section currently in the middle of the viewport
+- **Hamburger menu (≤480px):** `.nav-toggle` button (2-bar → X on open); `.nav-links` becomes a full-viewport overlay (`position: fixed; inset: 0`). GSAP nav entrance uses `clearProps: 'transform'` to prevent the residual GSAP transform from becoming a CSS containing block that would constrain the `inset: 0` overlay to the 66px nav bar.
+- Escape key closes the menu; anchor clicks close the menu before scrolling
+
 ### Hero
 - Full viewport, 2-column grid (desktop) / stacked (mobile)
 - Left: grayscale portrait, hover reduces grayscale to 60%
@@ -90,7 +97,7 @@ images/
   - Ghost counter `"01"` overlaid, Cormorant Garamond `clamp(12rem, 22vw, 28rem)`, `3% opacity`, parallaxes upward independently
   - Editorial meta row bottom-left: `01 ── raster.focus Asia tour`
 - **Block 2** (`tokyo-node.png`): `height: 75vh`, clip-path reveal from bottom on scroll enter + parallax
-  - Editorial meta row: `02 ── 攻殻機動隊展 Ghost and the Shell Collaboration REFLEX 4 - MUTEK.JP`
+  - Editorial meta row: `02 ── 攻殻機動隊展 Ghost in the Shell Collaboration REFLEX 4 - MUTEK.JP`
 - Image wrappers `height: 120%` / `top: -10%` to provide parallax travel room (desktop only)
 - **Mobile (≤900px):** image wrappers reset to `height: 100%; top: 0` — prevents unwanted crop/zoom
 - **Mobile:** GSAP parallax (`yPercent`) **and** the Block 2 `filter: brightness()` scrub are disabled (animating `filter` every frame is GPU-heavy on mobile); clip-path reveal and meta fade-up still run on all devices
@@ -102,6 +109,9 @@ images/
 - Trigger: `start: 'top bottom'` / `end: 'bottom bottom'` / `scrub: 1.2`
 - Mathematical guarantee: revealed area == visible viewport area at all times → no dark background visible at any scroll position
 - Brightness fade: `0.4 → 1.0` (`scrub: 2`, end: `top center`) — image emerges from darkness cinematically
+
+### Footer
+- `© [year] LISA MIZUNO` — year is set dynamically by JS (`new Date().getFullYear()`); HTML fallback is `2026`
 
 ### Connect
 - 2 categories: **Music** / **Media**
@@ -121,9 +131,11 @@ images/
 | Effect | Implementation |
 |---|---|
 | Smooth scroll | **Lenis 1.1.14** — expo ease-out, `duration: 1.2`, `smoothTouch: false` |
-| Anchor nav links | `lenis.scrollTo(target, { offset: -72, duration: 1.4 })` |
+| Anchor nav links | `lenis.scrollTo(target, { offset: -72, duration: 1.4 })`; menu closed before scroll |
 | Nav border on scroll | `lenis.on('scroll')` → `.scrolled` class at 50px |
-| Page load hero entrance | GSAP timeline: nav ↓, image fade, name slide-up, title fade |
+| Scroll-spy | `IntersectionObserver` (`rootMargin: '-50% 0px -50% 0px'`) → `.active` on matching nav link |
+| Mobile hamburger | `.nav-toggle` toggles `#nav.menu-open`; Escape key / anchor click closes; `aria-expanded` updated |
+| Page load hero entrance | GSAP timeline: nav ↓ (`clearProps:'transform'`), image fade, name slide-up, title fade |
 | Fade-in on scroll | `IntersectionObserver` → `.fade-in.visible` (opacity + translateY) |
 | About language toggle | JP / EN buttons (in the section-label row) swap `.bio.active`, update `aria-pressed`, then `ScrollTrigger.refresh()` |
 | Gallery Image 1 parallax | GSAP `yPercent: 20`, `scrub: 1.5` — desktop only |
@@ -134,6 +146,10 @@ images/
 | Meta fade-up | GSAP stagger `y: 18 → 0`, `duration: 0.9`, `power2.out` |
 | Logo hover | CSS `filter: grayscale(0%)` transition |
 | Connect link hover | CSS `padding-left` + `::after` opacity |
+| Footer year | JS `new Date().getFullYear()` writes to `#footer-year`; HTML fallback `2026` |
+| Reduced motion | `window.matchMedia('prefers-reduced-motion: reduce')` — Lenis and GSAP skipped entirely; CSS `@media (prefers-reduced-motion: reduce)` zeroes all transitions/animations |
+| No-JS fallback | `<html class="no-js">` + inline `<script>` removes class immediately; `.no-js .fade-in` forces `opacity: 1; transform: none` |
+| Focus-visible | `a:focus-visible`, `.nav-toggle:focus-visible` — 1px solid `--text` outline; `#gallery a:focus-visible` uses `--bg` (light on dark) |
 | iOS vh fix | `--vh` CSS variable set on load; recomputed **only on width (orientation) change** — height-only `resize` events from the mobile address bar showing/hiding are ignored to avoid hero reflow jank mid-scroll |
 | Mobile nav perf | Nav `backdrop-filter: blur()` is **disabled ≤900px** (background already ~opaque) — avoids per-frame blur recompositing during scroll |
 | GPU hints | `will-change: transform` on `.g-img-wrap`, `.g-counter` |

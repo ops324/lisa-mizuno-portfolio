@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Swap no-js → js ASAP so JS-disabled users still see content (fade-in fallback) -->
+  <script>document.documentElement.classList.remove('no-js');</script>
   <title>LISA MIZUNO — DJ · ARTIST</title>
   <meta name="description" content="LISA MIZUNO is a DJ and artist based in Tokyo. Organizer of the Resonance event series." />
 
@@ -30,7 +32,11 @@
   <!-- Navigation -->
   <nav id="nav">
     <a href="#" class="nav-logo">LISA MIZUNO</a>
-    <div class="nav-links">
+    <button class="nav-toggle" type="button" aria-label="Menu" aria-expanded="false" aria-controls="nav-links">
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-links" id="nav-links">
       <a href="#about" data-en="About" data-jp="プロフィール">About</a>
       <a href="#works" data-en="Works" data-jp="実績">Works</a>
       <a href="#gallery" data-en="Gallery" data-jp="ギャラリー">Gallery</a>
@@ -155,7 +161,7 @@
       <div class="g-meta g-meta-2">
         <span class="g-meta-num">02</span>
         <span class="g-meta-rule"></span>
-        <span class="g-meta-label">攻殻機動隊展 Ghost and the Shell Collaboration REFLEX 4 - MUTEK.JP</span>
+        <span class="g-meta-label">攻殻機動隊展 Ghost in the Shell Collaboration REFLEX 4 - MUTEK.JP</span>
       </div>
     </div>
 
@@ -214,7 +220,7 @@
 
   <!-- Footer -->
   <footer>
-    <p>© 2025 LISA MIZUNO</p>
+    <p>© <span id="footer-year">2026</span> LISA MIZUNO</p>
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>

@@ -19,22 +19,49 @@ window.addEventListener('resize', () => {
   setVh();
 }, { passive: true });
 
-// ─── SMOOTH SCROLL: Lenis ───
-const lenis = new Lenis({
-  duration: 1.2,
-  easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // expo ease-out
-  smoothWheel: true,
-  smoothTouch: false,   // native touch on mobile
-  wheelMultiplier: 0.9,
-});
+// ─── MOTION PREFERENCE ───
+const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// ─── NAV: show border on scroll ───
 const nav = document.getElementById('nav');
-lenis.on('scroll', ({ scroll }) => {
-  nav.classList.toggle('scrolled', scroll > 50);
+
+// ─── MOBILE MENU (hamburger) ───
+const navToggle = nav.querySelector('.nav-toggle');
+function closeMenu() {
+  nav.classList.remove('menu-open');
+  if (navToggle) navToggle.setAttribute('aria-expanded', 'false');
+}
+if (navToggle) {
+  navToggle.addEventListener('click', () => {
+    const open = nav.classList.toggle('menu-open');
+    navToggle.setAttribute('aria-expanded', String(open));
+  });
+}
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeMenu();
 });
 
-// ─── ANCHOR LINKS: smooth via Lenis ───
+// ─── SMOOTH SCROLL: Lenis (skipped when the user prefers reduced motion) ───
+let lenis = null;
+if (!prefersReduced) {
+  lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // expo ease-out
+    smoothWheel: true,
+    smoothTouch: false,   // native touch on mobile
+    wheelMultiplier: 0.9,
+  });
+}
+
+// ─── NAV: show border on scroll (works with or without Lenis) ───
+const setNavBorder = (y) => nav.classList.toggle('scrolled', y > 50);
+if (lenis) {
+  lenis.on('scroll', ({ scroll }) => setNavBorder(scroll));
+} else {
+  window.addEventListener('scroll', () => setNavBorder(window.scrollY), { passive: true });
+  setNavBorder(window.scrollY);
+}
+
+// ─── ANCHOR LINKS ───
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   anchor.addEventListener('click', e => {
     const href = anchor.getAttribute('href');
@@ -42,12 +69,17 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     const target = document.querySelector(href);
     if (!target) return;
     e.preventDefault();
-    lenis.scrollTo(target, { offset: -72, duration: 1.4 });
+    closeMenu();
+    if (lenis) {
+      lenis.scrollTo(target, { offset: -72, duration: 1.4 });
+    } else {
+      window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - 72 });
+    }
   });
 });
 
-// ─── GSAP ───
-if (typeof gsap !== 'undefined') {
+// ─── GSAP (skipped when the user prefers reduced motion) ───
+if (!prefersReduced && typeof gsap !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 
   // Sync Lenis with GSAP ticker so ScrollTrigger stays accurate
@@ -57,7 +89,9 @@ if (typeof gsap !== 'undefined') {
 
   // ─── PAGE LOAD: hero entrance ───
   gsap.timeline({ defaults: { ease: 'power3.out' } })
-    .from('#nav',         { y: -20, opacity: 0, duration: 0.7 }, 0.1)
+    // clearProps: a residual transform on #nav would make it the containing
+    // block for the position:fixed mobile menu overlay (breaking its inset:0).
+    .from('#nav',         { y: -20, opacity: 0, duration: 0.7, clearProps: 'transform' }, 0.1)
     .from('.hero-image',  { opacity: 0,          duration: 1.8 }, 0.2)
     .from('.hero-name',   { y: 44, opacity: 0,   duration: 1.4 }, 0.6)
     .from('.hero-title',  { y: 18, opacity: 0,   duration: 0.9 }, 1.2);
@@ -155,7 +189,7 @@ if (typeof gsap !== 'undefined') {
     );
   }
 
-} else {
+} else if (lenis) {
   // Fallback: run Lenis via rAF if GSAP unavailable
   (function raf(time) {
     lenis.raf(time);
@@ -219,3 +253,33 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.1 });
 
 document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// ─── SCROLL-SPY: highlight the nav link for the section in view ───
+(function scrollSpy() {
+  const links = {};
+  document.querySelectorAll('.nav-links a[href^="#"]').forEach(a => {
+    const id = a.getAttribute('href').slice(1);
+    if (id) links[id] = a;
+  });
+  const sections = Object.keys(links)
+    .map(id => document.getElementById(id))
+    .filter(Boolean);
+  if (!sections.length) return;
+
+  const spy = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      Object.values(links).forEach(a => a.classList.remove('active'));
+      const active = links[entry.target.id];
+      if (active) active.classList.add('active');
+    });
+  }, { rootMargin: '-50% 0px -50% 0px', threshold: 0 });
+
+  sections.forEach(s => spy.observe(s));
+})();
+
+// ─── FOOTER: current year ───
+(function footerYear() {
+  const el = document.getElementById('footer-year');
+  if (el) el.textContent = new Date().getFullYear();
+})();

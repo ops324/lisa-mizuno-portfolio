@@ -96,8 +96,46 @@ body {
   color: var(--text);
 }
 
-.nav-links a:hover::after {
+.nav-links a:hover::after,
+.nav-links a.active::after {
   width: 100%;
+}
+
+/* Scroll-spy: current section */
+.nav-links a.active {
+  color: var(--text);
+}
+
+/* ─── NAV: mobile menu toggle (hamburger) ─── */
+.nav-toggle {
+  display: none; /* shown only on narrow screens via media query */
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 110;
+}
+
+.nav-toggle span {
+  display: block;
+  width: 22px;
+  height: 1px;
+  background: var(--text);
+  transition: transform 0.35s ease, opacity 0.35s ease;
+}
+
+/* Open state: morph the two bars into an X */
+#nav.menu-open .nav-toggle span:first-child {
+  transform: translateY(3px) rotate(45deg);
+}
+
+#nav.menu-open .nav-toggle span:last-child {
+  transform: translateY(-3px) rotate(-45deg);
 }
 
 /* ─── HERO ─── */
@@ -536,8 +574,41 @@ footer p {
 }
 
 @media (max-width: 480px) {
+  .nav-toggle {
+    display: flex;
+  }
+
+  /* Keep the logo above the open overlay */
+  .nav-logo {
+    position: relative;
+    z-index: 110;
+  }
+
+  /* Links become a full-screen overlay menu */
+  .nav-links {
+    position: fixed;
+    inset: 0;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2.4rem;
+    background: var(--bg);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+  }
+
+  #nav.menu-open .nav-links {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
   .nav-links a {
-    display: none;
+    font-size: 1.4rem;
+    letter-spacing: 0.2em;
+    color: var(--text);
   }
 
   .hero-image {
@@ -778,4 +849,44 @@ footer p {
   .g-block-1 { height: 70vh; }
   .g-block-2 { height: 60vh; }
   .g-counter { font-size: clamp(8rem, 30vw, 14rem); }
+}
+
+/* ─── NO-JS FALLBACK ─── */
+/* If JS is disabled the no-js class is never removed, so reveal fade-in content. */
+.no-js .fade-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ─── FOCUS VISIBLE (keyboard) ─── */
+a:focus-visible,
+.nav-toggle:focus-visible {
+  outline: 1px solid var(--text);
+  outline-offset: 3px;
+  border-radius: 1px;
+}
+
+/* On the dark gallery, use a light ring for contrast */
+#gallery a:focus-visible {
+  outline-color: var(--bg);
+}
+
+/* ─── REDUCED MOTION ─── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Show content without motion (JS also skips Lenis/GSAP under this setting) */
+  .fade-in {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .scroll-indicator span {
+    animation: none !important;
+  }
 }
