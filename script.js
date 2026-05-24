@@ -5,11 +5,19 @@ if ('scrollRestoration' in history) {
 window.scrollTo(0, 0);
 
 // ─── iOS Safari: --vh fix ───
+// Only recompute on width (orientation) change. Mobile browsers fire `resize`
+// when the address bar shows/hides during scroll; recomputing --vh there
+// resized the full-height hero mid-scroll and caused jank.
+let vhWidth = window.innerWidth;
 const setVh = () => {
   document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
 };
 setVh();
-window.addEventListener('resize', setVh, { passive: true });
+window.addEventListener('resize', () => {
+  if (window.innerWidth === vhWidth) return;
+  vhWidth = window.innerWidth;
+  setVh();
+}, { passive: true });
 
 // ─── SMOOTH SCROLL: Lenis ───
 const lenis = new Lenis({
@@ -112,20 +120,23 @@ if (typeof gsap !== 'undefined') {
       }
     );
 
-    // Brightness emergence — image rises from dark to full
-    gsap.fromTo('.g-img-2',
-      { filter: 'brightness(0.4)' },
-      {
-        filter: 'brightness(1)',
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: '.g-block-2',
-          start: 'top bottom',
-          end: 'top center',
-          scrub: 2,
-        },
-      }
-    );
+    // Brightness emergence — image rises from dark to full.
+    // Desktop only: animating `filter` every scroll frame is GPU-heavy on mobile.
+    if (isDesktop) {
+      gsap.fromTo('.g-img-2',
+        { filter: 'brightness(0.4)' },
+        {
+          filter: 'brightness(1)',
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: '.g-block-2',
+            start: 'top bottom',
+            end: 'top center',
+            scrub: 2,
+          },
+        }
+      );
+    }
 
     // Meta rows staggered fade-up — all devices
     gsap.fromTo('.g-meta',
