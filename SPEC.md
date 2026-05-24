@@ -3,7 +3,7 @@
 **URL (GitHub Pages):** https://ops324.github.io/lisa-mizuno-portfolio/  
 **URL (Vercel):** https://lisa-mizuno.vercel.app/  
 **Hosting:** GitHub Pages (`main` branch, root `/`) + Vercel (`serene-leavitt-d01939`)  
-**Last updated:** 2026-05-24 (rev 5)
+**Last updated:** 2026-05-25 (rev 6)
 
 ---
 
@@ -66,7 +66,7 @@ images/
 
 ### About
 - Bilingual bio with **JP / EN toggle** (JP active by default)
-- `.about-header`: serif name "Lisa Mizuno" (left) + `.lang-toggle` JP / EN buttons (right) — name shared across both languages, stays fixed above the body text
+- `.lang-toggle` (JP / EN) lives in the `01 ABOUT` section-label row, right-aligned via `margin-left: auto`; the body text begins directly below (no separate name heading — the name already appears in the nav, hero, and the bio's opening line)
 - Toggle switches `.bio.active` between `#bio-jp` / `#bio-en`; active language button styled via `aria-pressed="true"`; `ScrollTrigger.refresh()` runs after each switch to re-sync gallery triggers to the new page height
 - **Typography:**
   - **EN bio** (`.bio.en`) set in Cormorant Garamond (serif, matches the `.bio-name`), `font-size: 1.12rem` / `font-weight: 500` for body legibility at text size
@@ -93,7 +93,7 @@ images/
   - Editorial meta row: `02 ── 攻殻機動隊展 Ghost and the Shell Collaboration REFLEX 4 - MUTEK.JP`
 - Image wrappers `height: 120%` / `top: -10%` to provide parallax travel room (desktop only)
 - **Mobile (≤900px):** image wrappers reset to `height: 100%; top: 0` — prevents unwanted crop/zoom
-- **Mobile:** GSAP parallax (`yPercent`) disabled; clip-path reveal and meta fade-up run on all devices
+- **Mobile:** GSAP parallax (`yPercent`) **and** the Block 2 `filter: brightness()` scrub are disabled (animating `filter` every frame is GPU-heavy on mobile); clip-path reveal and meta fade-up still run on all devices
 - GSAP 3.12 + ScrollTrigger loaded via CDN
 - **Block gap:** `margin-bottom: 0` — no gap between blocks (dark background never bleeds through)
 
@@ -125,16 +125,17 @@ images/
 | Nav border on scroll | `lenis.on('scroll')` → `.scrolled` class at 50px |
 | Page load hero entrance | GSAP timeline: nav ↓, image fade, name slide-up, title fade |
 | Fade-in on scroll | `IntersectionObserver` → `.fade-in.visible` (opacity + translateY) |
-| About language toggle | JP / EN buttons swap `.bio.active`, update `aria-pressed`, then `ScrollTrigger.refresh()` |
+| About language toggle | JP / EN buttons (in the section-label row) swap `.bio.active`, update `aria-pressed`, then `ScrollTrigger.refresh()` |
 | Gallery Image 1 parallax | GSAP `yPercent: 20`, `scrub: 1.5` — desktop only |
 | Ghost counter parallax | GSAP `yPercent: -40`, `scrub: 1.5` — desktop only |
 | Gallery Image 2 clip-path reveal | GSAP `inset(0 0 100% 0)` → `inset(0 0 0% 0)`, `scrub: 1.2`, `start:'top bottom'` `end:'bottom bottom'` — all devices |
-| Gallery Image 2 brightness fade | GSAP `brightness(0.4 → 1)`, `scrub: 2`, `end:'top center'` — cinematic dark emergence |
+| Gallery Image 2 brightness fade | GSAP `brightness(0.4 → 1)`, `scrub: 2`, `end:'top center'` — cinematic dark emergence — **desktop only** |
 | Gallery Image 2 parallax | GSAP `yPercent: 15`, `scrub: 1.5` — desktop only |
 | Meta fade-up | GSAP stagger `y: 18 → 0`, `duration: 0.9`, `power2.out` |
 | Logo hover | CSS `filter: grayscale(0%)` transition |
 | Connect link hover | CSS `padding-left` + `::after` opacity |
-| iOS vh fix | `--vh` CSS variable updated on resize via JS |
+| iOS vh fix | `--vh` CSS variable set on load; recomputed **only on width (orientation) change** — height-only `resize` events from the mobile address bar showing/hiding are ignored to avoid hero reflow jank mid-scroll |
+| Mobile nav perf | Nav `backdrop-filter: blur()` is **disabled ≤900px** (background already ~opaque) — avoids per-frame blur recompositing during scroll |
 | GPU hints | `will-change: transform` on `.g-img-wrap`, `.g-counter` |
 
 ---

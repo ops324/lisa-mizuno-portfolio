@@ -219,19 +219,12 @@ body {
 }
 
 /* ─── ABOUT ─── */
-.about-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
 .lang-toggle {
   display: flex;
   align-items: baseline;
   gap: 0.55rem;
   flex-shrink: 0;
+  margin-left: auto; /* push toggle to the right of the "01 ABOUT" label row */
 }
 
 .lang-btn {
@@ -315,14 +308,6 @@ body {
   font-size: 0.97rem;
   line-height: 2.0;
   font-weight: 300;
-}
-
-.bio-name {
-  font-family: var(--font-serif);
-  font-size: 1.1rem;
-  font-weight: 400;
-  letter-spacing: 0.2em;
-  color: var(--text);
 }
 
 /* ─── WORKS ─── */
@@ -514,6 +499,11 @@ footer p {
 
   #nav {
     padding: 1.2rem 1.5rem;
+    /* Drop the blur on mobile — it repaints every scroll frame for no
+       visible gain (background is already ~opaque). */
+    background: var(--bg);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 
   .nav-links {
