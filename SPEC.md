@@ -3,7 +3,7 @@
 **URL (GitHub Pages):** https://ops324.github.io/lisa-mizuno-portfolio/  
 **URL (Vercel):** https://lisa-mizuno.vercel.app/  
 **Hosting:** GitHub Pages (`main` branch, root `/`) + Vercel (`serene-leavitt-d01939`)  
-**Last updated:** 2026-05-18 (rev 3)
+**Last updated:** 2026-05-24 (rev 5)
 
 ---
 
@@ -20,10 +20,10 @@ Sections: Hero → About → Works → Gallery → Connect
 |---|---|
 | Background | `#faf8f4` (warm cream) |
 | Text | `#1a1714` (dark brown) |
-| Subtext | `#8a7f76` (muted taupe) |
+| Subtext | `#7a6f64` (muted taupe — WCAG AA ≥4.5:1 on bg) |
 | Border | `#d9d0c6` (warm gray) |
 | Gallery BG | `#111009` (warm near-black) |
-| Font serif | Cormorant Garamond 300/400 |
+| Font serif | Cormorant Garamond 300/400/500 |
 | Font sans | Space Grotesk 300/400/500 |
 | Font JP | Noto Sans JP 300 |
 
@@ -65,9 +65,17 @@ images/
 - Scroll cue: vertical "SCROLL" text `::after`, bottom-right (hidden on mobile)
 
 ### About
-- Bilingual bio (JP active by default, EN hidden via `.bio` / `.bio.active`)
+- Bilingual bio with **JP / EN toggle** (JP active by default)
+- `.about-header`: serif name "Lisa Mizuno" (left) + `.lang-toggle` JP / EN buttons (right) — name shared across both languages, stays fixed above the body text
+- Toggle switches `.bio.active` between `#bio-jp` / `#bio-en`; active language button styled via `aria-pressed="true"`; `ScrollTrigger.refresh()` runs after each switch to re-sync gallery triggers to the new page height
+- **Typography:**
+  - **EN bio** (`.bio.en`) set in Cormorant Garamond (serif, matches the `.bio-name`), `font-size: 1.12rem` / `font-weight: 500` for body legibility at text size
+  - **JP bio** (`.bio.jp`) uses font stack `var(--font-serif), var(--font-jp)` — Latin glyphs (e.g. "LISA MIZUNO", "Resonance") render in Cormorant Garamond, Japanese glyphs fall back to Noto Sans JP (Cormorant has no JP coverage)
+- **Accessibility:**
+  - `lang="en"` / `lang="ja"` on the bio blocks so screen readers announce each language correctly (`<html lang="en">` kept — UI chrome/meta are English)
+  - Active language button shows an underline indicator (`.lang-btn[aria-pressed="true"]::after`) in addition to color, so the selection is clear regardless of contrast
+  - `.lang-btn:focus-visible` outline for keyboard navigation
 - `max-width: 860px`, `padding: 9rem 3rem`
-- JP name displayed as serif heading above body text
 
 ### Works
 - 13 partner logos, 4-col grid → 3-col (≤900px) → 2-col (≤480px)
@@ -117,6 +125,7 @@ images/
 | Nav border on scroll | `lenis.on('scroll')` → `.scrolled` class at 50px |
 | Page load hero entrance | GSAP timeline: nav ↓, image fade, name slide-up, title fade |
 | Fade-in on scroll | `IntersectionObserver` → `.fade-in.visible` (opacity + translateY) |
+| About language toggle | JP / EN buttons swap `.bio.active`, update `aria-pressed`, then `ScrollTrigger.refresh()` |
 | Gallery Image 1 parallax | GSAP `yPercent: 20`, `scrub: 1.5` — desktop only |
 | Ghost counter parallax | GSAP `yPercent: -40`, `scrub: 1.5` — desktop only |
 | Gallery Image 2 clip-path reveal | GSAP `inset(0 0 100% 0)` → `inset(0 0 0% 0)`, `scrub: 1.2`, `start:'top bottom'` `end:'bottom bottom'` — all devices |
@@ -150,3 +159,5 @@ images/
 
 No build step required (pure HTML/CSS/JS).  
 Vercel project: `serene-leavitt-d01939` (linked in worktree `.vercel/` config).
+
+**Basic Auth:** `middleware.js` (Vercel Edge middleware) gates the **Vercel** deployment behind HTTP Basic Auth. GitHub Pages is a static host and does not run middleware, so that mirror is **not** password-protected.

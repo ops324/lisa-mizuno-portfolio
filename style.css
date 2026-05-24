@@ -7,7 +7,7 @@
 :root {
   --bg: #faf8f4;
   --text: #1a1714;
-  --text-sub: #8a7f76;
+  --text-sub: #7a6f64;
   --border: #d9d0c6;
 
   --font-en: 'Space Grotesk', sans-serif;
@@ -219,6 +219,65 @@ body {
 }
 
 /* ─── ABOUT ─── */
+.about-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.lang-toggle {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  flex-shrink: 0;
+}
+
+.lang-btn {
+  position: relative;
+  font-family: var(--font-en);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-sub);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.35s ease;
+}
+
+.lang-btn:hover {
+  color: var(--text);
+}
+
+.lang-btn[aria-pressed="true"] {
+  color: var(--text);
+}
+
+.lang-btn[aria-pressed="true"]::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 1px;
+  background: var(--text);
+}
+
+.lang-btn:focus-visible {
+  outline: 1px solid var(--text);
+  outline-offset: 4px;
+}
+
+.lang-sep {
+  font-size: 0.68rem;
+  color: var(--text-sub);
+  opacity: 0.5;
+}
+
 .bio {
   display: none;
 }
@@ -239,8 +298,17 @@ body {
   margin-bottom: 0;
 }
 
+.bio.en {
+  font-family: var(--font-serif);
+}
+
+.bio.en p {
+  font-size: 1.12rem;
+  font-weight: 500;
+}
+
 .bio.jp {
-  font-family: var(--font-jp);
+  font-family: var(--font-serif), var(--font-jp);
 }
 
 .bio.jp p {
@@ -255,7 +323,6 @@ body {
   font-weight: 400;
   letter-spacing: 0.2em;
   color: var(--text);
-  margin-bottom: 2rem;
 }
 
 /* ─── WORKS ─── */
