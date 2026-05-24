@@ -7,7 +7,7 @@
 :root {
   --bg: #faf8f4;
   --text: #1a1714;
-  --text-sub: #8a7f76;
+  --text-sub: #7a6f64;
   --border: #d9d0c6;
 
   --font-en: 'Space Grotesk', sans-serif;
@@ -235,6 +235,7 @@ body {
 }
 
 .lang-btn {
+  position: relative;
   font-family: var(--font-en);
   font-size: 0.68rem;
   font-weight: 500;
@@ -254,6 +255,21 @@ body {
 
 .lang-btn[aria-pressed="true"] {
   color: var(--text);
+}
+
+.lang-btn[aria-pressed="true"]::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 1px;
+  background: var(--text);
+}
+
+.lang-btn:focus-visible {
+  outline: 1px solid var(--text);
+  outline-offset: 4px;
 }
 
 .lang-sep {
@@ -282,8 +298,17 @@ body {
   margin-bottom: 0;
 }
 
+.bio.en {
+  font-family: var(--font-serif);
+}
+
+.bio.en p {
+  font-size: 1.12rem;
+  font-weight: 500;
+}
+
 .bio.jp {
-  font-family: var(--font-jp);
+  font-family: var(--font-serif), var(--font-jp);
 }
 
 .bio.jp p {
