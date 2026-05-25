@@ -222,20 +222,23 @@ if (!prefersReduced && typeof gsap !== 'undefined') {
   });
 })();
 
-// ─── ABOUT: language toggle ───
+// ─── ABOUT: language toggle (also switches the footer attribution note) ───
 (function aboutLangToggle() {
   const buttons = document.querySelectorAll('.lang-btn');
-  const bios = {
-    jp: document.getElementById('bio-jp'),
-    en: document.getElementById('bio-en'),
-  };
-  if (!buttons.length || !bios.jp || !bios.en) return;
+  if (!buttons.length) return;
+
+  // Groups of {jp, en} elements that switch together with the toggle.
+  const groups = [
+    { jp: document.getElementById('bio-jp'), en: document.getElementById('bio-en') },
+    { jp: document.getElementById('note-jp'), en: document.getElementById('note-en') },
+  ];
 
   buttons.forEach(btn => {
     btn.addEventListener('click', () => {
       const lang = btn.dataset.lang;
-      Object.entries(bios).forEach(([key, el]) => {
-        el.classList.toggle('active', key === lang);
+      groups.forEach(({ jp, en }) => {
+        if (jp) jp.classList.toggle('active', lang === 'jp');
+        if (en) en.classList.toggle('active', lang === 'en');
       });
       buttons.forEach(b => {
         b.setAttribute('aria-pressed', String(b.dataset.lang === lang));

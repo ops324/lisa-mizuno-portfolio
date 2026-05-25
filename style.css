@@ -494,6 +494,23 @@ footer p {
   opacity: 0.8;
 }
 
+footer .footer-note {
+  font-family: var(--font-en), var(--font-jp);
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  line-height: 1.7;
+  opacity: 0.5;
+  margin-top: 0.9rem;
+}
+
+footer .lang-note {
+  display: none;
+}
+
+footer .lang-note.active {
+  display: inline;
+}
+
 /* ─── HERO SCROLL CUE ─── */
 #hero::after {
   content: 'scroll';
