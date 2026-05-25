@@ -1,5 +1,8 @@
 export const config = {
-  matcher: '/:path*',
+  // Gate every path EXCEPT the icon files, so the browser can load the
+  // favicon / touch icon without auth (otherwise the tab icon 401s and the
+  // browser shows a fallback). The page itself stays password-protected.
+  matcher: ['/((?!favicon.svg|favicon.ico|apple-touch-icon.png).*)'],
 };
 
 export default function middleware(request) {
