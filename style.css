@@ -11,8 +11,10 @@
   --border: #d9d0c6;
 
   --font-en: 'Space Grotesk', sans-serif;
-  --font-serif: 'Cormorant Garamond', serif;
-  --font-jp: 'Noto Sans JP', sans-serif;
+  /* JP face listed before the generic so Japanese glyphs resolve to Shippori
+     Mincho (not a device-dependent system serif) in serif contexts. */
+  --font-serif: 'Cormorant Garamond', 'Shippori Mincho', serif;
+  --font-jp: 'Shippori Mincho', serif;
 }
 
 ::selection {
@@ -495,12 +497,16 @@ footer p {
 }
 
 footer .footer-note {
-  font-family: var(--font-en), var(--font-jp);
+  font-family: var(--font-en);
   font-size: 0.6rem;
   letter-spacing: 0.06em;
   line-height: 1.7;
   opacity: 0.5;
   margin-top: 0.9rem;
+}
+
+footer #note-jp {
+  font-family: var(--font-jp);
 }
 
 footer .lang-note {

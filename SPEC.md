@@ -3,7 +3,7 @@
 **URL (GitHub Pages):** https://ops324.github.io/lisa-mizuno-portfolio/  
 **URL (Vercel):** https://lisa-mizuno.vercel.app/  
 **Hosting:** GitHub Pages (`main` branch, root `/`) + Vercel (`serene-leavitt-d01939`)  
-**Last updated:** 2026-05-25 (rev 8 — Works per-device logo order + optical size balancing)
+**Last updated:** 2026-05-25 (rev 9 — JP font → Shippori Mincho; Works per-device logo order + optical size balancing)
 
 ---
 
@@ -25,7 +25,7 @@ Sections: Hero → About → Works → Gallery → Connect
 | Gallery BG | `#111009` (warm near-black) |
 | Font serif | Cormorant Garamond 300/400/500 |
 | Font sans | Space Grotesk 300/400/500 |
-| Font JP | Noto Sans JP 300 |
+| Font JP | Shippori Mincho 400/500 (Mincho serif) |
 
 Section labels auto-number via CSS `counter-increment: section-index`:  
 01 About · 02 Works · 03 Gallery · 04 Connect
@@ -77,7 +77,7 @@ images/
 - Toggle switches `.bio.active` between `#bio-jp` / `#bio-en`; active language button styled via `aria-pressed="true"`; `ScrollTrigger.refresh()` runs after each switch to re-sync gallery triggers to the new page height
 - **Typography:**
   - **EN bio** (`.bio.en`) set in Cormorant Garamond (serif, matches the `.bio-name`), `font-size: 1.12rem` / `font-weight: 500` for body legibility at text size
-  - **JP bio** (`.bio.jp`) uses font stack `var(--font-serif), var(--font-jp)` — Latin glyphs (e.g. "LISA MIZUNO", "Resonance") render in Cormorant Garamond, Japanese glyphs fall back to Noto Sans JP (Cormorant has no JP coverage)
+  - **JP bio** (`.bio.jp`) uses font stack `var(--font-serif), var(--font-jp)` — Latin glyphs (e.g. "LISA MIZUNO", "Resonance") render in Cormorant Garamond, Japanese glyphs render in Shippori Mincho. The JP face is placed before the generic `serif` so Japanese resolves to Shippori Mincho (not a device-dependent system serif)
 - **Accessibility:**
   - `lang="en"` / `lang="ja"` on the bio blocks so screen readers announce each language correctly (`<html lang="en">` kept — UI chrome/meta are English)
   - Active language button shows an underline indicator (`.lang-btn[aria-pressed="true"]::after`) in addition to color, so the selection is clear regardless of contrast
@@ -165,7 +165,7 @@ images/
 | GSAP | 3.12.5 | CDN (cdnjs) |
 | ScrollTrigger | 3.12.5 | CDN (cdnjs) |
 | Lenis | 1.1.14 | CDN (jsDelivr) |
-| Google Fonts | — | Cormorant Garamond, Space Grotesk, Noto Sans JP |
+| Google Fonts | — | Cormorant Garamond, Space Grotesk, Shippori Mincho |
 
 ---
 
