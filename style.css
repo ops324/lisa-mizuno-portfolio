@@ -363,8 +363,9 @@ body {
 }
 
 .works-logo-item img {
-  width: 100%;
-  max-height: 38px;
+  width: auto;
+  max-width: 100%;
+  max-height: 30px;
   object-fit: contain;
   filter: grayscale(100%);
   transition: filter 0.5s ease;
@@ -374,6 +375,21 @@ body {
   filter: grayscale(0%);
 }
 
+/* Optical size balancing: equalize perceived size by AREA within a safe box.
+   Wide wordmarks get a width cap so they don't bleed to the cell edge;
+   narrow / stacked lock-ups are lifted in height. */
+.works-logo-item--mutek img        { max-height: 24px; }
+.works-logo-item--keisuke img      { max-height: 24px; max-width: min(158px, 100%); }
+.works-logo-item--malakai img      { max-width: min(172px, 100%); }
+.works-logo-item--tokyonode img    { max-width: min(160px, 100%); }
+.works-logo-item--sibtv img        { max-width: min(150px, 100%); }
+.works-logo-item--pioneerdj img    { max-height: 30px; }
+.works-logo-item--ignite img       { max-height: 32px; }
+.works-logo-item--parco img        { max-height: 30px; }
+.works-logo-item--mori img         { max-height: 38px; }
+.works-logo-item--shogakukan img   { max-height: 38px; }
+.works-logo-item--shibuyaradio img { max-height: 32px; }
+
 .works-logo-item--dommune {
   flex-direction: row;
   gap: 0.25rem;
@@ -381,6 +397,7 @@ body {
 
 .works-logo-item--dommune img {
   width: auto;
+  max-height: none;
   filter: none;
 }
 
@@ -390,7 +407,7 @@ body {
 }
 
 .dommune-text {
-  height: 38px;
+  height: 34px;
 }
 
 /* ─── CONNECT ─── */
@@ -568,6 +585,21 @@ footer p {
     grid-column: 2 / 3;
   }
 
+  /* Tablet (3-col) row-by-row order per handwritten layout */
+  .works-logo-item--pioneerdj    { order: 1; }
+  .works-logo-item--mutek        { order: 2; }
+  .works-logo-item--dommune      { order: 3; }
+  .works-logo-item--keisuke      { order: 4; }
+  .works-logo-item--malakai      { order: 5; }
+  .works-logo-item--parco        { order: 6; }
+  .works-logo-item--mori         { order: 7; }
+  .works-logo-item--tokyonode    { order: 8; }
+  .works-logo-item--ignite       { order: 9; }
+  .works-logo-item--shogakukan   { order: 10; }
+  .works-logo-item--shibuyaradio { order: 11; }
+  .works-logo-item--oizumi       { order: 12; }
+  .works-logo-item--sibtv        { order: 13; }
+
   #hero::after {
     display: none;
   }
@@ -630,13 +662,28 @@ footer p {
     grid-column: 1 / -1;
   }
 
+  /* Mobile (2-col) row-by-row order per handwritten layout */
+  .works-logo-item--pioneerdj    { order: 1; }
+  .works-logo-item--mutek        { order: 2; }
+  .works-logo-item--dommune      { order: 3; }
+  .works-logo-item--parco        { order: 4; }
+  .works-logo-item--keisuke      { order: 5; }
+  .works-logo-item--malakai      { order: 6; }
+  .works-logo-item--ignite       { order: 7; }
+  .works-logo-item--oizumi       { order: 8; }
+  .works-logo-item--mori         { order: 9; }
+  .works-logo-item--tokyonode    { order: 10; }
+  .works-logo-item--shogakukan   { order: 11; }
+  .works-logo-item--shibuyaradio { order: 12; }
+  .works-logo-item--sibtv        { order: 13; }
+
   /* DOMMUNE: scale down for narrow screens */
   .dommune-icon {
-    height: 22px;
+    height: 24px;
   }
 
   .dommune-text {
-    height: 30px;
+    height: 28px;
   }
 }
 

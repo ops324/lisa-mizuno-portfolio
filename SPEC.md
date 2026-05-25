@@ -3,7 +3,7 @@
 **URL (GitHub Pages):** https://ops324.github.io/lisa-mizuno-portfolio/  
 **URL (Vercel):** https://lisa-mizuno.vercel.app/  
 **Hosting:** GitHub Pages (`main` branch, root `/`) + Vercel (`serene-leavitt-d01939`)  
-**Last updated:** 2026-05-25 (rev 7)
+**Last updated:** 2026-05-25 (rev 8 — Works per-device logo order + optical size balancing)
 
 ---
 
@@ -88,8 +88,10 @@ images/
 - 13 partner logos, 4-col grid → 3-col (≤900px) → 2-col (≤480px)
 - Grayscale → color on hover
 - Orphaned last item auto-centered via `grid-column` nth-child rules (4n+1→col 2/4, 3n+1→col 2/3, 2n+1→col 1/-1)
-- **DOMMUNE**: shield icon (`dommune/Logo-1.png`) + wordmark (`dommune/Logo-2.png`) side-by-side in one grid cell (`flex-direction: row`); canvas background removal at load time (script.js `removeDommuneBackground`) makes PNG backgrounds transparent; desktop icon/text: 30px/38px; mobile (≤480px): 22px/30px; grayscale excluded via `filter: none`
-- **IGNITE SVG**: `text-anchor="middle" x="123"` to center text within 240px viewBox
+- **Per-device order**: each item has an identifier class (`works-logo-item--pioneerdj`, etc.); DOM order = PC order, while tablet/mobile reorder rows via CSS `order` inside the media queries. Shibuya Television (www.sib.tv) is always last/centered (12 grid logos divide evenly into 2/3/4 cols, leaving it as the orphan)
+- **Optical size balancing**: base `max-width: 100%; max-height: 30px` (height-driven, not full-width). Perceived size equalized by AREA: wide wordmarks (MALAKAI/TOKYONODE/KEISUKEYOSHIDA/sib.tv) capped with `max-width: min(Npx, 100%)` so they don't bleed to the cell edge; narrow/stacked marks lifted in height (森ビル/小学館 38px, IGNITE 32px). Area spread tightened to ~0.7–1.4× of tablet median (森ビル stays smallest — vertical lock-up)
+- **DOMMUNE**: shield icon (`dommune/Logo-1.png`) + wordmark (`dommune/Logo-2.png`) side-by-side in one grid cell (`flex-direction: row`); canvas background removal at load time (script.js `removeDommuneBackground`) makes PNG backgrounds transparent; desktop icon/text: 30px/34px; mobile (≤480px): 24px/28px; `max-height: none` lifts the base cap; grayscale excluded via `filter: none`
+- **IGNITE SVG**: `text-anchor="middle" x="123"` to center text within 240px viewBox; sized up to `max-height: 32px`
 
 ### Gallery
 - Full-bleed dark section (`background: #111009`)
