@@ -9,6 +9,9 @@
   --text: #1a1714;
   --text-sub: #7a6f64;
   --border: #d9d0c6;
+  /* Single restrained accent — deep muted oxblood. Used only on interaction
+     (hover / active underlines, the ↗ arrow, text selection). */
+  --accent: #7d3531;
 
   --font-en: 'Space Grotesk', sans-serif;
   /* JP face listed before the generic so Japanese glyphs resolve to Shippori
@@ -18,7 +21,7 @@
 }
 
 ::selection {
-  background: var(--text);
+  background: var(--accent);
   color: var(--bg);
 }
 
@@ -32,7 +35,6 @@ body {
   font-family: var(--font-en);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  counter-reset: section-index;
 }
 
 /* ─── NAV ─── */
@@ -90,7 +92,7 @@ body {
   left: 0;
   width: 0;
   height: 1px;
-  background: var(--text);
+  background: var(--accent);
   transition: width 0.4s ease;
 }
 
@@ -155,6 +157,18 @@ body {
   overflow: hidden;
 }
 
+/* Cinematic vignette — grounds the portrait, adds depth without noise. */
+.hero-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background:
+    linear-gradient(to bottom, transparent 52%, rgba(17, 16, 9, 0.30) 100%),
+    radial-gradient(120% 90% at 50% 38%, transparent 58%, rgba(17, 16, 9, 0.22) 100%);
+}
+
 .hero-image img {
   width: 100%;
   height: 100%;
@@ -163,6 +177,15 @@ body {
   filter: grayscale(100%) brightness(0.96);
   display: block;
   transition: filter 1.2s ease;
+  /* Slow, near-imperceptible Ken Burns drift — the portrait "breathes". */
+  animation: heroKenBurns 32s ease-in-out infinite alternate;
+  transform-origin: 50% 35%;
+  will-change: transform;
+}
+
+@keyframes heroKenBurns {
+  from { transform: scale(1); }
+  to   { transform: scale(1.07); }
 }
 
 .hero-image:hover img {
@@ -194,33 +217,6 @@ body {
   color: var(--text-sub);
 }
 
-.scroll-indicator {
-  position: absolute;
-  bottom: 3rem;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.scroll-indicator span {
-  display: block;
-  width: 1px;
-  height: 60px;
-  background: var(--text-sub);
-  animation: scrollLine 2.4s ease-in-out infinite;
-  transform-origin: top;
-  opacity: 0.7;
-}
-
-@keyframes scrollLine {
-  0%   { transform: scaleY(0); opacity: 0; }
-  30%  { opacity: 0.7; }
-  70%  { transform: scaleY(1); opacity: 0.7; }
-  100% { transform: scaleY(1); opacity: 0; }
-}
-
 /* ─── SHARED SECTION STYLES ─── */
 #about,
 #works,
@@ -244,18 +240,6 @@ body {
   display: flex;
   align-items: baseline;
   gap: 1.3rem;
-  counter-increment: section-index;
-}
-
-.section-label::before {
-  content: "0" counter(section-index);
-  font-size: 0.55rem;
-  letter-spacing: 0.1em;
-  font-weight: 400;
-  color: var(--text-sub);
-  opacity: 0.45;
-  flex-shrink: 0;
-  text-transform: none;
 }
 
 /* ─── ABOUT ─── */
@@ -297,7 +281,7 @@ body {
   right: 0;
   bottom: -4px;
   height: 1px;
-  background: var(--text);
+  background: var(--accent);
 }
 
 .lang-btn:focus-visible {
@@ -435,7 +419,7 @@ body {
 
 .connect-item:hover {
   padding-left: 1rem;
-  border-bottom-color: var(--text);
+  border-bottom-color: var(--accent);
 }
 
 .connect-item::after {
@@ -451,8 +435,9 @@ body {
 }
 
 .connect-item:hover::after {
-  opacity: 0.5;
+  opacity: 0.9;
   transform: translate(0, 0);
+  color: var(--accent);
 }
 
 .connect-category-label {
@@ -800,11 +785,63 @@ footer .lang-note.active {
   background: #111009;
   position: relative;
   overflow: hidden;
-  padding-top: 6rem;
+  padding-top: 17rem;
   padding-bottom: 8rem;
 }
 
+/* Cinematic transition — the dark gallery emerges from the paper section
+   above instead of cutting hard. The stops follow a smoothstep (ease-in-out)
+   curve so both seams — paper→band and band→dark — dissolve with no visible
+   edge, and the mid-tones avoid a muddy flat-grey band. */
+#gallery::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 260px;
+  /* 11 stops sampled on a smoothstep curve — denser stops mean the slope
+     barely changes at each joint, so no Mach band appears between segments. */
+  background: linear-gradient(
+    to bottom,
+    var(--bg) 0%,
+    #f4f2ed 10%,
+    #e2e0dc 20%,
+    #c8c6c1 30%,
+    #a8a6a1 40%,
+    #86847f 50%,
+    #63625c 60%,
+    #43423c 70%,
+    #292821 80%,
+    #181710 90%,
+    #111009 100%
+  );
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Dither layer — a faint monochrome noise over the transition band. It
+   decorrelates the 8-bit quantisation steps that the eye reads as banding
+   in the dark region. Masked at both ends so the noise itself has no edge. */
+#gallery::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 260px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  opacity: 0.05;
+  z-index: 0;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 22%, #000 78%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 22%, #000 78%, transparent 100%);
+}
+
 #gallery .gallery-header {
+  position: relative;
+  z-index: 1;
   max-width: 860px;
   margin: 0 auto 4rem;
   padding: 0 3rem;
@@ -814,10 +851,6 @@ footer .lang-note.active {
   color: rgba(232, 226, 216, 0.4);
   border-bottom-color: rgba(232, 226, 216, 0.12);
   margin-bottom: 0;
-}
-
-#gallery .gallery-label::before {
-  color: rgba(232, 226, 216, 0.25);
 }
 
 .g-block {
@@ -838,28 +871,12 @@ footer .lang-note.active {
   will-change: transform;
 }
 
-.g-img-wrap img {
+.g-img-wrap img,
+.g-img-wrap video {
   width: 100%;
   height: 100%;
   object-fit: cover;
   display: block;
-}
-
-.g-counter {
-  position: absolute;
-  top: 50%;
-  right: 5vw;
-  transform: translateY(-50%);
-  font-family: var(--font-serif);
-  font-size: clamp(12rem, 22vw, 28rem);
-  font-weight: 300;
-  line-height: 1;
-  letter-spacing: -0.02em;
-  color: rgba(250, 248, 244, 0.03);
-  pointer-events: none;
-  z-index: 2;
-  user-select: none;
-  will-change: transform;
 }
 
 .g-meta {
@@ -902,7 +919,9 @@ footer .lang-note.active {
 }
 
 @media (max-width: 900px) {
-  #gallery { padding-top: 4.5rem; padding-bottom: 5.5rem; }
+  #gallery { padding-top: 12rem; padding-bottom: 5.5rem; }
+  #gallery::before,
+  #gallery::after { height: 180px; }
   #gallery .gallery-header { padding: 0 1.5rem; margin-bottom: 3rem; }
   .g-block-1 { height: 80vh; }
   .g-block-2 { height: 65vh; }
@@ -918,7 +937,6 @@ footer .lang-note.active {
 @media (max-width: 480px) {
   .g-block-1 { height: 70vh; }
   .g-block-2 { height: 60vh; }
-  .g-counter { font-size: clamp(8rem, 30vw, 14rem); }
 }
 
 /* ─── NO-JS FALLBACK ─── */
@@ -956,7 +974,9 @@ a:focus-visible,
     transform: none !important;
   }
 
-  .scroll-indicator span {
+  /* Stop the Ken Burns drift and reset to a clean, unscaled portrait. */
+  .hero-image img {
     animation: none !important;
+    transform: none !important;
   }
 }

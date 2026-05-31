@@ -113,17 +113,6 @@ if (!prefersReduced && typeof gsap !== 'undefined') {
         },
       });
 
-      gsap.to('.g-counter', {
-        yPercent: -40,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: '.g-block-1',
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: 1.5,
-        },
-      });
-
       gsap.to('.g-img-2', {
         yPercent: 15,
         ease: 'none',
