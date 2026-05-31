@@ -141,10 +141,12 @@
     <!-- Block 1: DJ Portrait — full-bleed with parallax -->
     <div class="g-block g-block-1">
       <div class="g-img-wrap g-img-1">
+        <!-- 装飾用の背景動画。隣の .g-meta-label が可視キャプションを担うため
+             aria-hidden で支援技術からは除外する。 -->
         <video src="images/dj-shanghai.mp4"
                poster="images/dj-portrait.jpg"
                autoplay muted loop playsinline
-               aria-label="Lisa Mizuno — raster.focus Asia tour"></video>
+               aria-hidden="true"></video>
       </div>
       <div class="g-meta g-meta-1">
         <span class="g-meta-num">01</span>
@@ -229,9 +231,15 @@
     </p>
   </footer>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"
+          integrity="sha384-g4NTh/Iv5PPU4xPyhEWqPcwtNXOvdaDI8LLnyYfyNZOjKJeYQyjzQ9X5275eBjpt"
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"
+          integrity="sha384-Z3REaz79l2IaAZqJsSABtTbhjgOUYyV3p90XNnAPCSHg3EMTz1fouunq9WZRtj3d"
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"
+          integrity="sha384-O55L/6rhHr9CFvrxqv5luxOCcmVaBmETbZbJDP+Do8T0pztTACsFBD/IXCNkj7DV"
+          crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="script.js"></script>
 </body>
 </html>

@@ -10,14 +10,18 @@ window.scrollTo(0, 0);
 // resized the full-height hero mid-scroll and caused jank.
 let vhWidth = window.innerWidth;
 const setVh = () => {
-  document.documentElement.style.setProperty('--vh', window.innerHeight * 0.01 + 'px');
+  document.documentElement.style.setProperty('--vh', `${window.innerHeight * 0.01}px`);
 };
 setVh();
-window.addEventListener('resize', () => {
-  if (window.innerWidth === vhWidth) return;
-  vhWidth = window.innerWidth;
-  setVh();
-}, { passive: true });
+window.addEventListener(
+  'resize',
+  () => {
+    if (window.innerWidth === vhWidth) return;
+    vhWidth = window.innerWidth;
+    setVh();
+  },
+  { passive: true },
+);
 
 // ─── MOTION PREFERENCE ───
 const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -45,9 +49,9 @@ let lenis = null;
 if (!prefersReduced) {
   lenis = new Lenis({
     duration: 1.2,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // expo ease-out
+    easing: (t) => Math.min(1, 1.001 - 2 ** (-10 * t)), // expo ease-out
     smoothWheel: true,
-    smoothTouch: false,   // native touch on mobile
+    smoothTouch: false, // native touch on mobile
     wheelMultiplier: 0.9,
   });
 }
@@ -62,8 +66,8 @@ if (lenis) {
 }
 
 // ─── ANCHOR LINKS ───
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', e => {
+document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+  anchor.addEventListener('click', (e) => {
     const href = anchor.getAttribute('href');
     if (href === '#') return;
     const target = document.querySelector(href);
@@ -88,13 +92,14 @@ if (!prefersReduced && typeof gsap !== 'undefined') {
   gsap.ticker.lagSmoothing(0);
 
   // ─── PAGE LOAD: hero entrance ───
-  gsap.timeline({ defaults: { ease: 'power3.out' } })
+  gsap
+    .timeline({ defaults: { ease: 'power3.out' } })
     // clearProps: a residual transform on #nav would make it the containing
     // block for the position:fixed mobile menu overlay (breaking its inset:0).
-    .from('#nav',         { y: -20, opacity: 0, duration: 0.7, clearProps: 'transform' }, 0.1)
-    .from('.hero-image',  { opacity: 0,          duration: 1.8 }, 0.2)
-    .from('.hero-name',   { y: 44, opacity: 0,   duration: 1.4 }, 0.6)
-    .from('.hero-title',  { y: 18, opacity: 0,   duration: 0.9 }, 1.2);
+    .from('#nav', { y: -20, opacity: 0, duration: 0.7, clearProps: 'transform' }, 0.1)
+    .from('.hero-image', { opacity: 0, duration: 1.8 }, 0.2)
+    .from('.hero-name', { y: 44, opacity: 0, duration: 1.4 }, 0.6)
+    .from('.hero-title', { y: 18, opacity: 0, duration: 0.9 }, 1.2);
 
   // ─── GALLERY ANIMATIONS ───
   if (document.getElementById('gallery')) {
@@ -129,7 +134,8 @@ if (!prefersReduced && typeof gsap !== 'undefined') {
     // inset(0 0 B 0): clips from bottom → top of image always exposed first.
     // start:'top bottom' / end:'bottom bottom' ensures revealed area == visible area at all times.
     // No dark background ever shows through.
-    gsap.fromTo('.g-block-2',
+    gsap.fromTo(
+      '.g-block-2',
       { clipPath: 'inset(0 0 100% 0)' },
       {
         clipPath: 'inset(0 0 0% 0)',
@@ -140,13 +146,14 @@ if (!prefersReduced && typeof gsap !== 'undefined') {
           end: 'bottom bottom',
           scrub: 1.2,
         },
-      }
+      },
     );
 
     // Brightness emergence — image rises from dark to full.
     // Desktop only: animating `filter` every scroll frame is GPU-heavy on mobile.
     if (isDesktop) {
-      gsap.fromTo('.g-img-2',
+      gsap.fromTo(
+        '.g-img-2',
         { filter: 'brightness(0.4)' },
         {
           filter: 'brightness(1)',
@@ -157,12 +164,13 @@ if (!prefersReduced && typeof gsap !== 'undefined') {
             end: 'top center',
             scrub: 2,
           },
-        }
+        },
       );
     }
 
     // Meta rows staggered fade-up — all devices
-    gsap.fromTo('.g-meta',
+    gsap.fromTo(
+      '.g-meta',
       { opacity: 0, y: 18 },
       {
         opacity: 1,
@@ -174,10 +182,9 @@ if (!prefersReduced && typeof gsap !== 'undefined') {
           trigger: '.g-block-1',
           start: 'top 60%',
         },
-      }
+      },
     );
   }
-
 } else if (lenis) {
   // Fallback: run Lenis via rAF if GSAP unavailable
   (function raf(time) {
@@ -188,7 +195,7 @@ if (!prefersReduced && typeof gsap !== 'undefined') {
 
 // ─── DOMMUNE: remove baked-in background via canvas ───
 (function removeDommuneBg() {
-  document.querySelectorAll('.dommune-icon, .dommune-text').forEach(img => {
+  document.querySelectorAll('.dommune-icon, .dommune-text').forEach((img) => {
     const process = () => {
       if (img.dataset.bgRemoved) return;
       img.dataset.bgRemoved = '1';
@@ -201,13 +208,19 @@ if (!prefersReduced && typeof gsap !== 'undefined') {
       const id = ctx.getImageData(0, 0, c.width, c.height);
       const d = id.data;
       for (let i = 0; i < d.length; i += 4) {
-        const dr = d[i] - bg[0], dg = d[i+1] - bg[1], db = d[i+2] - bg[2];
-        if (dr*dr + dg*dg + db*db < 400) d[i+3] = 0; // tolerance 20
+        const dr = d[i] - bg[0];
+        const dg = d[i + 1] - bg[1];
+        const db = d[i + 2] - bg[2];
+        if (dr * dr + dg * dg + db * db < 400) d[i + 3] = 0; // tolerance 20
       }
       ctx.putImageData(id, 0, 0);
-      c.toBlob(blob => { img.src = URL.createObjectURL(blob); });
+      c.toBlob((blob) => {
+        img.src = URL.createObjectURL(blob);
+      });
     };
-    img.complete && img.naturalWidth ? process() : img.addEventListener('load', process, { once: true });
+    img.complete && img.naturalWidth
+      ? process()
+      : img.addEventListener('load', process, { once: true });
   });
 })();
 
@@ -222,14 +235,14 @@ if (!prefersReduced && typeof gsap !== 'undefined') {
     { jp: document.getElementById('note-jp'), en: document.getElementById('note-en') },
   ];
 
-  buttons.forEach(btn => {
+  buttons.forEach((btn) => {
     btn.addEventListener('click', () => {
       const lang = btn.dataset.lang;
       groups.forEach(({ jp, en }) => {
         if (jp) jp.classList.toggle('active', lang === 'jp');
         if (en) en.classList.toggle('active', lang === 'en');
       });
-      buttons.forEach(b => {
+      buttons.forEach((b) => {
         b.setAttribute('aria-pressed', String(b.dataset.lang === lang));
       });
       if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
@@ -238,36 +251,42 @@ if (!prefersReduced && typeof gsap !== 'undefined') {
 })();
 
 // ─── FADE IN: IntersectionObserver ───
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) entry.target.classList.add('visible');
-  });
-}, { threshold: 0.1 });
+const observer = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  },
+  { threshold: 0.1 },
+);
 
-document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+document.querySelectorAll('.fade-in').forEach((el) => observer.observe(el));
 
 // ─── SCROLL-SPY: highlight the nav link for the section in view ───
 (function scrollSpy() {
   const links = {};
-  document.querySelectorAll('.nav-links a[href^="#"]').forEach(a => {
+  document.querySelectorAll('.nav-links a[href^="#"]').forEach((a) => {
     const id = a.getAttribute('href').slice(1);
     if (id) links[id] = a;
   });
   const sections = Object.keys(links)
-    .map(id => document.getElementById(id))
+    .map((id) => document.getElementById(id))
     .filter(Boolean);
   if (!sections.length) return;
 
-  const spy = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      Object.values(links).forEach(a => a.classList.remove('active'));
-      const active = links[entry.target.id];
-      if (active) active.classList.add('active');
-    });
-  }, { rootMargin: '-50% 0px -50% 0px', threshold: 0 });
+  const spy = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        Object.values(links).forEach((a) => a.classList.remove('active'));
+        const active = links[entry.target.id];
+        if (active) active.classList.add('active');
+      });
+    },
+    { rootMargin: '-50% 0px -50% 0px', threshold: 0 },
+  );
 
-  sections.forEach(s => spy.observe(s));
+  sections.forEach((s) => spy.observe(s));
 })();
 
 // ─── FOOTER: current year ───

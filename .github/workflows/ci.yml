@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# 古い実行を自動キャンセル（同一ブランチで多重実行しない）
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ── Lint / Format（Biome）＋ HTML バリデーション ──
+  lint:
+    name: Lint & HTML validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Biome check
+        run: npm run lint
+      - name: HTML validate
+        run: npm run validate:html
+
+  # ── Secret scanning（gitleaks）──
+  secrets:
+    name: Secret scan (gitleaks)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # ── Lighthouse CI（パフォーマンス / a11y / SEO / best-practices）──
+  lighthouse:
+    name: Lighthouse CI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Assemble static dist (exclude node_modules)
+        run: |
+          mkdir -p dist
+          cp index.html style.css script.js dist/
+          cp favicon.ico favicon.svg apple-touch-icon.png dist/ 2>/dev/null || true
+          cp -r images dist/
+      - name: Run Lighthouse CI
+        run: npm run lighthouse

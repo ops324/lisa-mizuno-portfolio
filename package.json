@@ -1,0 +1,20 @@
+{
+  "name": "lisa-mizuno-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Lisa Mizuno portfolio site (static HTML/CSS/JS, deployed on Vercel)",
+  "type": "module",
+  "scripts": {
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "validate:html": "html-validate index.html",
+    "lighthouse": "lhci autorun",
+    "check": "npm run lint && npm run validate:html"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@lhci/cli": "0.14.0",
+    "html-validate": "9.5.3"
+  }
+}
