@@ -5,12 +5,6 @@ export const config = {
   matcher: ['/((?!favicon.svg|favicon.ico|apple-touch-icon.png).*)'],
 };
 
-// 資格情報は Vercel の環境変数で管理する（コードに直書きしない）。
-//   BASIC_AUTH_USER / BASIC_AUTH_PASS
-// 未設定の場合は「全拒否（fail-closed）」とし、誤って認証を無効化しない。
-const EXPECTED_USER = process.env.BASIC_AUTH_USER;
-const EXPECTED_PASS = process.env.BASIC_AUTH_PASS;
-
 // タイミング攻撃を避けるための定数時間比較。
 function safeEqual(a, b) {
   if (typeof a !== 'string' || typeof b !== 'string' || a.length !== b.length) {
@@ -24,6 +18,13 @@ function safeEqual(a, b) {
 }
 
 export default function middleware(request) {
+  // 資格情報は Vercel の環境変数で管理する（コードに直書きしない）。
+  //   BASIC_AUTH_USER / BASIC_AUTH_PASS
+  // Edge Middleware では参照をリクエスト時に行う（モジュール初期化時より確実）。
+  // 未設定の場合は「全拒否（fail-closed）」とし、誤って認証を無効化しない。
+  const EXPECTED_USER = process.env.BASIC_AUTH_USER;
+  const EXPECTED_PASS = process.env.BASIC_AUTH_PASS;
+
   const authHeader = request.headers.get('authorization');
 
   // 環境変数が両方そろっている時だけ認証を許可（fail-closed）。
