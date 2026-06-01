@@ -1,4 +1,6 @@
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -13,11 +15,11 @@
      (hover / active underlines, the ↗ arrow, text selection). */
   --accent: #7d3531;
 
-  --font-en: 'Space Grotesk', sans-serif;
+  --font-en: "Space Grotesk", sans-serif;
   /* JP face listed before the generic so Japanese glyphs resolve to Shippori
      Mincho (not a device-dependent system serif) in serif contexts. */
-  --font-serif: 'Cormorant Garamond', 'Shippori Mincho', serif;
-  --font-jp: 'Shippori Mincho', serif;
+  --font-serif: "Cormorant Garamond", "Shippori Mincho", serif;
+  --font-jp: "Shippori Mincho", serif;
 }
 
 ::selection {
@@ -86,7 +88,7 @@ body {
 }
 
 .nav-links a::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -3px;
   left: 0;
@@ -159,13 +161,12 @@ body {
 
 /* Cinematic vignette — grounds the portrait, adds depth without noise. */
 .hero-image::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: 1;
-  background:
-    linear-gradient(to bottom, transparent 52%, rgba(17, 16, 9, 0.30) 100%),
+  background: linear-gradient(to bottom, transparent 52%, rgba(17, 16, 9, 0.3) 100%),
     radial-gradient(120% 90% at 50% 38%, transparent 58%, rgba(17, 16, 9, 0.22) 100%);
 }
 
@@ -184,8 +185,12 @@ body {
 }
 
 @keyframes heroKenBurns {
-  from { transform: scale(1); }
-  to   { transform: scale(1.07); }
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(1.07);
+  }
 }
 
 .hero-image:hover img {
@@ -275,7 +280,7 @@ body {
 }
 
 .lang-btn[aria-pressed="true"]::after {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   right: 0;
@@ -364,17 +369,40 @@ body {
 /* Optical size balancing: equalize perceived size by AREA within a safe box.
    Wide wordmarks get a width cap so they don't bleed to the cell edge;
    narrow / stacked lock-ups are lifted in height. */
-.works-logo-item--mutek img        { max-height: 24px; }
-.works-logo-item--keisuke img      { max-height: 24px; max-width: min(158px, 100%); }
-.works-logo-item--malakai img      { max-width: min(172px, 100%); }
-.works-logo-item--tokyonode img    { max-width: min(160px, 100%); }
-.works-logo-item--sibtv img        { max-width: min(150px, 100%); }
-.works-logo-item--pioneerdj img    { max-height: 30px; }
-.works-logo-item--ignite img       { max-height: 32px; }
-.works-logo-item--parco img        { max-height: 30px; }
-.works-logo-item--mori img         { max-height: 38px; }
-.works-logo-item--shogakukan img   { max-height: 38px; }
-.works-logo-item--shibuyaradio img { max-height: 32px; }
+.works-logo-item--mutek img {
+  max-height: 24px;
+}
+.works-logo-item--keisuke img {
+  max-height: 24px;
+  max-width: min(158px, 100%);
+}
+.works-logo-item--malakai img {
+  max-width: min(172px, 100%);
+}
+.works-logo-item--tokyonode img {
+  max-width: min(160px, 100%);
+}
+.works-logo-item--sibtv img {
+  max-width: min(150px, 100%);
+}
+.works-logo-item--pioneerdj img {
+  max-height: 30px;
+}
+.works-logo-item--ignite img {
+  max-height: 32px;
+}
+.works-logo-item--parco img {
+  max-height: 30px;
+}
+.works-logo-item--mori img {
+  max-height: 38px;
+}
+.works-logo-item--shogakukan img {
+  max-height: 38px;
+}
+.works-logo-item--shibuyaradio img {
+  max-height: 32px;
+}
 
 .works-logo-item--dommune {
   flex-direction: row;
@@ -423,7 +451,7 @@ body {
 }
 
 .connect-item::after {
-  content: '↗';
+  content: "↗";
   font-family: var(--font-en);
   font-size: 0.72rem;
   color: var(--text-sub);
@@ -504,7 +532,7 @@ footer .lang-note.active {
 
 /* ─── HERO SCROLL CUE ─── */
 #hero::after {
-  content: 'scroll';
+  content: "scroll";
   position: absolute;
   bottom: 2.8rem;
   right: 3.5rem;
@@ -594,19 +622,45 @@ footer .lang-note.active {
   }
 
   /* Tablet (3-col) row-by-row order per handwritten layout */
-  .works-logo-item--pioneerdj    { order: 1; }
-  .works-logo-item--mutek        { order: 2; }
-  .works-logo-item--dommune      { order: 3; }
-  .works-logo-item--keisuke      { order: 4; }
-  .works-logo-item--malakai      { order: 5; }
-  .works-logo-item--parco        { order: 6; }
-  .works-logo-item--mori         { order: 7; }
-  .works-logo-item--tokyonode    { order: 8; }
-  .works-logo-item--ignite       { order: 9; }
-  .works-logo-item--shogakukan   { order: 10; }
-  .works-logo-item--shibuyaradio { order: 11; }
-  .works-logo-item--oizumi       { order: 12; }
-  .works-logo-item--sibtv        { order: 13; }
+  .works-logo-item--pioneerdj {
+    order: 1;
+  }
+  .works-logo-item--mutek {
+    order: 2;
+  }
+  .works-logo-item--dommune {
+    order: 3;
+  }
+  .works-logo-item--keisuke {
+    order: 4;
+  }
+  .works-logo-item--malakai {
+    order: 5;
+  }
+  .works-logo-item--parco {
+    order: 6;
+  }
+  .works-logo-item--mori {
+    order: 7;
+  }
+  .works-logo-item--tokyonode {
+    order: 8;
+  }
+  .works-logo-item--ignite {
+    order: 9;
+  }
+  .works-logo-item--shogakukan {
+    order: 10;
+  }
+  .works-logo-item--shibuyaradio {
+    order: 11;
+  }
+  .works-logo-item--oizumi {
+    order: 12;
+  }
+  .works-logo-item--sibtv {
+    order: 13;
+  }
 
   #hero::after {
     display: none;
@@ -671,19 +725,45 @@ footer .lang-note.active {
   }
 
   /* Mobile (2-col) row-by-row order per handwritten layout */
-  .works-logo-item--pioneerdj    { order: 1; }
-  .works-logo-item--mutek        { order: 2; }
-  .works-logo-item--dommune      { order: 3; }
-  .works-logo-item--parco        { order: 4; }
-  .works-logo-item--keisuke      { order: 5; }
-  .works-logo-item--malakai      { order: 6; }
-  .works-logo-item--ignite       { order: 7; }
-  .works-logo-item--oizumi       { order: 8; }
-  .works-logo-item--mori         { order: 9; }
-  .works-logo-item--tokyonode    { order: 10; }
-  .works-logo-item--shogakukan   { order: 11; }
-  .works-logo-item--shibuyaradio { order: 12; }
-  .works-logo-item--sibtv        { order: 13; }
+  .works-logo-item--pioneerdj {
+    order: 1;
+  }
+  .works-logo-item--mutek {
+    order: 2;
+  }
+  .works-logo-item--dommune {
+    order: 3;
+  }
+  .works-logo-item--parco {
+    order: 4;
+  }
+  .works-logo-item--keisuke {
+    order: 5;
+  }
+  .works-logo-item--malakai {
+    order: 6;
+  }
+  .works-logo-item--ignite {
+    order: 7;
+  }
+  .works-logo-item--oizumi {
+    order: 8;
+  }
+  .works-logo-item--mori {
+    order: 9;
+  }
+  .works-logo-item--tokyonode {
+    order: 10;
+  }
+  .works-logo-item--shogakukan {
+    order: 11;
+  }
+  .works-logo-item--shibuyaradio {
+    order: 12;
+  }
+  .works-logo-item--sibtv {
+    order: 13;
+  }
 
   /* DOMMUNE: scale down for narrow screens */
   .dommune-icon {
@@ -794,7 +874,7 @@ footer .lang-note.active {
    curve so both seams — paper→band and band→dark — dissolve with no visible
    edge, and the mid-tones avoid a muddy flat-grey band. */
 #gallery::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -824,7 +904,7 @@ footer .lang-note.active {
    decorrelates the 8-bit quantisation steps that the eye reads as banding
    in the dark region. Masked at both ends so the noise itself has no edge. */
 #gallery::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -835,7 +915,13 @@ footer .lang-note.active {
   opacity: 0.05;
   z-index: 0;
   pointer-events: none;
-  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 22%, #000 78%, transparent 100%);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 22%,
+    #000 78%,
+    transparent 100%
+  );
   mask-image: linear-gradient(to bottom, transparent 0%, #000 22%, #000 78%, transparent 100%);
 }
 
@@ -859,8 +945,13 @@ footer .lang-note.active {
   overflow: hidden;
 }
 
-.g-block-1 { height: 90vh; margin-bottom: 0; }
-.g-block-2 { height: 75vh; }
+.g-block-1 {
+  height: 90vh;
+  margin-bottom: 0;
+}
+.g-block-2 {
+  height: 75vh;
+}
 
 .g-img-wrap {
   width: 100%;
@@ -919,13 +1010,27 @@ footer .lang-note.active {
 }
 
 @media (max-width: 900px) {
-  #gallery { padding-top: 12rem; padding-bottom: 5.5rem; }
+  #gallery {
+    padding-top: 12rem;
+    padding-bottom: 5.5rem;
+  }
   #gallery::before,
-  #gallery::after { height: 180px; }
-  #gallery .gallery-header { padding: 0 1.5rem; margin-bottom: 3rem; }
-  .g-block-1 { height: 80vh; }
-  .g-block-2 { height: 65vh; }
-  .g-meta { padding: 1.4rem 1.5rem; }
+  #gallery::after {
+    height: 180px;
+  }
+  #gallery .gallery-header {
+    padding: 0 1.5rem;
+    margin-bottom: 3rem;
+  }
+  .g-block-1 {
+    height: 80vh;
+  }
+  .g-block-2 {
+    height: 65vh;
+  }
+  .g-meta {
+    padding: 1.4rem 1.5rem;
+  }
 
   /* Disable parallax travel room on mobile — prevents unwanted crop/zoom */
   .g-img-wrap {
@@ -935,8 +1040,12 @@ footer .lang-note.active {
 }
 
 @media (max-width: 480px) {
-  .g-block-1 { height: 70vh; }
-  .g-block-2 { height: 60vh; }
+  .g-block-1 {
+    height: 70vh;
+  }
+  .g-block-2 {
+    height: 60vh;
+  }
 }
 
 /* ─── NO-JS FALLBACK ─── */
@@ -961,7 +1070,9 @@ a:focus-visible,
 
 /* ─── REDUCED MOTION ─── */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
