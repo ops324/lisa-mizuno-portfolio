@@ -3,7 +3,7 @@
 **URL (GitHub Pages):** https://ops324.github.io/lisa-mizuno-portfolio/  
 **URL (Vercel):** https://lisa-mizuno.vercel.app/  
 **Hosting:** GitHub Pages (`main` branch, root `/`) + Vercel (`serene-leavitt-d01939`)  
-**Last updated:** 2026-05-25 (rev 9 — JP font → Shippori Mincho; Works per-device logo order + optical size balancing)
+**Last updated:** 2026-06-01 (rev 10 — security/quality baseline: env-var Basic Auth, SRI, Biome/html-validate, GitHub Actions CI; Gallery Block 1 → video)
 
 ---
 
@@ -38,10 +38,23 @@ Section labels auto-number via CSS `counter-increment: section-index`:
 index.html               — Single HTML page
 style.css                — All styles
 script.js                — Interactions + GSAP gallery animations
-favicon.svg
+middleware.js            — Vercel Edge middleware (Basic Auth)
+favicon.svg / .ico       — Tab icons
+apple-touch-icon.png     — iOS home-screen icon
+package.json             — npm scripts + devDependencies (no runtime deps)
+biome.json               — Lint / format config
+.htmlvalidate.json       — HTML validation config
+lighthouserc.json        — Lighthouse CI config
+.gitignore               — node_modules / .env / .DS_Store etc.
+.env.example             — Sample auth env vars (dummy values)
+.github/workflows/ci.yml — GitHub Actions CI
+README.md                — Developer documentation
+SPEC.md                  — This file
+仕様書.md                 — Specification (Japanese)
 images/
   lisa-photo-web.jpg     — Hero portrait
-  dj-portrait.jpg        — Gallery block 1 (dark DJ performance, red lighting)
+  dj-shanghai.mp4        — Gallery block 1 background video (Shanghai show)
+  dj-portrait.jpg        — Poster / fallback for the block 1 video
   tokyo-node.png         — Gallery block 2 (Tokyo Node venue, blue lighting)
   music-artwork.png      — Connect / Music row artwork (square cosmic abstract)
   media-editorial.png    — Connect / Media row photo (B&W staircase portrait)
@@ -95,8 +108,11 @@ images/
 
 ### Gallery
 - Full-bleed dark section (`background: #111009`)
-- **Block 1** (`dj-portrait.jpg`): `height: 90vh`, vertical parallax via GSAP ScrollTrigger
-  - Ghost counter `"01"` overlaid, Cormorant Garamond `clamp(12rem, 22vw, 28rem)`, `3% opacity`, parallaxes upward independently
+- **Block 1** (`dj-shanghai.mp4`): `height: 90vh`, vertical parallax via GSAP ScrollTrigger
+  - Background **video** — `<video autoplay muted loop playsinline>` (auto-playing, looping, silent; `muted` + `playsinline` allow inline autoplay on mobile)
+  - `poster="images/dj-portrait.jpg"` is the loading / playback-unavailable fallback (the JPG is retained for this)
+  - `aria-hidden="true"` (decorative); the visible caption is the `.g-meta-label` row below
+  - Parallax is applied to the wrapper `.g-img-1`, so it works unchanged whether the child is `<img>` or `<video>`; `.g-img-wrap img, .g-img-wrap video` share `object-fit: cover`
   - Editorial meta row bottom-left: `01 ── raster.focus Asia tour`
 - **Block 2** (`tokyo-node.png`): `height: 75vh`, clip-path reveal from bottom on scroll enter + parallax
   - Editorial meta row: `02 ── 攻殻機動隊展 Ghost in the Shell Collaboration REFLEX 4 - MUTEK.JP`
@@ -162,10 +178,14 @@ images/
 
 | Library | Version | Load |
 |---|---|---|
-| GSAP | 3.12.5 | CDN (cdnjs) |
-| ScrollTrigger | 3.12.5 | CDN (cdnjs) |
-| Lenis | 1.1.14 | CDN (jsDelivr) |
+| GSAP | 3.12.5 | CDN (cdnjs) — SRI sha384 + `crossorigin="anonymous"` |
+| ScrollTrigger | 3.12.5 | CDN (cdnjs) — SRI sha384 + `crossorigin="anonymous"` |
+| Lenis | 1.1.14 | CDN (jsDelivr) — SRI sha384 + `crossorigin="anonymous"` |
 | Google Fonts | — | Cormorant Garamond, Space Grotesk, Shippori Mincho |
+
+All three CDN scripts carry Subresource Integrity (`integrity` sha384 + `crossorigin="anonymous"` + `referrerpolicy="no-referrer"`) for tamper detection.
+
+**Dev tooling** (devDependencies only — no runtime deps): Biome 1.9.4 (lint/format), html-validate 9.5.3, @lhci/cli 0.14.0 (Lighthouse CI). npm scripts: `lint`, `lint:fix`, `format`, `validate:html`, `lighthouse`, `check`.
 
 ---
 
@@ -176,7 +196,39 @@ images/
 | GitHub Pages | Push to `main` → auto-deploys (~1 min) | ops324.github.io/lisa-mizuno-portfolio |
 | Vercel | `npx vercel --prod --yes` from worktree dir | lisa-mizuno.vercel.app |
 
-No build step required (pure HTML/CSS/JS).  
-Vercel project: `serene-leavitt-d01939` (linked in worktree `.vercel/` config).
+No build step required for production (pure HTML/CSS/JS; Lighthouse CI assembles a `dist/` only for measurement).  
+Vercel project: `serene-leavitt-d01939` (linked in worktree `.vercel/` config). Canonical production domain: `lisa-mizuno.vercel.app`.
 
-**Basic Auth:** `middleware.js` (Vercel Edge middleware) gates the **Vercel** deployment behind HTTP Basic Auth. GitHub Pages is a static host and does not run middleware, so that mirror is **not** password-protected.
+**Workflow:** changes land via branch + PR to `main`; merging triggers the Vercel production deploy. Direct pushes to `main` are avoided.
+
+### Basic Auth (`middleware.js`)
+
+`middleware.js` (Vercel Edge middleware) gates the **Vercel** deployment behind HTTP Basic Auth. GitHub Pages is a static host and does not run middleware, so that mirror is **not** password-protected.
+
+- Credentials come from env vars `BASIC_AUTH_USER` / `BASIC_AUTH_PASS` — **never hardcoded** (set in Vercel for both Production and Preview; `.env.example` documents the keys with dummy values)
+- Env vars are read **inside the handler (request-time)** — reading them at module-init can yield undefined in some environments and cause auth to always fail
+- **Fail-closed**: if either var is missing, all requests are rejected
+- **Constant-time comparison** (`safeEqual`) for both username and password (evaluated unconditionally) to avoid timing attacks
+- `matcher` excludes only the icon files (`favicon.svg` / `favicon.ico` / `apple-touch-icon.png`) so the browser tab icon doesn't 401
+
+### CI (`.github/workflows/ci.yml`)
+
+On push / PR to `main` (concurrency cancels superseded runs):
+
+| Job | What it runs |
+|---|---|
+| Lint & HTML validate | `biome check` (JS/CSS) + `html-validate index.html` |
+| Secret scan | `gitleaks` scans commits for leaked secrets |
+| Lighthouse CI | Lighthouse ×3 against an assembled `dist/` (node_modules excluded) |
+
+**Measured Lighthouse scores** (real values): Performance 72 / Accessibility 96 / Best Practices 100 / SEO 100.
+
+---
+
+## Changelog (recent)
+
+| Date | Change |
+|---|---|
+| 2026-06-01 | Moved Basic Auth env-var reads inside the handler (request-time) to fix production login failure (PR #24) |
+| 2026-06-01 | Security/quality baseline (PR #23): env-var Basic Auth (no hardcode, fail-closed, constant-time compare), SRI on CDN scripts, `.gitignore` / `.env.example`, Biome + html-validate + Lighthouse CI, GitHub Actions CI (lint / gitleaks / Lighthouse), README |
+| 2026-06-01 | Gallery Block 1 swapped from static `dj-portrait.jpg` to Shanghai-show video `dj-shanghai.mp4` (autoplay/loop/muted background style, JPG kept as `poster`, `aria-hidden`); file renamed to ASCII for delivery stability |
