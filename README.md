@@ -3,8 +3,6 @@
 DJ / アーティスト Lisa Mizuno のポートフォリオサイト。
 シネマティックな演出と日本語タイポグラフィを軸にした、静的サイト（ビルドレス）です。
 
-🔒 本番はプレビュー段階のため Basic 認証で保護しています。
-
 ---
 
 ## Tech stack
@@ -15,7 +13,6 @@ DJ / アーティスト Lisa Mizuno のポートフォリオサイト。
 | スクリプト | Vanilla JavaScript（ESM、ビルドステップなし） |
 | アニメーション | GSAP 3.12 + ScrollTrigger（パララックス・クリップパス演出）、Lenis（スムーススクロール） |
 | フォント | Cormorant Garamond / Space Grotesk / Shippori Mincho（Google Fonts） |
-| 認証 | Vercel Edge Middleware による Basic 認証（資格情報は環境変数管理） |
 | ホスティング / CI | Vercel（GitHub 連携で自動デプロイ）/ GitHub Actions |
 | 品質ツール | Biome（Lint + Format）・html-validate・Lighthouse CI・gitleaks |
 
@@ -77,19 +74,9 @@ npm run lighthouse
 
 ---
 
-## デプロイと認証
+## デプロイ
 
-`main` への push で Vercel が自動デプロイします。
-
-Basic 認証の資格情報は **コードに直書きせず**、Vercel の環境変数で管理します:
-
-| 変数名 | 用途 |
-| --- | --- |
-| `BASIC_AUTH_USER` | ユーザー名 |
-| `BASIC_AUTH_PASS` | パスワード |
-
-`middleware.js` は両変数が揃っているときだけ認証を許可し（fail-closed）、比較は定数時間で行います。
-ローカル用のサンプルは [`.env.example`](./.env.example) を参照。
+`main` への push で Vercel が自動デプロイします。サイトは一般公開（認証なし）です。
 
 ---
 
@@ -110,7 +97,6 @@ Basic 認証の資格情報は **コードに直書きせず**、Vercel の環�
 ├── index.html              # 1 ページ構成（Hero / Works / Gallery / About / Connect）
 ├── style.css               # トークン（:root）+ セクション別スタイル
 ├── script.js               # スムーススクロール・GSAP 演出・言語トグル等
-├── middleware.js           # Vercel Edge：Basic 認証（環境変数ベース）
 ├── images/                 # 画像・動画アセット
 ├── biome.json              # Lint / Format 設定
 ├── .htmlvalidate.json      # HTML バリデーション設定
