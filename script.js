@@ -193,6 +193,52 @@ if (!prefersReduced && typeof gsap !== 'undefined') {
   })(performance.now());
 }
 
+// ─── GALLERY: robust background-video autoplay (mobile / tablet safe) ───
+// The HTML already carries autoplay/muted/loop/playsinline, but mobile and
+// tablet browsers frequently defer or block muted autoplay (off-screen
+// deferral, iOS Low Power Mode, Android data saver, or the muted *attribute*
+// not being honored). This re-asserts muted as a property, plays the moment
+// the video scrolls into view, and falls back to the first user interaction.
+(function galleryVideoAutoplay() {
+  const video = document.querySelector('.g-img-1 video');
+  if (!video) return;
+
+  // Respect reduced motion: keep the poster frame, don't loop a moving bg.
+  if (prefersReduced) {
+    video.removeAttribute('autoplay');
+    video.pause();
+    return;
+  }
+
+  video.muted = true; // property form — required for mobile/tablet autoplay
+  video.setAttribute('playsinline', '');
+
+  const tryPlay = () => {
+    const p = video.play();
+    if (p && typeof p.catch === 'function') p.catch(() => {});
+  };
+
+  tryPlay();
+
+  // Play when the gallery scrolls into view (mobile defers off-screen autoplay).
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) tryPlay();
+        });
+      },
+      { threshold: 0.25 },
+    );
+    io.observe(video);
+  }
+
+  // Low Power Mode / data saver block autoplay outright — start on first touch.
+  const kick = () => tryPlay();
+  window.addEventListener('touchstart', kick, { once: true, passive: true });
+  window.addEventListener('pointerdown', kick, { once: true });
+})();
+
 // ─── DOMMUNE: remove baked-in background via canvas ───
 (function removeDommuneBg() {
   document.querySelectorAll('.dommune-icon, .dommune-text').forEach((img) => {
