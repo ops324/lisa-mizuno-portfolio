@@ -980,8 +980,27 @@ footer .lang-note.active {
   flex-wrap: wrap;
   gap: 0.8rem 1.4rem;
   padding: 1.8rem 3rem;
-  background: linear-gradient(to top, rgba(17, 16, 9, 0.72) 0%, transparent 100%);
   z-index: 3;
+}
+
+/* Cinematic scrim — a tall, smooth fade so the label reads as part of the
+   image (like block 2) rather than sitting in a hard black band. Anchored to
+   the bottom and rising into the media; kept behind the label text. */
+.g-meta::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 240px;
+  background: linear-gradient(
+    to top,
+    rgba(13, 12, 7, 0.9) 0%,
+    rgba(13, 12, 7, 0.4) 42%,
+    transparent 100%
+  );
+  z-index: -1;
+  pointer-events: none;
 }
 
 .g-meta-num {
