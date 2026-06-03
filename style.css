@@ -385,7 +385,7 @@ body {
 .works-logo-item--sibtv img {
   max-width: min(150px, 100%);
 }
-.works-logo-item--pioneerdj img {
+.works-logo-item--alphatheta img {
   max-height: 30px;
 }
 .works-logo-item--ignite img {
@@ -416,12 +416,12 @@ body {
 }
 
 .dommune-icon {
-  height: 30px;
+  height: 36px;
   flex-shrink: 0;
 }
 
 .dommune-text {
-  height: 34px;
+  height: 40px;
 }
 
 /* ─── CONNECT ─── */
@@ -622,7 +622,7 @@ footer .lang-note.active {
   }
 
   /* Tablet (3-col) row-by-row order per handwritten layout */
-  .works-logo-item--pioneerdj {
+  .works-logo-item--alphatheta {
     order: 1;
   }
   .works-logo-item--mutek {
@@ -725,7 +725,7 @@ footer .lang-note.active {
   }
 
   /* Mobile (2-col) row-by-row order per handwritten layout */
-  .works-logo-item--pioneerdj {
+  .works-logo-item--alphatheta {
     order: 1;
   }
   .works-logo-item--mutek {
@@ -767,11 +767,11 @@ footer .lang-note.active {
 
   /* DOMMUNE: scale down for narrow screens */
   .dommune-icon {
-    height: 24px;
+    height: 28px;
   }
 
   .dommune-text {
-    height: 28px;
+    height: 32px;
   }
 }
 
