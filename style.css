@@ -339,6 +339,77 @@ body {
   font-weight: 300;
 }
 
+/* ─── RESONANCE ─── */
+#resonance {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 11rem 3rem;
+}
+
+.resonance-inner {
+  text-align: center;
+}
+
+.resonance-word {
+  font-family: var(--font-serif);
+  font-size: clamp(3rem, 9vw, 6rem);
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  color: var(--border);
+  margin-bottom: 3.5rem;
+}
+
+.resonance-poem {
+  display: none;
+}
+
+.resonance-poem.active {
+  display: block;
+}
+
+.resonance-poem.jp p.resonance-title,
+.resonance-poem.en p.resonance-title {
+  font-size: 1.4rem;
+  line-height: 1.5;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  margin-bottom: 2.4rem;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.resonance-poem p {
+  color: var(--text);
+  margin-bottom: 2.2rem;
+}
+
+.resonance-poem p:last-child {
+  margin-bottom: 0;
+}
+
+.resonance-poem.jp {
+  font-family: var(--font-jp);
+}
+
+.resonance-poem.jp p {
+  font-size: 1.02rem;
+  line-height: 2.4;
+  font-weight: 300;
+}
+
+.resonance-poem.en {
+  font-family: var(--font-serif);
+}
+
+.resonance-poem.en p {
+  font-size: 1.18rem;
+  line-height: 2.1;
+  font-weight: 500;
+  font-style: italic;
+}
+
 /* ─── WORKS ─── */
 .works-grid {
   display: grid;
@@ -605,6 +676,14 @@ footer .lang-note.active {
   #works,
   #connect {
     padding: 5.5rem 1.5rem;
+  }
+
+  #resonance {
+    padding: 7rem 1.5rem;
+  }
+
+  .resonance-word {
+    margin-bottom: 2.5rem;
   }
 
   .works-grid {
