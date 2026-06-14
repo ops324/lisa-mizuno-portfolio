@@ -105,6 +105,11 @@ if (!prefersReduced && typeof gsap !== 'undefined') {
   if (document.getElementById('gallery')) {
     const isDesktop = window.matchMedia('(min-width: 901px)').matches;
 
+    // B-4 奥行き量: 虹レイヤーに与える追加 parallax(yPercent)。
+    // 0 → 両層同一 = 素のクロスディゾルブ(B-1)。4〜6 で控えめな B-4 の奥行き。
+    const G2_BASE_PARALLAX = 15; // 従来の単層値
+    const G2_DEPTH_DELTA = 5; // 調整用。0 にすると B-1
+
     // Parallax — desktop only (mobile resets to 100% height)
     if (isDesktop) {
       gsap.to('.g-img-1', {
@@ -118,8 +123,21 @@ if (!prefersReduced && typeof gsap !== 'undefined') {
         },
       });
 
-      gsap.to('.g-img-2', {
-        yPercent: 15,
+      // 青(上) — 従来の移動量
+      gsap.to('.g-img-2a', {
+        yPercent: G2_BASE_PARALLAX,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.g-block-2',
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1.5,
+        },
+      });
+
+      // 虹(下) — わずかに大きく動かし奥行きを出す
+      gsap.to('.g-img-2b', {
+        yPercent: G2_BASE_PARALLAX + G2_DEPTH_DELTA,
         ease: 'none',
         scrollTrigger: {
           trigger: '.g-block-2',
@@ -167,6 +185,28 @@ if (!prefersReduced && typeof gsap !== 'undefined') {
         },
       );
     }
+
+    // B-4 クロスディゾルブ — 青フレームが虹へ"現像"される。
+    // 流れ: ①入場＋clip-path＋明度(top bottom→top center, 青のまま立ち上がる)
+    //       ②top center→center center で青→虹へ溶ける
+    //       ③center center 以降はブロックが画面に収まったまま虹を保持
+    // brightness(end:top center) のちょうど直後に開始し handoff がきれい。
+    // 虹(より強い新ヒーロー)を全画面で見せ切ってから退場させる。
+    // opacity は GPU 合成で軽いため全デバイス実行（filter/parallax と違い）。
+    gsap.fromTo(
+      '.g-img-2a',
+      { opacity: 1 },
+      {
+        opacity: 0,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.g-block-2',
+          start: 'top center',
+          end: 'center center',
+          scrub: 1.2,
+        },
+      },
+    );
 
     // Meta rows staggered fade-up — all devices
     gsap.fromTo(

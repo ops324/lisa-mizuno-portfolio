@@ -1069,6 +1069,13 @@ footer .lang-note.active {
   display: block;
 }
 
+/* ── B-4 develop: block 2 の2枚重ね（青→虹へ"現像"） ── */
+.g-img-2a { z-index: 2; opacity: 1; }  /* 青 — 上層、スクロールで抜けていく */
+.g-img-2b { z-index: 1; }              /* 虹 — 下層、青が抜けると現れる */
+
+/* JS 無効時: ディゾルブを省き、より強い新ヒーロー＝虹を静的表示（青を隠す） */
+.no-js .g-img-2a { opacity: 0; }
+
 .g-meta {
   position: absolute;
   bottom: 0;
@@ -1215,5 +1222,10 @@ a:focus-visible,
   .hero-image img {
     animation: none !important;
     transform: none !important;
+  }
+
+  /* 動きオフ時もディゾルブを省き、虹を静的ヒーロー表示（青を隠す） */
+  .g-img-2a {
+    opacity: 0 !important;
   }
 }
