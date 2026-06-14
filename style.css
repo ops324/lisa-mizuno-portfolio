@@ -372,7 +372,7 @@ body {
 
 .resonance-poem.jp p.resonance-title,
 .resonance-poem.en p.resonance-title {
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   line-height: 1.5;
   letter-spacing: 0.12em;
   color: var(--accent);
