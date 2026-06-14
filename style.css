@@ -357,7 +357,8 @@ body {
   font-style: italic;
   letter-spacing: 0.02em;
   line-height: 1;
-  color: var(--border);
+  color: var(--text-sub);
+  opacity: 0.22;
   margin-bottom: 3.5rem;
 }
 
@@ -380,9 +381,16 @@ body {
   font-style: normal;
 }
 
+/* EN: the faint "Resonance" watermark already serves as the heading,
+   so hide the EN title to avoid the word appearing twice. */
+.resonance-poem.en .resonance-title {
+  display: none;
+}
+
 .resonance-poem p {
   color: var(--text);
   margin-bottom: 2.2rem;
+  text-wrap: balance; /* even out centered, ragged poem lines */
 }
 
 .resonance-poem p:last-child {
@@ -397,6 +405,7 @@ body {
   font-size: 1.02rem;
   line-height: 2.4;
   font-weight: 300;
+  word-break: keep-all; /* break at 、。 boundaries — avoids orphaned single kanji */
 }
 
 .resonance-poem.en {
@@ -684,6 +693,17 @@ footer .lang-note.active {
 
   .resonance-word {
     margin-bottom: 2.5rem;
+  }
+
+  /* Narrow viewport: shrink the poem a step so hard <br> lines fit without
+     wrapping into orphaned characters. */
+  .resonance-poem.jp p {
+    font-size: 0.92rem;
+    line-height: 2.1;
+  }
+
+  .resonance-poem.en p {
+    font-size: 1.05rem;
   }
 
   .works-grid {
