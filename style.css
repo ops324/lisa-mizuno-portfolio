@@ -1155,6 +1155,14 @@ footer .lang-note.active {
     height: 100%;
     top: 0;
   }
+
+  /* Landscape media (16:9 video, 3:2 image) was cropped left/right inside the
+     tall portrait containers. Show it whole instead; the letterbox space blends
+     into the #111009 gallery background, reading as a clean dark margin. */
+  .g-img-wrap img,
+  .g-img-wrap video {
+    object-fit: contain;
+  }
 }
 
 @media (max-width: 480px) {
