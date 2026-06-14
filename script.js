@@ -105,19 +105,11 @@ if (!prefersReduced && typeof gsap !== 'undefined') {
   if (document.getElementById('gallery')) {
     const isDesktop = window.matchMedia('(min-width: 901px)').matches;
 
-    // Parallax — desktop only (mobile resets to 100% height)
+    // Parallax — desktop only (mobile resets to 100% height).
+    // Block 1 (the 16:9 video) is shown whole via object-fit: contain with its
+    // wrapper pinned to the block, so it must NOT travel — any vertical movement
+    // would clip the fully-fit frame. Parallax is kept for Block 2 only.
     if (isDesktop) {
-      gsap.to('.g-img-1', {
-        yPercent: 20,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: '.g-block-1',
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: 1.5,
-        },
-      });
-
       gsap.to('.g-img-2', {
         yPercent: 15,
         ease: 'none',

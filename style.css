@@ -1069,6 +1069,18 @@ footer .lang-note.active {
   display: block;
 }
 
+/* Block 1 (16:9 video): show the whole frame on every screen. Pin the wrapper
+   to the block (no parallax overflow — see script.js) and contain the video so
+   it is never cropped; the letterbox blends into the #111009 gallery bg. */
+.g-img-1 {
+  height: 100%;
+  top: 0;
+}
+
+.g-img-1 video {
+  object-fit: contain;
+}
+
 .g-meta {
   position: absolute;
   bottom: 0;
