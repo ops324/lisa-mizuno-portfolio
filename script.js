@@ -278,6 +278,7 @@ if (!prefersReduced && typeof gsap !== 'undefined') {
   // Groups of {jp, en} elements that switch together with the toggle.
   const groups = [
     { jp: document.getElementById('bio-jp'), en: document.getElementById('bio-en') },
+    { jp: document.getElementById('resonance-jp'), en: document.getElementById('resonance-en') },
     { jp: document.getElementById('note-jp'), en: document.getElementById('note-en') },
   ];
 
