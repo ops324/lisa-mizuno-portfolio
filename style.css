@@ -1045,7 +1045,11 @@ footer .lang-note.active {
 }
 
 .g-block-1 {
-  height: 90vh;
+  /* コンテナを動画と同じ 16:9 にすると、object-fit: contain でも左右に隙間が
+     出ず、動画が左右端まで届く。余白が出るのは上下のみで #111009 に溶け込む。
+     モバイルは下のメディアクエリで明示的な height を持つため aspect-ratio は
+     無視され、従来どおり（横端まで表示）。 */
+  aspect-ratio: 16 / 9;
   margin-bottom: 0;
 }
 .g-block-2 {
