@@ -394,7 +394,7 @@ body {
   font-size: 1.2rem;
   line-height: 1.5;
   letter-spacing: 0.12em;
-  color: var(--accent);
+  color: #55576c; /* 勝色（かちいろ）: ごく暗い紫みの青 */
   margin-bottom: 2.4rem;
   font-weight: 400;
   font-style: normal;
