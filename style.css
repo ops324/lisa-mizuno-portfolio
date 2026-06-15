@@ -1045,12 +1045,14 @@ footer .lang-note.active {
 }
 
 .g-block-1 {
-  /* コンテナを動画と同じ 16:9 にすると、object-fit: contain でも左右に隙間が
-     出ず、動画が左右端まで届く。余白が出るのは上下のみで #111009 に溶け込む。
-     モバイルは下のメディアクエリで明示的な height を持つため aspect-ratio は
-     無視され、従来どおり（横端まで表示）。 */
-  aspect-ratio: 16 / 9;
-  margin-bottom: 0;
+  /* PC: 02（75vh）と同じく viewport 基準の固定高さにし、キャプションを常に
+     画面内に収める。16:9 全幅だと横長画面で高さが viewport を超え、bottom:0 の
+     キャプションが画面外に落ちていた。リード映像なので 02 より少し大きい 82vh。
+     全幅を保つため動画は cover（下の .g-img-1 video）。ぼかし基調の抽象映像の
+     ため上下のわずかなトリミングは目立たない。
+     モバイルは下のメディアクエリで aspect-ratio:16/9 / height:auto に戻す。 */
+  height: 82vh;
+  margin-bottom: 3rem; /* 01↔02 のダークなガター（#111009 が見える）。作品を分離。ラベルは動画内に持ち上げるため余白は控えめに。 */
 }
 .g-block-2 {
   height: 75vh;
@@ -1073,16 +1075,18 @@ footer .lang-note.active {
   display: block;
 }
 
-/* Block 1 (16:9 video): show the whole frame on every screen. Pin the wrapper
-   to the block (no parallax overflow — see script.js) and contain the video so
-   it is never cropped; the letterbox blends into the #111009 gallery bg. */
+/* Block 1 (16:9 video): wrapper pinned to the block (no parallax overflow —
+   see script.js). On PC the block is height-bound (82vh) and the video fills it
+   with `cover`, keeping full width so no black bars appear and the bottom-anchored
+   caption stays on screen. On mobile the block hugs the video at 16:9 (see media
+   query), where contain is re-applied. */
 .g-img-1 {
   height: 100%;
   top: 0;
 }
 
 .g-img-1 video {
-  object-fit: contain;
+  object-fit: cover;
 }
 
 .g-meta {
@@ -1116,6 +1120,23 @@ footer .lang-note.active {
   );
   z-index: -1;
   pointer-events: none;
+}
+
+/* Block 1 のみ: 下にダークガターがあるため、ラベルを動画下端から少し持ち上げて
+   「動画の上のラベル」だと明確に読ませる（境目に張り付いて動画とガターの両方に
+   触れる中途半端さを解消）。スクリムも短く・軽くして黒の量を抑え、映像が見える
+   ようにする。02 はガターが無い最終ブロックなので従来どおり bottom:0。 */
+.g-meta-1 {
+  bottom: 2.5rem;
+}
+.g-meta-1::before {
+  height: 155px;
+  background: linear-gradient(
+    to top,
+    rgba(13, 12, 7, 0.8) 0%,
+    rgba(13, 12, 7, 0.32) 55%,
+    transparent 100%
+  );
 }
 
 .g-meta-num {
@@ -1157,13 +1178,25 @@ footer .lang-note.active {
     margin-bottom: 3rem;
   }
   .g-block-1 {
-    height: 80vh;
+    /* PC と同じ 16:9 でコンテナを動画に沿わせる。縦長 vh だと 16:9 動画が
+       上下にレターボックスされ、動画上の黒帯（入った直後の余白）と、
+       bottom:0 キャプションが動画から離れて浮く問題が出ていた。 */
+    aspect-ratio: 16 / 9;
+    height: auto;
+    margin-bottom: 2rem; /* モバイルは詰めたダークガター */
   }
   .g-block-2 {
     height: 65vh;
   }
   .g-meta {
     padding: 1.4rem 1.5rem;
+  }
+  /* 16:9 の小さい動画（≈219px）に合わせ、持ち上げ量とスクリムを縮小。 */
+  .g-meta-1 {
+    bottom: 1rem;
+  }
+  .g-meta-1::before {
+    height: 95px;
   }
 
   /* Disable parallax travel room on mobile — prevents unwanted crop/zoom */
@@ -1182,9 +1215,7 @@ footer .lang-note.active {
 }
 
 @media (max-width: 480px) {
-  .g-block-1 {
-    height: 70vh;
-  }
+  /* .g-block-1 は 900px クエリの aspect-ratio: 16/9 を継承（高さは動画に追従）。 */
   .g-block-2 {
     height: 60vh;
   }
