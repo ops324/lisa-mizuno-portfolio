@@ -29,6 +29,25 @@
 
 html {
   scroll-behavior: auto; /* Lenis handles smooth scroll */
+  /* Stop iOS / in-app browsers (LINE WKWebView etc.) from auto-inflating text,
+     which can push long unbreakable lines past the viewport edge. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* ─── HORIZONTAL-OVERFLOW GUARD ───
+   Final safety net: no device should ever scroll sideways. `clip` (not
+   `hidden`) avoids creating a scroll container, so position:fixed nav and
+   Lenis/ScrollTrigger keep working. The real fixes (text wrapping, fluid
+   layout) come first; this only catches unforeseen overflow. */
+html,
+body {
+  overflow-x: clip;
+}
+
+img,
+video {
+  max-width: 100%;
 }
 
 body {
@@ -406,6 +425,10 @@ body {
   line-height: 2.4;
   font-weight: 300;
   word-break: keep-all; /* break at 、。 boundaries — avoids orphaned single kanji */
+  /* Safety net: WebKit's stricter keep-all keeps a whole <br>-line unbroken, so
+     a long line overflowed the viewport in iOS Safari / LINE's in-app browser.
+     `anywhere` permits an emergency break only when no 、。 break is taken. */
+  overflow-wrap: anywhere;
 }
 
 .resonance-poem.en {
@@ -447,29 +470,33 @@ body {
 }
 
 /* Optical size balancing: equalize perceived size by AREA within a safe box.
-   Wide wordmarks get a width cap so they don't bleed to the cell edge;
-   narrow / stacked lock-ups are lifted in height. */
+   Wide wordmarks get a width cap (a % of the cell, so they keep a consistent
+   inset at every breakpoint instead of bleeding edge-to-edge); narrow / stacked
+   lock-ups are lifted in height. */
 .works-logo-item--mutek img {
   max-height: 24px;
+  max-width: min(140px, 86%);
 }
 .works-logo-item--keisuke img {
   max-height: 24px;
-  max-width: min(158px, 100%);
+  max-width: min(140px, 86%);
 }
 .works-logo-item--malakai img {
-  max-width: min(172px, 100%);
+  max-width: min(150px, 88%);
 }
 .works-logo-item--tokyonode img {
-  max-width: min(160px, 100%);
+  max-width: min(140px, 86%);
 }
 .works-logo-item--sibtv img {
-  max-width: min(150px, 100%);
+  max-width: min(134px, 84%);
 }
 .works-logo-item--alphatheta img {
   max-height: 30px;
+  max-width: min(132px, 84%);
 }
 .works-logo-item--ignite img {
-  max-height: 32px;
+  max-height: 28px;
+  max-width: min(128px, 82%);
 }
 .works-logo-item--parco img {
   max-height: 30px;
@@ -696,10 +723,15 @@ footer .lang-note.active {
   }
 
   /* Narrow viewport: shrink the poem a step so hard <br> lines fit without
-     wrapping into orphaned characters. */
+     wrapping into orphaned characters. On phones the longest <br>-lines still
+     exceed the content width, and WebKit's keep-all won't break them at 、,
+     so allow normal CJK wrapping here — guaranteeing the text fits on every
+     browser. The hard <br>s still define the primary line structure; only an
+     over-long line wraps. */
   .resonance-poem.jp p {
     font-size: 0.92rem;
     line-height: 2.1;
+    word-break: normal;
   }
 
   .resonance-poem.en p {
@@ -1186,7 +1218,12 @@ footer .lang-note.active {
     margin-bottom: 2rem; /* モバイルは詰めたダークガター */
   }
   .g-block-2 {
-    height: 65vh;
+    /* Match the container to the 3:2 image (like block-1's 16:9). A fixed vh
+       height left ~246px of dark letterbox above/below the contained image and
+       pushed the bottom caption far off the photo. Hugging the image removes
+       that empty band and anchors the caption to the image. */
+    aspect-ratio: 3 / 2;
+    height: auto;
   }
   .g-meta {
     padding: 1.4rem 1.5rem;
@@ -1214,12 +1251,8 @@ footer .lang-note.active {
   }
 }
 
-@media (max-width: 480px) {
-  /* .g-block-1 は 900px クエリの aspect-ratio: 16/9 を継承（高さは動画に追従）。 */
-  .g-block-2 {
-    height: 60vh;
-  }
-}
+/* .g-block-1 / .g-block-2 とも 900px クエリの aspect-ratio をそのまま継承
+   （高さはメディアに追従）。≤480 専用の高さ上書きは不要。 */
 
 /* ─── NO-JS FALLBACK ─── */
 /* If JS is disabled the no-js class is never removed, so reveal fade-in content. */

@@ -277,6 +277,8 @@ if (!prefersReduced && typeof gsap !== 'undefined') {
   buttons.forEach((btn) => {
     btn.addEventListener('click', () => {
       const lang = btn.dataset.lang;
+      // Keep <html lang> in sync with the visible language (a11y / SEO).
+      document.documentElement.lang = lang === 'jp' ? 'ja' : 'en';
       groups.forEach(({ jp, en }) => {
         if (jp) jp.classList.toggle('active', lang === 'jp');
         if (en) en.classList.toggle('active', lang === 'en');
