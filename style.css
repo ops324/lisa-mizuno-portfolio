@@ -391,7 +391,7 @@ body {
 
 .resonance-poem.jp p.resonance-title,
 .resonance-poem.en p.resonance-title {
-  font-size: 1.2rem;
+  font-size: 1.05rem;
   line-height: 1.5;
   letter-spacing: 0.12em;
   color: #55576c; /* 勝色（かちいろ）: ごく暗い紫みの青 */
@@ -1077,17 +1077,19 @@ footer .lang-note.active {
 }
 
 .g-block-1 {
-  /* PC: 02（75vh）と同じく viewport 基準の固定高さにし、キャプションを常に
-     画面内に収める。16:9 全幅だと横長画面で高さが viewport を超え、bottom:0 の
-     キャプションが画面外に落ちていた。リード映像なので 02 より少し大きい 82vh。
-     全幅を保つため動画は cover（下の .g-img-1 video）。ぼかし基調の抽象映像の
-     ため上下のわずかなトリミングは目立たない。
-     モバイルは下のメディアクエリで aspect-ratio:16/9 / height:auto に戻す。 */
-  height: 82vh;
-  margin-bottom: 3rem; /* 01↔02 のダークなガター（#111009 が見える）。作品を分離。ラベルは動画内に持ち上げるため余白は控えめに。 */
+  /* 動画素材は上下それぞれ約12%の黒帯が焼き込まれている（シネスコ素材を16:9に収めたもの）。
+     ブロックのアスペクト比を“中身”の比率（≈2.35:1）に合わせ、video を object-fit:cover で
+     敷くことで、黒帯だけが上下にクロップされて画面外に出る。比率ベースなので全ビューポート
+     共通で効き、横方向のロスや歪みも無い。全幅のシネスコ帯としてリード映像を見せる。 */
+  aspect-ratio: 2.35 / 1;
+  /* ガターは下の .g-meta-1（このブロックのキャプション）には付けない。作品間の間隔は
+     次ブロック .g-block-2 の margin-top で確保し、キャプションは直上の画像に近接させる。 */
 }
 .g-block-2 {
   height: 75vh;
+  /* 01 のキャプション(.g-meta-1)↔02 画像 のダークなガター（#111009 が見える）。
+     作品を分離しつつ、キャプションは直上の 01 画像にグルーピングさせる非対称の間。 */
+  margin-top: 4.5rem;
 }
 
 .g-img-wrap {
@@ -1107,11 +1109,10 @@ footer .lang-note.active {
   display: block;
 }
 
-/* Block 1 (16:9 video): wrapper pinned to the block (no parallax overflow —
-   see script.js). On PC the block is height-bound (82vh) and the video fills it
-   with `cover`, keeping full width so no black bars appear and the bottom-anchored
-   caption stays on screen. On mobile the block hugs the video at 16:9 (see media
-   query), where contain is re-applied. */
+/* Block 1 video: wrapper pinned to the block (no parallax overflow — see script.js).
+   The block is shaped to the footage's content ratio (≈2.35:1) and the video is laid
+   in with `cover`, so the baked-in top/bottom letterbox is cropped off-screen on every
+   viewport. */
 .g-img-1 {
   height: 100%;
   top: 0;
@@ -1121,54 +1122,26 @@ footer .lang-note.active {
   object-fit: cover;
 }
 
+/* Block 2（3:2 静止画）: PC は縦長コンテナ＋cover で上下がトリミングされる。主役の DJ・
+   Pioneer DJ 機材・手元は画像下部にあるため、object-position を下基準にして下を切らさず、
+   代わりに天井/配線（雰囲気）側を多めにトリミングする。
+   ※モバイル（≤900px）は contain で 3:2 ぴったり表示のため object-position は無効（影響なし）。 */
+.g-img-2 img {
+  object-position: 50% 100%;
+}
+
+/* キャプションは画像の「外（下）」に通常フローで置く（展示の作法 — 画像に文字を被せない）。
+   番号＋ラベルを左揃え（全デバイス共通・棒線なし）。直上の画像に近接させるため margin-top は
+   小さく、左右はサイト標準のテキストガター(3rem)に揃える（「GALLERY」ラベルや他セクション本文と
+   同じ左余白。画像は全幅だが文字には必ず余白を持たせ、画面端に張り付かせない）。scrim が無くなり
+   平坦なダーク(#111009)上に乗るため、ラベルの不透明度は可読性のため僅かに上げている。 */
 .g-meta {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 0.8rem 1.4rem;
-  padding: 1.8rem 3rem;
-  z-index: 3;
-}
-
-/* Cinematic scrim — a tall, smooth fade so the label reads as part of the
-   image (like block 2) rather than sitting in a hard black band. Anchored to
-   the bottom and rising into the media; kept behind the label text. */
-.g-meta::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 240px;
-  background: linear-gradient(
-    to top,
-    rgba(13, 12, 7, 0.9) 0%,
-    rgba(13, 12, 7, 0.4) 42%,
-    transparent 100%
-  );
-  z-index: -1;
-  pointer-events: none;
-}
-
-/* Block 1 のみ: 下にダークガターがあるため、ラベルを動画下端から少し持ち上げて
-   「動画の上のラベル」だと明確に読ませる（境目に張り付いて動画とガターの両方に
-   触れる中途半端さを解消）。スクリムも短く・軽くして黒の量を抑え、映像が見える
-   ようにする。02 はガターが無い最終ブロックなので従来どおり bottom:0。 */
-.g-meta-1 {
-  bottom: 2.5rem;
-}
-.g-meta-1::before {
-  height: 155px;
-  background: linear-gradient(
-    to top,
-    rgba(13, 12, 7, 0.8) 0%,
-    rgba(13, 12, 7, 0.32) 55%,
-    transparent 100%
-  );
+  margin-top: 1.1rem;
+  padding: 0 3rem;
 }
 
 .g-meta-num {
@@ -1180,20 +1153,15 @@ footer .lang-note.active {
   flex-shrink: 0;
 }
 
-.g-meta-rule {
-  flex: 1;
-  max-width: 80px;
-  height: 1px;
-  background: rgba(232, 226, 216, 0.18);
-}
-
 .g-meta-label {
   font-family: var(--font-en);
   font-size: 0.6rem;
   font-weight: 400;
   letter-spacing: 0.32em;
   text-transform: uppercase;
-  color: rgba(232, 226, 216, 0.55);
+  /* scrim が無くなり平坦なダーク上に乗るため、0.55 → 0.68 へ微増して可読性を確保。
+     抑制したトーンは保つ。 */
+  color: rgba(232, 226, 216, 0.68);
 }
 
 @media (max-width: 900px) {
@@ -1210,30 +1178,27 @@ footer .lang-note.active {
     margin-bottom: 3rem;
   }
   .g-block-1 {
-    /* PC と同じ 16:9 でコンテナを動画に沿わせる。縦長 vh だと 16:9 動画が
-       上下にレターボックスされ、動画上の黒帯（入った直後の余白）と、
-       bottom:0 キャプションが動画から離れて浮く問題が出ていた。 */
-    aspect-ratio: 16 / 9;
+    /* PC と同じく“中身”の比率(≈2.35:1)。焼き込まれた上下の黒帯を cover でクロップする。 */
+    aspect-ratio: 2.35 / 1;
     height: auto;
-    margin-bottom: 2rem; /* モバイルは詰めたダークガター */
   }
   .g-block-2 {
-    /* Match the container to the 3:2 image (like block-1's 16:9). A fixed vh
-       height left ~246px of dark letterbox above/below the contained image and
-       pushed the bottom caption far off the photo. Hugging the image removes
-       that empty band and anchors the caption to the image. */
+    /* Match the container to the 3:2 image (like block-1's 16:9). */
     aspect-ratio: 3 / 2;
     height: auto;
+    margin-top: 3rem; /* モバイルは詰めたダークガター（01キャプション↔02画像） */
   }
   .g-meta {
-    padding: 1.4rem 1.5rem;
+    /* モバイルも左右はサイト標準ガター(1.5rem)に揃える（左余白を確保）。近接は維持。 */
+    padding: 0 1.5rem;
+    margin-top: 0.9rem;
+    /* 美術館のチェックリスト式ぶら下げインデント: 番号を単独で上に落とさず、長いタイトル（02）は
+       番号と同じ行から始め、折り返した続き行はタイトル左端に揃える。01・02 で改行のされ方を統一。 */
+    flex-wrap: nowrap;
+    align-items: baseline;
   }
-  /* 16:9 の小さい動画（≈219px）に合わせ、持ち上げ量とスクリムを縮小。 */
-  .g-meta-1 {
-    bottom: 1rem;
-  }
-  .g-meta-1::before {
-    height: 95px;
+  .g-meta-label {
+    min-width: 0; /* ラベルを縮めてテキスト折り返しを許可（続き行＝タイトル左端＝ぶら下げ） */
   }
 
   /* Disable parallax travel room on mobile — prevents unwanted crop/zoom */
@@ -1248,6 +1213,11 @@ footer .lang-note.active {
   .g-img-wrap img,
   .g-img-wrap video {
     object-fit: contain;
+  }
+  /* Block 1 だけは cover を維持。素材の焼き込み黒帯（上下約12%）をクロップするため、
+     上の contain 一括指定を打ち消す。Block 2（静止画）は contain のまま全体を見せる。 */
+  .g-img-1 video {
+    object-fit: cover;
   }
 }
 

@@ -110,8 +110,10 @@ if (!prefersReduced && typeof gsap !== 'undefined') {
     // wrapper pinned to the block, so it must NOT travel — any vertical movement
     // would clip the fully-fit frame. Parallax is kept for Block 2 only.
     if (isDesktop) {
+      // 控えめなパララックス。大きいと object-position:bottom で寄せた下部（DJ機材・手元）が
+      // スクロール中に再び切れるため、travel を抑えて主役を常に画面内に保つ。
       gsap.to('.g-img-2', {
-        yPercent: 15,
+        yPercent: 6,
         ease: 'none',
         scrollTrigger: {
           trigger: '.g-block-2',

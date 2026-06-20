@@ -165,7 +165,10 @@
       <div class="section-label gallery-label" data-en="Gallery" data-jp="ギャラリー">Gallery</div>
     </div>
 
-    <!-- Block 1: DJ Portrait — full-bleed with parallax -->
+    <!-- Block 1: DJ Portrait — full-bleed with parallax.
+         キャプション(.g-meta)はブロックの「外（下）」に兄弟要素として置く。展示の作法で
+         画像（顔・機材）に文字を被せない。ブロックの overflow:hidden / clip-path の影響も
+         キャプションに及ばなくなる。 -->
     <div class="g-block g-block-1">
       <div class="g-img-wrap g-img-1">
         <!-- 装飾用の背景動画。隣の .g-meta-label が可視キャプションを担うため
@@ -175,25 +178,23 @@
                autoplay muted loop playsinline
                aria-hidden="true"></video>
       </div>
-      <div class="g-meta g-meta-1">
-        <span class="g-meta-num">01</span>
-        <span class="g-meta-rule"></span>
-        <span class="g-meta-label">raster.focus Asia tour</span>
-      </div>
+    </div>
+    <div class="g-meta g-meta-1">
+      <span class="g-meta-num">01</span>
+      <span class="g-meta-label">raster.focus Asia tour</span>
     </div>
 
-    <!-- Block 2: MUTEK.JP — clip-path reveal -->
+    <!-- Block 2: MUTEK.JP — clip-path reveal（画像のみ。キャプションは下の兄弟要素） -->
     <div class="g-block g-block-2">
       <div class="g-img-wrap g-img-2">
         <img src="images/tokyo-node.png"
              alt="Lisa Mizuno — 攻殻機動隊展 Ghost in the Shell · REFLEX 4 · MUTEK.JP"
              loading="lazy" />
       </div>
-      <div class="g-meta g-meta-2">
-        <span class="g-meta-num">02</span>
-        <span class="g-meta-rule"></span>
-        <span class="g-meta-label">攻殻機動隊展 Ghost in the Shell Collaboration REFLEX 4 - MUTEK.JP</span>
-      </div>
+    </div>
+    <div class="g-meta g-meta-2">
+      <span class="g-meta-num">02</span>
+      <span class="g-meta-label">攻殻機動隊展 Ghost in the Shell Collaboration REFLEX 4 - MUTEK.JP</span>
     </div>
 
   </section>
