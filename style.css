@@ -1122,11 +1122,19 @@ footer .lang-note.active {
   object-fit: cover;
 }
 
+/* Block 2（3:2 静止画）: PC は縦長コンテナ＋cover で上下がトリミングされる。主役の DJ・
+   Pioneer DJ 機材・手元は画像下部にあるため、object-position を下基準にして下を切らさず、
+   代わりに天井/配線（雰囲気）側を多めにトリミングする。
+   ※モバイル（≤900px）は contain で 3:2 ぴったり表示のため object-position は無効（影響なし）。 */
+.g-img-2 img {
+  object-position: 50% 100%;
+}
+
 /* キャプションは画像の「外（下）」に通常フローで置く（展示の作法 — 画像に文字を被せない）。
-   直上の画像に近接させるため margin-top は小さく、左右はサイト標準のテキストガター(3rem)に
-   揃える（「GALLERY」ラベルや他セクションの本文と同じ左余白。画像は全幅だが文字には必ず
-   余白を持たせ、画面端に張り付かせない）。scrim が無くなり平坦なダーク(#111009)上に乗るため、
-   ラベルの不透明度は可読性のため僅かに上げている（下の .g-meta-label）。 */
+   番号＋ラベルを左揃え（全デバイス共通・棒線なし）。直上の画像に近接させるため margin-top は
+   小さく、左右はサイト標準のテキストガター(3rem)に揃える（「GALLERY」ラベルや他セクション本文と
+   同じ左余白。画像は全幅だが文字には必ず余白を持たせ、画面端に張り付かせない）。scrim が無くなり
+   平坦なダーク(#111009)上に乗るため、ラベルの不透明度は可読性のため僅かに上げている。 */
 .g-meta {
   display: flex;
   align-items: center;
@@ -1145,14 +1153,6 @@ footer .lang-note.active {
   flex-shrink: 0;
 }
 
-.g-meta-rule {
-  flex: 1;
-  /* 番号を左端に寄せた分、棒線を長く伸ばして番号とラベルをつなぐ索引ルールにする。 */
-  max-width: 200px;
-  height: 1px;
-  background: rgba(232, 226, 216, 0.18);
-}
-
 .g-meta-label {
   font-family: var(--font-en);
   font-size: 0.6rem;
@@ -1162,19 +1162,6 @@ footer .lang-note.active {
   /* scrim が無くなり平坦なダーク上に乗るため、0.55 → 0.68 へ微増して可読性を確保。
      抑制したトーンは保つ。 */
   color: rgba(232, 226, 216, 0.68);
-}
-
-/* タブレット横・PC（>900px）: 棒線を省き、番号＋ラベルをまとめて右端へ寄せる。
-   この幅では棒線が max-width:200px で頭打ちになりラベルが左〜中央に浮くため、
-   索引ルールはやめて右寄せのグループ表示にする。≤900px（スマホ・タブレット縦）は
-   従来どおり「番号左・棒線・ラベル右」の索引行を維持。 */
-@media (min-width: 901px) {
-  .g-meta {
-    justify-content: flex-end;
-  }
-  .g-meta-rule {
-    display: none;
-  }
 }
 
 @media (max-width: 900px) {
@@ -1205,12 +1192,13 @@ footer .lang-note.active {
     /* モバイルも左右はサイト標準ガター(1.5rem)に揃える（左余白を確保）。近接は維持。 */
     padding: 0 1.5rem;
     margin-top: 0.9rem;
+    /* 美術館のチェックリスト式ぶら下げインデント: 番号を単独で上に落とさず、長いタイトル（02）は
+       番号と同じ行から始め、折り返した続き行はタイトル左端に揃える。01・02 で改行のされ方を統一。 */
+    flex-wrap: nowrap;
+    align-items: baseline;
   }
-  /* 01 のみ・モバイルのみ: 棒線の上限(200px)を外し、flex:1 で余白いっぱいに伸ばして
-     ラベルを右端まで押し出す（索引行 01 ———— RASTER.FOCUS ASIA TOUR）。
-     02 とデスクトップは対象外。 */
-  .g-meta-1 .g-meta-rule {
-    max-width: none;
+  .g-meta-label {
+    min-width: 0; /* ラベルを縮めてテキスト折り返しを許可（続き行＝タイトル左端＝ぶら下げ） */
   }
 
   /* Disable parallax travel room on mobile — prevents unwanted crop/zoom */
