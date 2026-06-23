@@ -92,6 +92,12 @@ if (!prefersReduced && typeof gsap !== 'undefined') {
   gsap.ticker.lagSmoothing(0);
 
   // ─── PAGE LOAD: hero entrance ───
+  // The CSS pre-hides these (opacity:0) to avoid an "appear→vanish→fade" flash
+  // before GSAP runs. But .from() reads the element's CURRENT opacity as the
+  // animation's END value — so force it back to 1 here, otherwise .from()
+  // would animate 0→0 and the hero would never appear.
+  gsap.set('#nav, .hero-image, .hero-name, .hero-title', { opacity: 1 });
+
   gsap
     .timeline({ defaults: { ease: 'power3.out' } })
     // clearProps: a residual transform on #nav would make it the containing
@@ -179,12 +185,22 @@ if (!prefersReduced && typeof gsap !== 'undefined') {
       },
     );
   }
-} else if (lenis) {
-  // Fallback: run Lenis via rAF if GSAP unavailable
-  (function raf(time) {
-    lenis.raf(time);
-    requestAnimationFrame(raf);
-  })(performance.now());
+} else {
+  // No GSAP entrance will run (GSAP CDN failed, or reduced motion). The CSS
+  // pre-hides the hero elements for the entrance, so reveal them explicitly
+  // here to avoid leaving them invisible. Harmless under reduced motion (the
+  // CSS guard never hid them; this just re-asserts opacity:1).
+  document.querySelectorAll('#nav, .hero-image, .hero-name, .hero-title').forEach((el) => {
+    el.style.opacity = '1';
+  });
+
+  if (lenis) {
+    // Fallback: run Lenis via rAF if GSAP unavailable
+    (function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    })(performance.now());
+  }
 }
 
 // ─── GALLERY: robust background-video autoplay (mobile / tablet safe) ───

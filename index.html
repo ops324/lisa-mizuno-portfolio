@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- Swap no-js → js ASAP so JS-disabled users still see content (fade-in fallback) -->
   <script>document.documentElement.classList.remove('no-js');</script>
+  <!-- Paint the cream background from the very first frame. Without this the
+       browser paints default white until the external style.css loads, causing
+       a white→cream flash on each (re)load. Keep in sync with --bg in style.css. -->
+  <style>html{background-color:#faf8f4}</style>
   <title>LISA MIZUNO — DJ · ARTIST</title>
   <meta name="description" content="LISA MIZUNO is a DJ and artist based in Tokyo. Organizer of the Resonance event series." />
 
