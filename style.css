@@ -666,6 +666,23 @@ footer .lang-note.active {
   transform: translateY(0);
 }
 
+/* ─── HERO ENTRANCE: pre-hide GSAP-animated elements ───
+   The hero entrance is driven by GSAP .from() (script.js). Without an initial
+   opacity:0 the browser paints these elements fully, then GSAP yanks them to 0
+   and fades them back — a visible "appear→vanish→fade" flash. Pre-hide them so
+   only the intended fade-in shows. Scoped exactly like .fade-in's no-js guard:
+   - html:not(.no-js): JS disabled → no entrance runs, keep visible.
+   - no-preference: reduced-motion skips GSAP (script.js), so keep visible.
+   GSAP's inline opacity overrides this once the entrance runs. */
+@media (prefers-reduced-motion: no-preference) {
+  html:not(.no-js) #nav,
+  html:not(.no-js) .hero-image,
+  html:not(.no-js) .hero-name,
+  html:not(.no-js) .hero-title {
+    opacity: 0;
+  }
+}
+
 /* ─── RESPONSIVE ─── */
 @media (max-width: 900px) {
   #hero {
