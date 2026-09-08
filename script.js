@@ -321,6 +321,155 @@ const observer = new IntersectionObserver(
 
 document.querySelectorAll('.fade-in').forEach((el) => observer.observe(el));
 
+// ─── SCHEDULE: build the list from schedule.json ───
+// The section ships `hidden` and only opens up once there is at least one
+// published event — an empty "Schedule" heading reads as a neglected site.
+// The nav link is revealed together with it.
+(function schedule() {
+  const section = document.getElementById('schedule');
+  const list = document.getElementById('sched-list');
+  if (!section || !list) return;
+
+  const navLink = document.querySelector('.nav-links a[href="#schedule"]');
+  const buttons = section.querySelectorAll('.sched-fbtn');
+  const DOW = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+  const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
+
+  // Local date — NOT toISOString(), which returns UTC and would treat an
+  // event as "past" for the first nine hours of every JST morning.
+  const now = new Date();
+  const pad = (n) => String(n).padStart(2, '0');
+  const today = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
+
+  let events = [];
+  let filter = 'upcoming';
+
+  // Only http(s) survives: the data file must never be able to smuggle a
+  // javascript: URL into an href.
+  const safeUrl = (raw) => {
+    if (!raw) return '';
+    try {
+      const u = new URL(raw, location.href);
+      return u.protocol === 'https:' || u.protocol === 'http:' ? u.href : '';
+    } catch {
+      return '';
+    }
+  };
+
+  // Built with textContent (never innerHTML) so event titles and venue names
+  // stay data, whatever the admin types.
+  const el = (tag, className, text) => {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text) node.textContent = text;
+    return node;
+  };
+
+  function row(e) {
+    const url = safeUrl(e.url);
+    const item = el(url ? 'a' : 'div', `sched-item${filter === 'past' ? ' is-past' : ''}`);
+    if (url) {
+      item.href = url;
+      item.target = '_blank';
+      item.rel = 'noopener noreferrer';
+    }
+
+    const [y, m, d] = e.date.split('-');
+    const date = el('span', 'sched-date', `${y}.${m}.${d}`);
+    date.appendChild(el('span', 'sched-dow', DOW[new Date(`${e.date}T00:00:00`).getDay()]));
+    item.appendChild(date);
+
+    const body = el('span', 'sched-body');
+    body.appendChild(el('span', 'sched-title', e.title));
+    const meta = [e.venue, e.city, e.time].filter(Boolean).join('　—　');
+    if (meta) body.appendChild(el('span', 'sched-venue', meta));
+    item.appendChild(body);
+
+    const tail = el('span', 'sched-tail');
+    if (e.tag) {
+      const sold = String(e.tag).toLowerCase() === 'sold out';
+      tail.appendChild(el('span', `sched-tag${sold ? ' sched-tag--sold' : ''}`, e.tag));
+    }
+    if (url) {
+      const arrow = el('span', 'sched-arrow', '↗');
+      arrow.setAttribute('aria-hidden', 'true');
+      tail.appendChild(arrow);
+    }
+    item.appendChild(tail);
+
+    const li = document.createElement('li');
+    li.appendChild(item);
+    return li;
+  }
+
+  function render() {
+    const rows = events
+      .filter((e) => (filter === 'upcoming' ? e.date >= today : e.date < today))
+      .sort((a, b) =>
+        filter === 'upcoming' ? a.date.localeCompare(b.date) : b.date.localeCompare(a.date),
+      );
+
+    list.textContent = '';
+    if (rows.length) {
+      rows.forEach((e) => list.appendChild(row(e)));
+    } else {
+      const li = document.createElement('li');
+      const msg =
+        filter === 'upcoming'
+          ? '現在お知らせできる予定はありません。'
+          : '過去の記録はまだありません。';
+      li.appendChild(el('p', 'sched-empty', msg));
+      list.appendChild(li);
+    }
+
+    // The list changes the page height, so the scrubbed gallery triggers
+    // further down need their start/end positions recomputed.
+    if (typeof ScrollTrigger !== 'undefined') ScrollTrigger.refresh();
+  }
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      filter = btn.dataset.filter;
+      buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filter === filter)));
+      render();
+    });
+  });
+
+  const setFilter = (next) => {
+    filter = next;
+    buttons.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.filter === next)));
+  };
+
+  fetch('schedule.json', { cache: 'no-cache' })
+    .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`HTTP ${r.status}`))))
+    .then((data) => {
+      const raw = data && Array.isArray(data.events) ? data.events : [];
+      events = raw.filter((e) => e && e.status === 'published' && ISO_DATE.test(e.date) && e.title);
+      if (!events.length) return; // nothing to show — stay hidden
+
+      section.hidden = false;
+      if (navLink) navLink.hidden = false;
+
+      // Everything already over? Open on PAST rather than an empty UPCOMING.
+      if (!events.some((e) => e.date >= today)) setFilter('past');
+
+      render();
+
+      // The section was `display: none` when the observer first swept the
+      // page, so its .fade-in elements were reported as not intersecting and
+      // nothing re-checks them on its own. observe() on an already-observed
+      // target is a no-op, so drop them first to force a fresh observation.
+      section.querySelectorAll('.fade-in').forEach((node) => {
+        observer.unobserve(node);
+        observer.observe(node);
+      });
+    })
+    .catch(() => {
+      // Stay hidden. On a portfolio page a visible "couldn't load" panel is
+      // worse than no section at all.
+    });
+})();
+
 // ─── SCROLL-SPY: highlight the nav link for the section in view ───
 (function scrollSpy() {
   const links = {};
