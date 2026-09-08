@@ -7,6 +7,7 @@ const $ = (id) => document.getElementById(id);
 
 const loginView = $('login-view');
 const adminView = $('admin-view');
+const fatalView = $('fatal-view');
 const loading = $('loading');
 
 let events = [];
@@ -219,6 +220,8 @@ $('save').addEventListener('click', async () => {
 
 $('view-site').addEventListener('click', () => window.open('/', '_blank', 'noopener'));
 
+$('retry').addEventListener('click', () => window.location.reload());
+
 $('logout').addEventListener('click', async () => {
   if (dirty && !window.confirm('未保存の変更があります。破棄してログアウトしますか？')) return;
   await api('/api/login', { method: 'DELETE' });
@@ -253,6 +256,7 @@ $('login-form').addEventListener('submit', async (ev) => {
 async function load() {
   loginView.hidden = true;
   adminView.hidden = true;
+  fatalView.hidden = true;
   loading.hidden = false;
 
   const { status, ok, body } = await api('/api/schedule');
@@ -263,10 +267,11 @@ async function load() {
     return;
   }
   if (!ok) {
-    loginView.hidden = false;
-    const error = $('login-error');
-    error.textContent = body?.error || '読み込みに失敗しました。時間をおいてお試しください。';
-    error.hidden = false;
+    // Logged in, but the backend could not answer — an expired GitHub token,
+    // for instance. Say so instead of showing a password box.
+    $('fatal-message').textContent =
+      body?.error || '読み込みできませんでした。時間をおいてお試しください。';
+    fatalView.hidden = false;
     return;
   }
 

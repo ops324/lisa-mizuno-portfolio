@@ -178,6 +178,17 @@ body {
   </div>
 </section>
 
+<!-- 読み込みに失敗した状態。ログイン済みなのにパスワード欄を出すと
+     「自分の入力が悪い」と誤解させるため、別画面として分ける。 -->
+<section id="fatal-view" hidden>
+  <div class="login">
+    <span class="logo">LISA MIZUNO</span>
+    <p>Schedule 管理</p>
+    <p class="note note--error" id="fatal-message"></p>
+    <button type="button" class="btn" id="retry">再読み込み</button>
+  </div>
+</section>
+
 <!-- 管理画面 -->
 <section id="admin-view" hidden>
   <header class="head">

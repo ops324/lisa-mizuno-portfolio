@@ -6,6 +6,28 @@ import { authorized } from './_lib/auth.js';
 import { readSchedule, writeSchedule } from './_lib/github.js';
 import { normalize } from './_lib/validate.js';
 
+// A generic "時間をおいてお試しください" is wrong for most of these: an expired
+// token or a missing permission never recovers on its own, and the person at
+// the keyboard needs to know it is not their mistake.
+const UPSTREAM = {
+  token: {
+    status: 502,
+    text: 'GitHub トークンの有効期限が切れているか、無効になっている可能性があります。管理者にご連絡ください。',
+  },
+  permission: {
+    status: 502,
+    text: 'GitHub トークンの権限が不足している可能性があります（Contents: Read and write が必要です）。管理者にご連絡ください。',
+  },
+  missing: {
+    status: 502,
+    text: '保存先のファイルが見つかりません。GitHub トークンの対象リポジトリ設定をご確認ください。管理者にご連絡ください。',
+  },
+  rate: {
+    status: 503,
+    text: 'GitHub の利用制限に達しました。しばらく待ってからお試しください。',
+  },
+};
+
 export default async function handler(req, res) {
   // Nothing here is public, including reads: draft events must not leak.
   if (!authorized(req)) {
@@ -50,6 +72,12 @@ export default async function handler(req, res) {
     }
     // Never echo the upstream message: it can carry repository details.
     console.error('[schedule]', err);
-    return res.status(502).json({ error: '保存に失敗しました。時間をおいてお試しください。' });
+
+    const verb = req.method === 'PUT' ? '保存' : '読み込み';
+    const known = UPSTREAM[err?.reason];
+    if (known) {
+      return res.status(known.status).json({ error: `${verb}できませんでした。${known.text}` });
+    }
+    return res.status(502).json({ error: `${verb}できませんでした。時間をおいてお試しください。` });
   }
 }

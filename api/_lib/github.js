@@ -24,6 +24,29 @@ function headers(token) {
   };
 }
 
+// Turn a GitHub error response into something the admin screen can explain.
+// Without this every failure reads "時間をおいてお試しください", which is
+// actively misleading for an expired token — waiting never fixes that.
+//
+// Note the 404: a fine-grained token that has lost access to the repository
+// gets 404 rather than 403, so "見つからない" and "権限が外れた" arrive as the
+// same status and share a message.
+export function classify(res) {
+  const err = new Error(`GitHub API ${res.status}`);
+  err.status = res.status;
+
+  if (res.status === 401) {
+    err.reason = 'token';
+  } else if (res.status === 403 || res.status === 429) {
+    err.reason = res.headers.get('x-ratelimit-remaining') === '0' ? 'rate' : 'permission';
+  } else if (res.status === 404) {
+    err.reason = 'missing';
+  } else if (res.status === 409 || res.status === 422) {
+    err.conflict = true;
+  }
+  return err;
+}
+
 // Returns { events, updated, sha }. The blob sha is what makes the write
 // safe: GitHub refuses the update if the file moved on in the meantime, so
 // two admins editing at once get a conflict instead of a silent overwrite.
@@ -33,7 +56,7 @@ export async function readSchedule() {
 
   const url = `${API}/repos/${repo}/contents/${FILE}?ref=${encodeURIComponent(branch)}`;
   const res = await fetch(url, { headers: headers(token), cache: 'no-store' });
-  if (!res.ok) throw new Error(`GitHub read failed (${res.status})`);
+  if (!res.ok) throw classify(res);
 
   const body = await res.json();
   const json = JSON.parse(Buffer.from(body.content, 'base64').toString('utf8'));
@@ -63,10 +86,7 @@ export async function writeSchedule(events, sha, message) {
     }),
   });
 
-  if (res.status === 409 || res.status === 422) {
-    throw Object.assign(new Error('conflict'), { conflict: true });
-  }
-  if (!res.ok) throw new Error(`GitHub write failed (${res.status})`);
+  if (!res.ok) throw classify(res);
 
   return res.json();
 }
