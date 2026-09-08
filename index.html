@@ -45,6 +45,7 @@
     <div class="nav-links" id="nav-links">
       <a href="#about" data-en="About" data-jp="プロフィール">About</a>
       <a href="#works" data-en="Works" data-jp="実績">Works</a>
+      <a href="#schedule" data-en="Schedule" data-jp="スケジュール" hidden>Schedule</a>
       <a href="#gallery" data-en="Gallery" data-jp="ギャラリー">Gallery</a>
       <a href="#connect" data-en="Connect" data-jp="リンク">Connect</a>
     </div>
@@ -160,6 +161,20 @@
         <img src="images/logos/shibuyatv.png" alt="シブヤテレビジョン" />
       </div>
     </div>
+  </section>
+
+  <!-- Schedule Section
+       中身は schedule.json から script.js が組み立てる。公開中のイベントが
+       1件も無いあいだはセクションごと（ナビリンクも）隠したままにする。 -->
+  <section id="schedule" hidden>
+    <div class="section-label fade-in" data-en="Schedule" data-jp="スケジュール">Schedule
+      <div class="sched-filter" role="group" aria-label="Schedule">
+        <button type="button" class="sched-fbtn" data-filter="upcoming" aria-pressed="true">Upcoming</button>
+        <span class="sched-fsep" aria-hidden="true">/</span>
+        <button type="button" class="sched-fbtn" data-filter="past" aria-pressed="false">Past</button>
+      </div>
+    </div>
+    <ul class="sched-list fade-in" id="sched-list"></ul>
   </section>
 
   <!-- Gallery / Live Section -->

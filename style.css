@@ -244,6 +244,7 @@ body {
 /* ─── SHARED SECTION STYLES ─── */
 #about,
 #works,
+#schedule,
 #connect {
   max-width: 860px;
   margin: 0 auto;
@@ -531,6 +532,185 @@ body {
   height: 40px;
 }
 
+/* ─── SCHEDULE ─── */
+/* Works と Gallery のあいだに置く出演予定リスト。中身は schedule.json から
+   script.js が組み立てる。公開中のイベントが1件も無いあいだはセクションごと
+   hidden のままにし、ナビリンクも出さない（空の見出しだけが残らないように）。 */
+
+/* ラベル右の UPCOMING / PAST 切り替え。About の言語トグルと同じ作法で
+   セクションラベル行の右端に置く。 */
+.sched-filter {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.sched-fbtn {
+  position: relative;
+  font-family: var(--font-en);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-sub);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: color 0.35s ease;
+}
+
+.sched-fbtn:hover {
+  color: var(--text);
+}
+
+.sched-fbtn[aria-pressed="true"] {
+  color: var(--text);
+}
+
+.sched-fbtn[aria-pressed="true"]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.sched-fsep {
+  font-size: 0.68rem;
+  color: var(--text-sub);
+  opacity: 0.5;
+}
+
+.sched-list {
+  list-style: none;
+}
+
+/* 行は Connect の .connect-item と同じ作法：罫線1本、ホバーで左に寄せて
+   下線をアクセント色に。日付 / 本文 / （ラベル＋矢印）の3カラム。 */
+.sched-item {
+  display: grid;
+  grid-template-columns: 7.6rem 1fr auto;
+  align-items: baseline;
+  gap: 1.4rem;
+  padding: 1.7rem 0;
+  border-bottom: 1px solid var(--border);
+  text-decoration: none;
+  color: var(--text);
+  transition: padding-left 0.4s ease, border-color 0.4s ease, opacity 0.4s ease;
+}
+
+.sched-list li:first-child .sched-item {
+  border-top: 1px solid var(--border);
+}
+
+a.sched-item:hover {
+  padding-left: 1rem;
+  border-bottom-color: var(--accent);
+}
+
+.sched-date {
+  font-family: var(--font-en);
+  font-size: 0.78rem;
+  letter-spacing: 0.13em;
+  color: var(--text-sub);
+  white-space: nowrap;
+}
+
+.sched-dow {
+  margin-left: 0.4em;
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  opacity: 0.62;
+}
+
+.sched-body {
+  display: block;
+  min-width: 0;
+}
+
+.sched-title {
+  display: block;
+  font-family: var(--font-serif), var(--font-jp);
+  font-size: 1.1rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  line-height: 1.45;
+}
+
+.sched-venue {
+  display: block;
+  margin-top: 0.5rem;
+  font-family: var(--font-en), var(--font-jp);
+  font-size: 0.72rem;
+  font-weight: 300;
+  letter-spacing: 0.11em;
+  color: var(--text-sub);
+}
+
+.sched-tail {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  flex-shrink: 0;
+}
+
+.sched-tag {
+  font-family: var(--font-en);
+  font-size: 0.58rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--text-sub);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 0.28rem 0.6rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* 完売のみアクセント色。他ラベルと差がつきすぎないよう opacity で落とす */
+.sched-tag--sold {
+  color: var(--accent);
+  border-color: var(--accent);
+  opacity: 0.75;
+}
+
+.sched-arrow {
+  font-family: var(--font-en);
+  font-size: 0.72rem;
+  color: var(--text-sub);
+  opacity: 0;
+  line-height: 1;
+  transform: translate(-4px, 4px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+a.sched-item:hover .sched-arrow {
+  opacity: 0.9;
+  transform: translate(0, 0);
+  color: var(--accent);
+}
+
+/* 終了したイベント（PAST 表示）は一段落とす */
+.sched-item.is-past {
+  opacity: 0.42;
+}
+
+.sched-empty {
+  padding: 3.2rem 0;
+  font-family: var(--font-en), var(--font-jp);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  color: var(--text-sub);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
 /* ─── CONNECT ─── */
 .connect-category {
   display: flex;
@@ -727,12 +907,30 @@ footer .lang-note.active {
 
   #about,
   #works,
+  #schedule,
   #connect {
     padding: 5.5rem 1.5rem;
   }
 
   #resonance {
     padding: 7rem 1.5rem;
+  }
+
+  /* 3カラムは保ったまま日付カラムだけ詰める。タブレット幅では
+     タイトルに残る幅を優先する。 */
+  .sched-item {
+    grid-template-columns: 6.4rem 1fr auto;
+    gap: 1rem;
+    padding: 1.5rem 0;
+  }
+
+  .sched-date {
+    font-size: 0.74rem;
+    letter-spacing: 0.1em;
+  }
+
+  .sched-title {
+    font-size: 1rem;
   }
 
   .resonance-word {
@@ -914,6 +1112,26 @@ footer .lang-note.active {
   }
 
   /* DOMMUNE: scale down for narrow screens */
+  /* 3カラムでは幅が足りないので縦に積む。ラベルは会場の下へ回す。 */
+  .sched-item {
+    grid-template-columns: 1fr;
+    gap: 0.45rem;
+    padding: 1.5rem 0;
+  }
+
+  .sched-date {
+    font-size: 0.72rem;
+  }
+
+  .sched-venue {
+    margin-top: 0.35rem;
+  }
+
+  .sched-tail {
+    justify-content: flex-start;
+    margin-top: 0.35rem;
+  }
+
   .dommune-icon {
     height: 28px;
   }
@@ -1003,7 +1221,8 @@ footer .lang-note.active {
 
 /* ─── CONNECT: NO ARROW ON TOUCH ─── */
 @media (hover: none) {
-  .connect-item::after {
+  .connect-item::after,
+  .sched-arrow {
     display: none;
   }
 }
