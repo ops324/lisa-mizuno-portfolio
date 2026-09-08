@@ -1,0 +1,79 @@
+// ─── schedule.json ↔ GitHub ───
+// The admin writes through the GitHub Contents API rather than a database:
+// the public page keeps serving a static schedule.json from the CDN (so the
+// GitHub Pages mirror keeps working too), and every edit lands in git history
+// where it can be inspected and reverted.
+
+const API = 'https://api.github.com';
+const FILE = 'schedule.json';
+
+function settings() {
+  const repo = process.env.GITHUB_REPO;
+  const branch = process.env.GITHUB_BRANCH || 'main';
+  const token = process.env.GITHUB_TOKEN;
+  return { repo, branch, token, ok: Boolean(repo && token) };
+}
+
+function headers(token) {
+  return {
+    Authorization: `Bearer ${token}`,
+    Accept: 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28',
+    // GitHub rejects API requests without one.
+    'User-Agent': 'lisa-mizuno-portfolio-admin',
+  };
+}
+
+// Returns { events, updated, sha }. The blob sha is what makes the write
+// safe: GitHub refuses the update if the file moved on in the meantime, so
+// two admins editing at once get a conflict instead of a silent overwrite.
+export async function readSchedule() {
+  const { repo, branch, token, ok } = settings();
+  if (!ok) throw new Error('GitHub is not configured');
+
+  const url = `${API}/repos/${repo}/contents/${FILE}?ref=${encodeURIComponent(branch)}`;
+  const res = await fetch(url, { headers: headers(token), cache: 'no-store' });
+  if (!res.ok) throw new Error(`GitHub read failed (${res.status})`);
+
+  const body = await res.json();
+  const json = JSON.parse(Buffer.from(body.content, 'base64').toString('utf8'));
+  return {
+    events: Array.isArray(json.events) ? json.events : [],
+    updated: typeof json.updated === 'string' ? json.updated : '',
+    sha: body.sha,
+  };
+}
+
+export async function writeSchedule(events, sha, message) {
+  const { repo, branch, token, ok } = settings();
+  if (!ok) throw new Error('GitHub is not configured');
+
+  // Two-space indent and a trailing newline so the committed file matches what
+  // Biome would format — otherwise the CI lint job fails on the admin's commit.
+  const payload = `${JSON.stringify({ updated: todayJST(), events }, null, 2)}\n`;
+
+  const res = await fetch(`${API}/repos/${repo}/contents/${FILE}`, {
+    method: 'PUT',
+    headers: { ...headers(token), 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      message,
+      content: Buffer.from(payload, 'utf8').toString('base64'),
+      sha,
+      branch,
+    }),
+  });
+
+  if (res.status === 409 || res.status === 422) {
+    throw Object.assign(new Error('conflict'), { conflict: true });
+  }
+  if (!res.ok) throw new Error(`GitHub write failed (${res.status})`);
+
+  return res.json();
+}
+
+// The site and its audience are in Japan; stamp the file in JST rather than
+// whatever region the function happens to run in.
+export function todayJST() {
+  const jst = new Date(Date.now() + 9 * 60 * 60 * 1000);
+  return jst.toISOString().slice(0, 10);
+}

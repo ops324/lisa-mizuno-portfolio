@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Schedule 管理 | LISA MIZUNO</title>
+<link rel="icon" href="../favicon.svg" type="image/svg+xml" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Space+Grotesk:wght@300;400;500&family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #f4f1ec;
+  --panel: #faf8f4;
+  --text: #1a1714;
+  --text-sub: #7a6f64;
+  --border: #d9d0c6;
+  --line: #ece6de;
+  --accent: #7d3531;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Space Grotesk", "Shippori Mincho", sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+.logo { font-family: "Cormorant Garamond", serif; font-size: .95rem; letter-spacing: .25em; }
+
+/* ─── ヘッダー ─── */
+.head {
+  display: flex; align-items: center; gap: 1rem;
+  padding: 1.4rem 2.2rem; background: var(--panel);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 20;
+}
+.crumb {
+  font-size: .62rem; letter-spacing: .24em; text-transform: uppercase;
+  color: var(--text-sub); border-left: 1px solid var(--border); padding-left: 1rem;
+}
+.head-right { margin-left: auto; display: flex; align-items: center; gap: 1rem; }
+.status { font-size: .68rem; letter-spacing: .08em; color: var(--text-sub); }
+.status.dirty { color: var(--accent); }
+
+.wrap { max-width: 940px; margin: 0 auto; padding: 2.4rem 2.2rem 6rem; }
+
+/* ─── ボタン ─── */
+.btn {
+  font: inherit; font-size: .68rem; letter-spacing: .16em; text-transform: uppercase;
+  padding: .62rem 1.15rem; border: 1px solid var(--text); background: var(--text);
+  color: var(--panel); cursor: pointer; border-radius: 2px; transition: .25s;
+}
+.btn:hover { background: #000; }
+.btn[disabled] { opacity: .32; cursor: not-allowed; }
+.btn--ghost { background: none; color: var(--text); }
+.btn--ghost:hover { background: var(--text); color: var(--panel); }
+.btn--quiet { background: none; border-color: var(--border); color: var(--text-sub); }
+.btn--quiet:hover { background: none; border-color: var(--text); color: var(--text); }
+.btn--danger { background: none; border-color: var(--border); color: var(--accent); }
+.btn--danger:hover { background: var(--accent); border-color: var(--accent); color: var(--panel); }
+.btn--link {
+  background: none; border: none; color: var(--text-sub); padding: 0;
+  font-size: .62rem; letter-spacing: .16em; text-transform: uppercase;
+  cursor: pointer; text-decoration: underline; text-underline-offset: 3px;
+}
+.btn--link:hover { color: var(--text); }
+
+/* ─── 通知 ─── */
+.note {
+  padding: .85rem 1.1rem; border-radius: 2px; font-size: .76rem; line-height: 1.8;
+  margin-bottom: 1.4rem; border: 1px solid var(--border); background: var(--panel);
+}
+.note--error { color: var(--accent); border-color: #e6cfcc; background: #f6ecea; }
+.note--ok { color: #2f5d3a; border-color: #cfe0d2; background: #eef5f0; }
+.note[hidden] { display: none; }
+
+/* ─── 一覧 ─── */
+.toolbar { display: flex; align-items: center; gap: .6rem; margin-bottom: 1.4rem; }
+.toolbar h2 { font-size: .62rem; letter-spacing: .3em; text-transform: uppercase; color: var(--text-sub); font-weight: 500; }
+.toolbar .btn { margin-left: auto; }
+
+.rows { background: var(--panel); border: 1px solid var(--border); border-radius: 3px; }
+.row {
+  display: grid; grid-template-columns: 7.2rem 1fr auto;
+  align-items: center; gap: 1rem; padding: 1rem 1.2rem;
+  border-bottom: 1px solid var(--line);
+}
+.row:last-child { border-bottom: none; }
+.row.is-draft { background: repeating-linear-gradient(135deg, #faf8f4, #faf8f4 8px, #f3efe8 8px, #f3efe8 16px); }
+.row-date { font-size: .74rem; letter-spacing: .1em; color: var(--text-sub); white-space: nowrap; }
+.row-title { display: block; font-family: "Cormorant Garamond", "Shippori Mincho", serif; font-size: 1rem; letter-spacing: .05em; }
+.row-venue { display: block; font-size: .68rem; color: var(--text-sub); margin-top: .2rem; }
+.badges { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .35rem; }
+.badge {
+  font-size: .54rem; letter-spacing: .18em; text-transform: uppercase; line-height: 1;
+  padding: .2rem .45rem; border: 1px solid var(--border); border-radius: 2px; color: var(--text-sub);
+}
+.badge--draft { color: var(--accent); border-color: #e0c3c1; }
+.badge--past { opacity: .6; }
+.row-actions .btn { padding: .45rem .8rem; font-size: .6rem; }
+.empty { padding: 2.6rem 1.2rem; text-align: center; font-size: .78rem; color: var(--text-sub); }
+
+/* ─── フォーム ─── */
+.form { margin-top: 1.6rem; background: var(--panel); border: 1px solid var(--border); border-radius: 3px; padding: 1.8rem; }
+.form[hidden] { display: none; }
+.form h3 { font-size: .62rem; letter-spacing: .3em; text-transform: uppercase; color: var(--text-sub); font-weight: 500; margin-bottom: 1.4rem; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem 1.4rem; }
+.f { display: flex; flex-direction: column; gap: .42rem; }
+.f--wide { grid-column: 1 / -1; }
+.f label { font-size: .6rem; letter-spacing: .18em; text-transform: uppercase; color: var(--text-sub); }
+.f label .opt { text-transform: none; letter-spacing: .02em; opacity: .7; margin-left: .4em; }
+.f input, .f select {
+  font: inherit; font-size: .86rem; padding: .6rem .7rem;
+  border: 1px solid var(--border); border-radius: 2px; background: #fff; color: var(--text);
+}
+.f input:focus, .f select:focus { outline: none; border-color: var(--text); }
+.f .hint { font-size: .62rem; color: #9a8f83; letter-spacing: .02em; }
+.form-foot { display: flex; align-items: center; gap: .6rem; margin-top: 1.6rem; padding-top: 1.3rem; border-top: 1px solid var(--line); }
+.form-foot .btn--danger { margin-right: auto; }
+
+/* ─── 保存バー ─── */
+.savebar {
+  position: sticky; bottom: 0; display: flex; align-items: center; gap: .8rem;
+  margin-top: 2rem; padding: 1rem 1.2rem; background: var(--panel);
+  border: 1px solid var(--border); border-radius: 3px;
+}
+.savemsg { font-size: .68rem; color: var(--text-sub); letter-spacing: .04em; }
+.savebar .btn { margin-left: auto; }
+
+/* ─── ログイン ─── */
+.login { max-width: 340px; margin: 5rem auto; background: var(--panel); border: 1px solid var(--border); border-radius: 3px; padding: 2.4rem 2rem; text-align: center; }
+.login .logo { display: block; margin-bottom: .5rem; }
+.login p { font-size: .62rem; letter-spacing: .24em; text-transform: uppercase; color: var(--text-sub); margin-bottom: 1.8rem; }
+.login input { width: 100%; font: inherit; font-size: .9rem; padding: .7rem; border: 1px solid var(--border); border-radius: 2px; text-align: center; letter-spacing: .3em; }
+.login input:focus { outline: none; border-color: var(--text); }
+.login .btn { width: 100%; margin-top: .9rem; }
+.login .note { margin: 1.2rem 0 0; text-align: left; }
+
+.loading { padding: 4rem 0; text-align: center; font-size: .72rem; letter-spacing: .2em; text-transform: uppercase; color: var(--text-sub); }
+
+@media (max-width: 820px) {
+  .head { padding: .85rem 1.2rem; gap: .7rem; }
+  .crumb { display: none; }
+  .logo { font-size: .78rem; letter-spacing: .18em; }
+  .status { font-size: .62rem; }
+  .wrap { padding: 1.6rem 1.2rem 5rem; }
+  .grid { grid-template-columns: 1fr; }
+  .row { grid-template-columns: 1fr; row-gap: .75rem; padding: 1.1rem; }
+  .row-date { white-space: normal; }
+  .savebar { flex-wrap: wrap; padding: .85rem 1rem; gap: .5rem; }
+  .savemsg { order: 3; width: 100%; }
+  .savebar .btn { margin-left: 0; flex: 1 1 40%; padding: .62rem .5rem; font-size: .62rem; }
+  .form { padding: 1.3rem; }
+  .form-foot { flex-wrap: wrap; }
+  .form-foot .btn { flex: 1 1 auto; }
+  .form-foot .btn--danger { margin-right: 0; flex-basis: 100%; order: 3; }
+}
+</style>
+</head>
+<body>
+
+<!-- ログイン -->
+<section id="login-view">
+  <div class="login">
+    <span class="logo">LISA MIZUNO</span>
+    <p>Schedule 管理</p>
+    <form id="login-form">
+      <input type="password" id="password" placeholder="••••••••" aria-label="パスワード" autocomplete="current-password" required />
+      <button type="submit" class="btn" id="login-btn">ログイン</button>
+    </form>
+    <p class="note note--error" id="login-error" hidden></p>
+  </div>
+</section>
+
+<!-- 管理画面 -->
+<section id="admin-view" hidden>
+  <header class="head">
+    <span class="logo">LISA MIZUNO</span>
+    <span class="crumb">Schedule 管理</span>
+    <span class="head-right">
+      <span class="status" id="status">保存済み</span>
+      <button type="button" class="btn--link" id="logout">ログアウト</button>
+    </span>
+  </header>
+
+  <div class="wrap">
+    <p class="note" id="message" hidden></p>
+
+    <div class="toolbar">
+      <h2>登録イベント <span id="count">0</span> 件</h2>
+      <button type="button" class="btn" id="new">＋ 新規追加</button>
+    </div>
+
+    <div class="rows" id="rows"></div>
+
+    <form class="form" id="form" hidden>
+      <h3 id="form-title">イベントを編集</h3>
+      <div class="grid">
+        <div class="f">
+          <label for="f-date">日付</label>
+          <input type="date" id="f-date" required />
+        </div>
+        <div class="f">
+          <label for="f-time">開始時刻 <span class="opt">（任意）</span></label>
+          <input type="time" id="f-time" />
+        </div>
+        <div class="f f--wide">
+          <label for="f-title">タイトル</label>
+          <input type="text" id="f-title" maxlength="200" placeholder="Resonance vol.6" required />
+        </div>
+        <div class="f">
+          <label for="f-venue">会場</label>
+          <input type="text" id="f-venue" maxlength="120" placeholder="WWW X" />
+        </div>
+        <div class="f">
+          <label for="f-city">都市 <span class="opt">（任意）</span></label>
+          <input type="text" id="f-city" maxlength="120" placeholder="Shibuya, Tokyo" />
+        </div>
+        <div class="f f--wide">
+          <label for="f-url">リンク URL <span class="opt">（任意 — チケット・告知ページ）</span></label>
+          <input type="url" id="f-url" maxlength="500" placeholder="https://..." />
+          <span class="hint">入力すると行全体がリンクになります。</span>
+        </div>
+        <div class="f">
+          <label for="f-tag">ラベル <span class="opt">（任意）</span></label>
+          <select id="f-tag">
+            <option value="">なし</option>
+            <option>Ticket</option>
+            <option>Free</option>
+            <option>Sold Out</option>
+            <option>Live Stream</option>
+            <option>TBA</option>
+          </select>
+        </div>
+        <div class="f">
+          <label for="f-status">公開状態</label>
+          <select id="f-status">
+            <option value="published">公開する</option>
+            <option value="draft">下書き（サイトに出さない）</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-foot">
+        <button type="button" class="btn btn--danger" id="delete">このイベントを削除</button>
+        <button type="button" class="btn btn--quiet" id="cancel">キャンセル</button>
+        <button type="submit" class="btn">この内容で確定</button>
+      </div>
+    </form>
+
+    <div class="savebar">
+      <span class="savemsg" id="savemsg">変更はありません</span>
+      <button type="button" class="btn btn--ghost" id="view-site">サイトを見る</button>
+      <button type="button" class="btn" id="save" disabled>保存して公開</button>
+    </div>
+  </div>
+</section>
+
+<div class="loading" id="loading" hidden>読み込み中…</div>
+
+<script src="admin.js"></script>
+</body>
+</html>
