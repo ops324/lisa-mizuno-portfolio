@@ -87,7 +87,8 @@ body {
 /* ─── 一覧 ─── */
 .toolbar { display: flex; align-items: center; gap: .6rem; margin-bottom: 1.4rem; }
 .toolbar h2 { font-size: .62rem; letter-spacing: .3em; text-transform: uppercase; color: var(--text-sub); font-weight: 500; }
-.toolbar .btn { margin-left: auto; }
+.toolbar .btn { margin-left: 0; }
+.toolbar a.btn { margin-left: auto; text-decoration: none; display: inline-flex; align-items: center; }
 
 .rows { background: var(--panel); border: 1px solid var(--border); border-radius: 3px; }
 .row {
@@ -109,6 +110,7 @@ body {
 .badge--past { opacity: .6; }
 .row-actions .btn { padding: .45rem .8rem; font-size: .6rem; }
 .empty { padding: 2.6rem 1.2rem; text-align: center; font-size: .78rem; color: var(--text-sub); }
+.empty a { color: var(--accent); text-underline-offset: 3px; }
 
 /* ─── フォーム ─── */
 .form { margin-top: 1.6rem; background: var(--panel); border: 1px solid var(--border); border-radius: 3px; padding: 1.8rem; }
@@ -180,6 +182,10 @@ a.btn--link { font-family: inherit; white-space: nowrap; }
   .status { font-size: .62rem; }
   .wrap { padding: 1.6rem 1.2rem 5rem; }
   .grid { grid-template-columns: 1fr; }
+  .toolbar { flex-wrap: wrap; }
+  .toolbar h2 { width: 100%; }
+  .toolbar a.btn { margin-left: 0; }
+  .toolbar .btn { flex: 1 1 auto; text-align: center; justify-content: center; }
   .row { grid-template-columns: 1fr; row-gap: .75rem; padding: 1.1rem; }
   .row-date { white-space: normal; }
   .savebar { flex-wrap: wrap; padding: .85rem 1rem; gap: .5rem; }
@@ -236,6 +242,7 @@ a.btn--link { font-family: inherit; white-space: nowrap; }
 
     <div class="toolbar">
       <h2>登録イベント <span id="count">0</span> 件</h2>
+      <a class="btn btn--ghost" href="../guide/" target="_blank" rel="noopener">使い方</a>
       <button type="button" class="btn" id="new">＋ 新規追加</button>
     </div>
 

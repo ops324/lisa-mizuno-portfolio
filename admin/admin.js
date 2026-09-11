@@ -90,9 +90,19 @@ function renderList() {
   $('count').textContent = String(events.length);
 
   if (!events.length) {
-    rows.appendChild(
-      el('p', 'empty', 'まだイベントがありません。「＋ 新規追加」から登録してください。'),
+    // 初めて開いたときがこの状態。ここに手引きが無いと、どこにも無いのと同じ。
+    const empty = el(
+      'p',
+      'empty',
+      'まだイベントがありません。「＋ 新規追加」から登録してください。',
     );
+    empty.appendChild(document.createElement('br'));
+    const help = el('a', null, '使い方を見る');
+    help.href = '../guide/';
+    help.target = '_blank';
+    help.rel = 'noopener';
+    empty.appendChild(help);
+    rows.appendChild(empty);
     return;
   }
 
