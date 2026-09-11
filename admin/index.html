@@ -126,7 +126,15 @@ body {
 .f input:focus, .f select:focus { outline: none; border-color: var(--text); }
 .f .hint { font-size: .62rem; color: #9a8f83; letter-spacing: .02em; }
 .form-foot { display: flex; align-items: center; gap: .6rem; margin-top: 1.6rem; padding-top: 1.3rem; border-top: 1px solid var(--line); }
-.form-foot .btn--danger { margin-right: auto; }
+.form-foot #delete { margin-right: auto; }
+
+/* 削除の確認は画面内で行う。window.confirm はブラウザ側で抑制されることが
+   あり、その場合「押しても何も起きない」という最悪の見え方になる。 */
+.confirm { display: flex; align-items: center; gap: .5rem; margin-right: auto; }
+.confirm[hidden] { display: none; }
+.confirm-text { font-size: .72rem; color: var(--accent); letter-spacing: .04em; }
+.btn--solid { background: var(--accent); border-color: var(--accent); color: var(--panel); }
+.btn--solid:hover { background: #5e2724; border-color: #5e2724; color: var(--panel); }
 
 /* ─── 保存バー ─── */
 .savebar {
@@ -272,6 +280,11 @@ body {
       </div>
       <div class="form-foot">
         <button type="button" class="btn btn--danger" id="delete">このイベントを削除</button>
+        <span class="confirm" id="delete-confirm" hidden>
+          <span class="confirm-text">一覧から削除しますか？</span>
+          <button type="button" class="btn btn--danger btn--solid" id="delete-yes">削除する</button>
+          <button type="button" class="btn btn--quiet" id="delete-no">やめる</button>
+        </span>
         <button type="button" class="btn btn--quiet" id="cancel">キャンセル</button>
         <button type="submit" class="btn" id="form-submit">一覧に追加</button>
       </div>

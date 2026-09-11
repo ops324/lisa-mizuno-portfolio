@@ -77,6 +77,10 @@ function setDirty(value) {
     ? '未保存の変更があります。右のボタンで公開してください'
     : '変更はありません';
   $('savebar').classList.toggle('is-dirty', value);
+  if (!value && logoutArmed) {
+    logoutArmed = false;
+    $('logout').textContent = 'ログアウト';
+  }
 }
 
 // ─── 一覧 ───
@@ -156,12 +160,14 @@ function openForm(index) {
   $('f-tag').value = e.tag;
   $('f-status').value = e.status;
   $('delete').style.display = index === null ? 'none' : '';
+  armDelete(false);
   $('form').hidden = false;
   $('form').scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 function closeForm() {
   $('form').hidden = true;
+  armDelete(false);
   editingIndex = null;
 }
 
@@ -172,11 +178,29 @@ function sortEvents() {
 $('new').addEventListener('click', () => openForm(null));
 $('cancel').addEventListener('click', closeForm);
 
+// window.confirm() はブラウザやコンテンツブロッカーに抑制されることがある。
+// 抑制されると false が即座に返るため、コードは「キャンセルされた」と判断して
+// 黙って終了する ―― 利用者には「押しても無反応」にしか見えない。確認は画面内で行う。
+function armDelete(on) {
+  $('delete').hidden = on;
+  $('delete-confirm').hidden = !on;
+}
+
 $('delete').addEventListener('click', () => {
+  if (editingIndex === null) {
+    // 黙って return しない。無反応は利用者にとって故障と区別がつかない。
+    notify('削除する対象が選ばれていません。一覧の「編集」から開き直してください。', 'error');
+    return;
+  }
+  armDelete(true);
+});
+
+$('delete-no').addEventListener('click', () => armDelete(false));
+
+$('delete-yes').addEventListener('click', () => {
   if (editingIndex === null) return;
-  const target = events[editingIndex];
-  if (!window.confirm(`「${target.title}」を削除します。よろしいですか？`)) return;
   events.splice(editingIndex, 1);
+  armDelete(false);
   closeForm();
   setDirty(true);
   renderList();
@@ -247,8 +271,21 @@ $('view-site').addEventListener('click', () => window.open('/', '_blank', 'noope
 
 $('retry').addEventListener('click', () => window.location.reload());
 
+// 同じく confirm() に頼らない。抑制されると「未保存の変更があるとログアウト
+// できない（しかも無反応）」という状態に陥る。
+let logoutArmed = false;
+
 $('logout').addEventListener('click', async () => {
-  if (dirty && !window.confirm('未保存の変更があります。破棄してログアウトしますか？')) return;
+  if (dirty && !logoutArmed) {
+    logoutArmed = true;
+    $('logout').textContent = '破棄してログアウト';
+    notify(
+      'もう一度「破棄してログアウト」を押すと、変更を捨ててログアウトします。',
+      'pending',
+      '未保存の変更があります。',
+    );
+    return;
+  }
   await api('/api/login', { method: 'DELETE' });
   window.location.reload();
 });
