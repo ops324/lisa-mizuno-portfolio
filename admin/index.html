@@ -78,6 +78,10 @@ body {
 }
 .note--error { color: var(--accent); border-color: #e6cfcc; background: #f6ecea; }
 .note--ok { color: #2f5d3a; border-color: #cfe0d2; background: #eef5f0; }
+/* 「まだ保存されていない」ことを伝える色。赤（エラー）でも緑（完了）でもない
+   琥珀色で、「手が必要」だけを意味させる。 */
+.note--pending { color: #6b5424; border-color: #e8d9b8; background: #fdf6e9; }
+.note--pending strong { color: #4a3a19; }
 .note[hidden] { display: none; }
 
 /* ─── 一覧 ─── */
@@ -132,6 +136,15 @@ body {
 }
 .savemsg { font-size: .68rem; color: var(--text-sub); letter-spacing: .04em; }
 .savebar .btn { margin-left: auto; }
+
+/* 未保存の変更があるあいだは保存バーの存在を強める。ここを押さないと
+   何も公開されないため、通常時と同じ見た目では見落とされる。 */
+.savebar.is-dirty {
+  border-color: var(--accent);
+  background: #fdf6e9;
+  box-shadow: 0 0 0 1px var(--accent);
+}
+.savebar.is-dirty .savemsg { color: var(--accent); }
 
 /* ─── ログイン ─── */
 .login { max-width: 340px; margin: 5rem auto; background: var(--panel); border: 1px solid var(--border); border-radius: 3px; padding: 2.4rem 2rem; text-align: center; }
@@ -260,11 +273,11 @@ body {
       <div class="form-foot">
         <button type="button" class="btn btn--danger" id="delete">このイベントを削除</button>
         <button type="button" class="btn btn--quiet" id="cancel">キャンセル</button>
-        <button type="submit" class="btn">この内容で確定</button>
+        <button type="submit" class="btn" id="form-submit">一覧に追加</button>
       </div>
     </form>
 
-    <div class="savebar">
+    <div class="savebar" id="savebar">
       <span class="savemsg" id="savemsg">変更はありません</span>
       <button type="button" class="btn btn--ghost" id="view-site">サイトを見る</button>
       <button type="button" class="btn" id="save" disabled>保存して公開</button>

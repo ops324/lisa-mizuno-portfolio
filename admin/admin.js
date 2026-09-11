@@ -43,11 +43,29 @@ async function api(path, options = {}) {
   return { status: res.status, ok: res.ok, body };
 }
 
-function notify(text, kind) {
+function notify(text, kind, lead) {
   const box = $('message');
-  box.textContent = text;
+  box.textContent = '';
+  if (lead) {
+    // textContent で組む（innerHTML は使わない）。強調は要素で表現する。
+    const strong = document.createElement('strong');
+    strong.textContent = lead;
+    box.appendChild(strong);
+    box.appendChild(document.createTextNode(` ${text}`));
+  } else {
+    box.textContent = text;
+  }
   box.className = kind ? `note note--${kind}` : 'note';
-  box.hidden = !text;
+  box.hidden = !text && !lead;
+}
+
+// 一覧をいじっただけでは何も公開されない。次に押すべきボタンを毎回名指しする。
+function notifyUnsaved(what) {
+  notify(
+    'サイトに反映するには、画面下の「保存して公開」を押してください。',
+    'pending',
+    `${what}しました。まだ公開されていません。`,
+  );
 }
 
 function setDirty(value) {
@@ -55,7 +73,10 @@ function setDirty(value) {
   $('status').textContent = value ? '未保存の変更あり' : '保存済み';
   $('status').classList.toggle('dirty', value);
   $('save').disabled = !value;
-  $('savemsg').textContent = value ? '未保存の変更があります' : '変更はありません';
+  $('savemsg').textContent = value
+    ? '未保存の変更があります。右のボタンで公開してください'
+    : '変更はありません';
+  $('savebar').classList.toggle('is-dirty', value);
 }
 
 // ─── 一覧 ───
@@ -124,6 +145,8 @@ function openForm(index) {
       : events[index];
 
   $('form-title').textContent = index === null ? '新しいイベント' : 'イベントを編集';
+  // 「確定」と書くと保存が済んだように読めるため、一覧を操作するだけだと分かる語に。
+  $('form-submit').textContent = index === null ? '一覧に追加' : '変更を反映';
   $('f-date').value = e.date;
   $('f-time').value = e.time;
   $('f-title').value = e.title;
@@ -157,6 +180,7 @@ $('delete').addEventListener('click', () => {
   closeForm();
   setDirty(true);
   renderList();
+  notifyUnsaved('一覧から削除');
 });
 
 $('form').addEventListener('submit', (ev) => {
@@ -175,14 +199,15 @@ $('form').addEventListener('submit', (ev) => {
     notify('日付とタイトルは必須です。', 'error');
     return;
   }
-  if (editingIndex === null) events.push(next);
+  const added = editingIndex === null;
+  if (added) events.push(next);
   else events[editingIndex] = next;
 
   sortEvents();
   closeForm();
-  notify('');
   setDirty(true);
   renderList();
+  notifyUnsaved(added ? '一覧に追加' : '内容を変更');
 });
 
 // ─── 保存 ───
