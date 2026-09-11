@@ -78,6 +78,10 @@ body {
 }
 .note--error { color: var(--accent); border-color: #e6cfcc; background: #f6ecea; }
 .note--ok { color: #2f5d3a; border-color: #cfe0d2; background: #eef5f0; }
+/* 「まだ保存されていない」ことを伝える色。赤（エラー）でも緑（完了）でもない
+   琥珀色で、「手が必要」だけを意味させる。 */
+.note--pending { color: #6b5424; border-color: #e8d9b8; background: #fdf6e9; }
+.note--pending strong { color: #4a3a19; }
 .note[hidden] { display: none; }
 
 /* ─── 一覧 ─── */
@@ -122,7 +126,15 @@ body {
 .f input:focus, .f select:focus { outline: none; border-color: var(--text); }
 .f .hint { font-size: .62rem; color: #9a8f83; letter-spacing: .02em; }
 .form-foot { display: flex; align-items: center; gap: .6rem; margin-top: 1.6rem; padding-top: 1.3rem; border-top: 1px solid var(--line); }
-.form-foot .btn--danger { margin-right: auto; }
+.form-foot #delete { margin-right: auto; }
+
+/* 削除の確認は画面内で行う。window.confirm はブラウザ側で抑制されることが
+   あり、その場合「押しても何も起きない」という最悪の見え方になる。 */
+.confirm { display: flex; align-items: center; gap: .5rem; margin-right: auto; }
+.confirm[hidden] { display: none; }
+.confirm-text { font-size: .72rem; color: var(--accent); letter-spacing: .04em; }
+.btn--solid { background: var(--accent); border-color: var(--accent); color: var(--panel); }
+.btn--solid:hover { background: #5e2724; border-color: #5e2724; color: var(--panel); }
 
 /* ─── 保存バー ─── */
 .savebar {
@@ -132,6 +144,15 @@ body {
 }
 .savemsg { font-size: .68rem; color: var(--text-sub); letter-spacing: .04em; }
 .savebar .btn { margin-left: auto; }
+
+/* 未保存の変更があるあいだは保存バーの存在を強める。ここを押さないと
+   何も公開されないため、通常時と同じ見た目では見落とされる。 */
+.savebar.is-dirty {
+  border-color: var(--accent);
+  background: #fdf6e9;
+  box-shadow: 0 0 0 1px var(--accent);
+}
+.savebar.is-dirty .savemsg { color: var(--accent); }
 
 /* ─── ログイン ─── */
 .login { max-width: 340px; margin: 5rem auto; background: var(--panel); border: 1px solid var(--border); border-radius: 3px; padding: 2.4rem 2rem; text-align: center; }
@@ -259,12 +280,17 @@ body {
       </div>
       <div class="form-foot">
         <button type="button" class="btn btn--danger" id="delete">このイベントを削除</button>
+        <span class="confirm" id="delete-confirm" hidden>
+          <span class="confirm-text">一覧から削除しますか？</span>
+          <button type="button" class="btn btn--danger btn--solid" id="delete-yes">削除する</button>
+          <button type="button" class="btn btn--quiet" id="delete-no">やめる</button>
+        </span>
         <button type="button" class="btn btn--quiet" id="cancel">キャンセル</button>
-        <button type="submit" class="btn">この内容で確定</button>
+        <button type="submit" class="btn" id="form-submit">一覧に追加</button>
       </div>
     </form>
 
-    <div class="savebar">
+    <div class="savebar" id="savebar">
       <span class="savemsg" id="savemsg">変更はありません</span>
       <button type="button" class="btn btn--ghost" id="view-site">サイトを見る</button>
       <button type="button" class="btn" id="save" disabled>保存して公開</button>
