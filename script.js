@@ -412,13 +412,10 @@ document.querySelectorAll('.fade-in').forEach((el) => observer.observe(el));
     list.textContent = '';
     if (rows.length) {
       rows.forEach((e) => list.appendChild(row(e)));
-    } else {
+    } else if (filter === 'past') {
+      // An empty UPCOMING stays blank (client request) — only PAST says so.
       const li = document.createElement('li');
-      const msg =
-        filter === 'upcoming'
-          ? '現在お知らせできる予定はありません。'
-          : '過去の記録はまだありません。';
-      li.appendChild(el('p', 'sched-empty', msg));
+      li.appendChild(el('p', 'sched-empty', '過去の記録はまだありません。'));
       list.appendChild(li);
     }
 
