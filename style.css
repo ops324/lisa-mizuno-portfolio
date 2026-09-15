@@ -590,27 +590,21 @@ body {
   list-style: none;
 }
 
-/* 行は Connect の .connect-item と同じ作法：罫線1本、ホバーで左に寄せて
-   下線をアクセント色に。日付 / 本文 / （ラベル＋矢印）の3カラム。 */
+/* 日付 / 本文 / （ラベル＋矢印）の3カラム。ホバーで左に寄せる。
+   罫線は引かない（クライアント要望。行の区切りは余白だけで見せる）。 */
 .sched-item {
   display: grid;
   grid-template-columns: 7.6rem 1fr auto;
   align-items: baseline;
   gap: 1.4rem;
   padding: 1.7rem 0;
-  border-bottom: 1px solid var(--border);
   text-decoration: none;
   color: var(--text);
-  transition: padding-left 0.4s ease, border-color 0.4s ease, opacity 0.4s ease;
-}
-
-.sched-list li:first-child .sched-item {
-  border-top: 1px solid var(--border);
+  transition: padding-left 0.4s ease, opacity 0.4s ease;
 }
 
 a.sched-item:hover {
   padding-left: 1rem;
-  border-bottom-color: var(--accent);
 }
 
 .sched-date {
@@ -699,16 +693,6 @@ a.sched-item:hover .sched-arrow {
 /* 終了したイベント（PAST 表示）は一段落とす */
 .sched-item.is-past {
   opacity: 0.42;
-}
-
-.sched-empty {
-  padding: 3.2rem 0;
-  font-family: var(--font-en), var(--font-jp);
-  font-size: 0.8rem;
-  letter-spacing: 0.1em;
-  color: var(--text-sub);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
 }
 
 /* ─── CONNECT ─── */

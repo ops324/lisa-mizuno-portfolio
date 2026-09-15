@@ -409,18 +409,10 @@ document.querySelectorAll('.fade-in').forEach((el) => observer.observe(el));
         filter === 'upcoming' ? a.date.localeCompare(b.date) : b.date.localeCompare(a.date),
       );
 
+    // An empty filter just leaves the list blank — no "nothing here" message
+    // (client request).
     list.textContent = '';
-    if (rows.length) {
-      rows.forEach((e) => list.appendChild(row(e)));
-    } else {
-      const li = document.createElement('li');
-      const msg =
-        filter === 'upcoming'
-          ? '現在お知らせできる予定はありません。'
-          : '過去の記録はまだありません。';
-      li.appendChild(el('p', 'sched-empty', msg));
-      list.appendChild(li);
-    }
+    rows.forEach((e) => list.appendChild(row(e)));
 
     // The list changes the page height, so the scrubbed gallery triggers
     // further down need their start/end positions recomputed.
