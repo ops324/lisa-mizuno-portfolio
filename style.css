@@ -1216,6 +1216,12 @@ footer .lang-note.active {
   background: #111009;
   position: relative;
   overflow: hidden;
+  /* 直前のセクション（Schedule。非表示のときは Works）の下余白に、下のグラデーション帯の
+     淡い頭（ほぼ地色の区間）を重ねる。重ねないと「地色の余白」と「帯の淡い部分」が続いて
+     間延びする。重ね幅は、最後の行から暗転が見え始めるまでの距離がリストの行間と同程度に
+     なる量。前セクションの下余白（PC 9rem／モバイル 5.5rem）より小さく保ち、本文には被せない。 */
+  margin-top: -6rem;
+  /* 帯の高さ（260px）＋0.75rem。ラベルは帯が暗くなり切った直後に置く */
   padding-top: 17rem;
   padding-bottom: 8rem;
 }
@@ -1386,12 +1392,15 @@ footer .lang-note.active {
 
 @media (max-width: 900px) {
   #gallery {
-    padding-top: 12rem;
+    margin-top: -3rem;
+    /* 狭い画面では帯が長いと「何もない区間」に見えるため 180px → 160px に詰める。
+       padding-top は PC と同じく 帯＋0.75rem */
+    padding-top: 10.75rem;
     padding-bottom: 5.5rem;
   }
   #gallery::before,
   #gallery::after {
-    height: 180px;
+    height: 160px;
   }
   #gallery .gallery-header {
     padding: 0 1.5rem;
