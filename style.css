@@ -528,10 +528,13 @@ body {
   max-width: min(128px, 82%);
 }
 /* ドイツ大使館: 3行ロックアップで横幅 5:1。文字が最小サイズなので、
-   他ロゴより幅の上限を緩めて可読性を確保する。 */
+   他ロゴより幅の上限を緩めて可読性を確保する。
+   国旗（黒赤金）はグレースケールにすると金が地色に沈んで判別できなくなる
+   ため、DOMMUNE と同じく常時カラー（ホバーでの変化なし）。 */
 .works-logo-item--germanembassy img {
   max-height: 34px;
   max-width: min(172px, 96%);
+  filter: none;
 }
 
 .works-logo-item--dommune {
