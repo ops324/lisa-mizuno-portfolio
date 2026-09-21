@@ -527,6 +527,12 @@ body {
   max-height: 24px;
   max-width: min(128px, 82%);
 }
+/* ドイツ大使館: 3行ロックアップで横幅 5:1。文字が最小サイズなので、
+   他ロゴより幅の上限を緩めて可読性を確保する。 */
+.works-logo-item--germanembassy img {
+  max-height: 34px;
+  max-width: min(172px, 96%);
+}
 
 .works-logo-item--dommune {
   flex-direction: row;
@@ -1016,6 +1022,18 @@ footer .lang-note.active {
   .works-logo-item--quinto {
     order: 16;
   }
+  .works-logo-item--germanembassy {
+    order: 17;
+  }
+
+  /* 3列で最終行が2個だけ残る場合の中央寄せ（孤立1個は grid-column で
+     中央に寄るが、2個はルールが無いと左詰めになる）。各セルは1カラム幅な
+     ので、半カラム＋半ギャップ分（= 50% + 1rem）右へずらすと行が中央に来る。
+     transform はレイアウトに影響しないため他の行を動かさない。 */
+  .works-logo-item:nth-last-child(2):nth-child(3n + 1),
+  .works-logo-item:last-child:nth-child(3n + 2) {
+    transform: translateX(calc(50% + 1rem));
+  }
 
   #hero::after {
     display: none;
@@ -1127,6 +1145,15 @@ footer .lang-note.active {
   }
   .works-logo-item--quinto {
     order: 16;
+  }
+  .works-logo-item--germanembassy {
+    order: 17;
+  }
+
+  /* 3列用の2個中央寄せは2列では不要（17個は2列で割り切れず孤立1個になる） */
+  .works-logo-item:nth-last-child(2):nth-child(3n + 1),
+  .works-logo-item:last-child:nth-child(3n + 2) {
+    transform: none;
   }
 
   /* DOMMUNE: scale down for narrow screens */
