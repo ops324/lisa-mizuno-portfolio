@@ -511,6 +511,22 @@ body {
 .works-logo-item--shibuyaradio img {
   max-height: 32px;
 }
+/* Qosmo: the oversized Q inflates the box height, so the lowercase reads small
+   at a 30px cap — lift the height instead of widening. */
+.works-logo-item--qosmo img {
+  max-height: 34px;
+  max-width: min(138px, 86%);
+}
+/* SALT / Quinto: all-cap-height and cap-plus-descender wordmarks; hold them to
+   the same width band as the other wide marks so they don't overpower the row. */
+.works-logo-item--salt img {
+  max-height: 26px;
+  max-width: min(120px, 76%);
+}
+.works-logo-item--quinto img {
+  max-height: 24px;
+  max-width: min(128px, 82%);
+}
 
 .works-logo-item--dommune {
   flex-direction: row;
@@ -991,6 +1007,15 @@ footer .lang-note.active {
   .works-logo-item--sibtv {
     order: 13;
   }
+  .works-logo-item--qosmo {
+    order: 14;
+  }
+  .works-logo-item--salt {
+    order: 15;
+  }
+  .works-logo-item--quinto {
+    order: 16;
+  }
 
   #hero::after {
     display: none;
@@ -1093,6 +1118,15 @@ footer .lang-note.active {
   }
   .works-logo-item--sibtv {
     order: 13;
+  }
+  .works-logo-item--qosmo {
+    order: 14;
+  }
+  .works-logo-item--salt {
+    order: 15;
+  }
+  .works-logo-item--quinto {
+    order: 16;
   }
 
   /* DOMMUNE: scale down for narrow screens */
