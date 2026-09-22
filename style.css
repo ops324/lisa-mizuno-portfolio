@@ -536,6 +536,11 @@ body {
   max-width: min(172px, 96%);
   filter: none;
 }
+/* syouryu: 紋章＋細いセリフのワードマークで約 5:1。 */
+.works-logo-item--syouryu img {
+  max-height: 28px;
+  max-width: min(140px, 88%);
+}
 
 .works-logo-item--dommune {
   flex-direction: row;
@@ -785,9 +790,20 @@ a.sched-item:hover .sched-arrow {
   letter-spacing: 0.08em;
 }
 
-/* Works: center the orphaned last item in a 4-col grid */
+/* Works: 最終行の端数を中央に寄せる（4列）。
+   ずらし量の一般式: （空きセル数 ÷ 2）×（カラム幅 + 列ギャップ）
+   セル幅＝1カラムなので「カラム幅」は `100%`、列ギャップは `3rem`。
+     ・1個余り（空き3）… `grid-column` で中央2セルにまたがせる方が素直
+     ・2個余り（空き2）… 1 ×（100% + 3rem）
+     ・3個余り（空き1）… 0.5 ×（50% + 1.5rem）※現状18社では発生しない
+   `:nth-child()` は DOM 順で判定されカラム数を見ないため、3列・2列側で必ず打ち消すこと。 */
 .works-logo-item:last-child:nth-child(4n + 1) {
   grid-column: 2 / 4;
+}
+
+.works-logo-item:nth-last-child(2):nth-child(4n + 1),
+.works-logo-item:last-child:nth-child(4n + 2) {
+  transform: translateX(calc(100% + 3rem));
 }
 
 /* ─── FOOTER ─── */
@@ -967,72 +983,23 @@ footer .lang-note.active {
     gap: 2.8rem 2rem;
   }
 
-  /* Reset desktop orphan rule, apply 3-col orphan rule */
+  /* 4列用の端数ルールを打ち消してから、3列用を貼り直す */
   .works-logo-item:last-child:nth-child(4n + 1) {
     grid-column: auto;
+  }
+
+  .works-logo-item:nth-last-child(2):nth-child(4n + 1),
+  .works-logo-item:last-child:nth-child(4n + 2) {
+    transform: none;
   }
 
   .works-logo-item:last-child:nth-child(3n + 1) {
     grid-column: 2 / 3;
   }
 
-  /* Tablet (3-col) row-by-row order per handwritten layout */
-  .works-logo-item--alphatheta {
-    order: 1;
-  }
-  .works-logo-item--mutek {
-    order: 2;
-  }
-  .works-logo-item--dommune {
-    order: 3;
-  }
-  .works-logo-item--keisuke {
-    order: 4;
-  }
-  .works-logo-item--malakai {
-    order: 5;
-  }
-  .works-logo-item--parco {
-    order: 6;
-  }
-  .works-logo-item--mori {
-    order: 7;
-  }
-  .works-logo-item--tokyonode {
-    order: 8;
-  }
-  .works-logo-item--ignite {
-    order: 9;
-  }
-  .works-logo-item--shogakukan {
-    order: 10;
-  }
-  .works-logo-item--shibuyaradio {
-    order: 11;
-  }
-  .works-logo-item--oizumi {
-    order: 12;
-  }
-  .works-logo-item--sibtv {
-    order: 13;
-  }
-  .works-logo-item--qosmo {
-    order: 14;
-  }
-  .works-logo-item--salt {
-    order: 15;
-  }
-  .works-logo-item--quinto {
-    order: 16;
-  }
-  .works-logo-item--germanembassy {
-    order: 17;
-  }
-
-  /* 3列で最終行が2個だけ残る場合の中央寄せ（孤立1個は grid-column で
-     中央に寄るが、2個はルールが無いと左詰めになる）。各セルは1カラム幅な
-     ので、半カラム＋半ギャップ分（= 50% + 1rem）右へずらすと行が中央に来る。
-     transform はレイアウトに影響しないため他の行を動かさない。 */
+  /* 3列で2個余る場合の中央寄せ。空きセルは1つなので
+     0.5 ×（100% + 2rem）＝ 50% + 1rem（列ギャップは 2rem）。
+     18社の現状では 18＝3×6 で端数が出ないため不発だが、社数が変わったときのために残す。 */
   .works-logo-item:nth-last-child(2):nth-child(3n + 1),
   .works-logo-item:last-child:nth-child(3n + 2) {
     transform: translateX(calc(50% + 1rem));
@@ -1100,62 +1067,11 @@ footer .lang-note.active {
     grid-column: 1 / -1;
   }
 
-  /* Mobile (2-col) row-by-row order per handwritten layout */
-  .works-logo-item--alphatheta {
-    order: 1;
-  }
-  .works-logo-item--mutek {
-    order: 2;
-  }
-  .works-logo-item--dommune {
-    order: 3;
-  }
-  .works-logo-item--parco {
-    order: 4;
-  }
-  .works-logo-item--keisuke {
-    order: 5;
-  }
-  .works-logo-item--malakai {
-    order: 6;
-  }
-  .works-logo-item--ignite {
-    order: 7;
-  }
-  .works-logo-item--oizumi {
-    order: 8;
-  }
-  .works-logo-item--mori {
-    order: 9;
-  }
-  .works-logo-item--tokyonode {
-    order: 10;
-  }
-  .works-logo-item--shogakukan {
-    order: 11;
-  }
-  .works-logo-item--shibuyaradio {
-    order: 12;
-  }
-  .works-logo-item--sibtv {
-    order: 13;
-  }
-  .works-logo-item--qosmo {
-    order: 14;
-  }
-  .works-logo-item--salt {
-    order: 15;
-  }
-  .works-logo-item--quinto {
-    order: 16;
-  }
-  .works-logo-item--germanembassy {
-    order: 17;
-  }
-
-  /* 3列用の2個中央寄せは2列では不要（17個は2列で割り切れず孤立1個になる） */
+  /* 2列で余るのは最大1個。3列・4列由来のズラしはすべて打ち消す */
   .works-logo-item:nth-last-child(2):nth-child(3n + 1),
-  .works-logo-item:last-child:nth-child(3n + 2) {
+  .works-logo-item:last-child:nth-child(3n + 2),
+  .works-logo-item:nth-last-child(2):nth-child(4n + 1),
+  .works-logo-item:last-child:nth-child(4n + 2) {
     transform: none;
   }
 
