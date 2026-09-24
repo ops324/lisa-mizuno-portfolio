@@ -511,6 +511,36 @@ body {
 .works-logo-item--shibuyaradio img {
   max-height: 32px;
 }
+/* Qosmo: the oversized Q inflates the box height, so the lowercase reads small
+   at a 30px cap — lift the height instead of widening. */
+.works-logo-item--qosmo img {
+  max-height: 34px;
+  max-width: min(138px, 86%);
+}
+/* SALT / Quinto: all-cap-height and cap-plus-descender wordmarks; hold them to
+   the same width band as the other wide marks so they don't overpower the row. */
+.works-logo-item--salt img {
+  max-height: 26px;
+  max-width: min(120px, 76%);
+}
+.works-logo-item--quinto img {
+  max-height: 24px;
+  max-width: min(128px, 82%);
+}
+/* ドイツ大使館: 3行ロックアップで横幅 5:1。文字が最小サイズなので、
+   他ロゴより幅の上限を緩めて可読性を確保する。
+   国旗（黒赤金）はグレースケールにすると金が地色に沈んで判別できなくなる
+   ため、DOMMUNE と同じく常時カラー（ホバーでの変化なし）。 */
+.works-logo-item--germanembassy img {
+  max-height: 34px;
+  max-width: min(172px, 96%);
+  filter: none;
+}
+/* syouryu: 紋章＋細いセリフのワードマークで約 5:1。 */
+.works-logo-item--syouryu img {
+  max-height: 28px;
+  max-width: min(140px, 88%);
+}
 
 .works-logo-item--dommune {
   flex-direction: row;
@@ -760,9 +790,20 @@ a.sched-item:hover .sched-arrow {
   letter-spacing: 0.08em;
 }
 
-/* Works: center the orphaned last item in a 4-col grid */
+/* Works: 最終行の端数を中央に寄せる（4列）。
+   ずらし量の一般式: （空きセル数 ÷ 2）×（カラム幅 + 列ギャップ）
+   セル幅＝1カラムなので「カラム幅」は `100%`、列ギャップは `3rem`。
+     ・1個余り（空き3）… `grid-column` で中央2セルにまたがせる方が素直
+     ・2個余り（空き2）… 1 ×（100% + 3rem）
+     ・3個余り（空き1）… 0.5 ×（50% + 1.5rem）※現状18社では発生しない
+   `:nth-child()` は DOM 順で判定されカラム数を見ないため、3列・2列側で必ず打ち消すこと。 */
 .works-logo-item:last-child:nth-child(4n + 1) {
   grid-column: 2 / 4;
+}
+
+.works-logo-item:nth-last-child(2):nth-child(4n + 1),
+.works-logo-item:last-child:nth-child(4n + 2) {
+  transform: translateX(calc(100% + 3rem));
 }
 
 /* ─── FOOTER ─── */
@@ -942,54 +983,26 @@ footer .lang-note.active {
     gap: 2.8rem 2rem;
   }
 
-  /* Reset desktop orphan rule, apply 3-col orphan rule */
+  /* 4列用の端数ルールを打ち消してから、3列用を貼り直す */
   .works-logo-item:last-child:nth-child(4n + 1) {
     grid-column: auto;
+  }
+
+  .works-logo-item:nth-last-child(2):nth-child(4n + 1),
+  .works-logo-item:last-child:nth-child(4n + 2) {
+    transform: none;
   }
 
   .works-logo-item:last-child:nth-child(3n + 1) {
     grid-column: 2 / 3;
   }
 
-  /* Tablet (3-col) row-by-row order per handwritten layout */
-  .works-logo-item--alphatheta {
-    order: 1;
-  }
-  .works-logo-item--mutek {
-    order: 2;
-  }
-  .works-logo-item--dommune {
-    order: 3;
-  }
-  .works-logo-item--keisuke {
-    order: 4;
-  }
-  .works-logo-item--malakai {
-    order: 5;
-  }
-  .works-logo-item--parco {
-    order: 6;
-  }
-  .works-logo-item--mori {
-    order: 7;
-  }
-  .works-logo-item--tokyonode {
-    order: 8;
-  }
-  .works-logo-item--ignite {
-    order: 9;
-  }
-  .works-logo-item--shogakukan {
-    order: 10;
-  }
-  .works-logo-item--shibuyaradio {
-    order: 11;
-  }
-  .works-logo-item--oizumi {
-    order: 12;
-  }
-  .works-logo-item--sibtv {
-    order: 13;
+  /* 3列で2個余る場合の中央寄せ。空きセルは1つなので
+     0.5 ×（100% + 2rem）＝ 50% + 1rem（列ギャップは 2rem）。
+     18社の現状では 18＝3×6 で端数が出ないため不発だが、社数が変わったときのために残す。 */
+  .works-logo-item:nth-last-child(2):nth-child(3n + 1),
+  .works-logo-item:last-child:nth-child(3n + 2) {
+    transform: translateX(calc(50% + 1rem));
   }
 
   #hero::after {
@@ -1054,45 +1067,12 @@ footer .lang-note.active {
     grid-column: 1 / -1;
   }
 
-  /* Mobile (2-col) row-by-row order per handwritten layout */
-  .works-logo-item--alphatheta {
-    order: 1;
-  }
-  .works-logo-item--mutek {
-    order: 2;
-  }
-  .works-logo-item--dommune {
-    order: 3;
-  }
-  .works-logo-item--parco {
-    order: 4;
-  }
-  .works-logo-item--keisuke {
-    order: 5;
-  }
-  .works-logo-item--malakai {
-    order: 6;
-  }
-  .works-logo-item--ignite {
-    order: 7;
-  }
-  .works-logo-item--oizumi {
-    order: 8;
-  }
-  .works-logo-item--mori {
-    order: 9;
-  }
-  .works-logo-item--tokyonode {
-    order: 10;
-  }
-  .works-logo-item--shogakukan {
-    order: 11;
-  }
-  .works-logo-item--shibuyaradio {
-    order: 12;
-  }
-  .works-logo-item--sibtv {
-    order: 13;
+  /* 2列で余るのは最大1個。3列・4列由来のズラしはすべて打ち消す */
+  .works-logo-item:nth-last-child(2):nth-child(3n + 1),
+  .works-logo-item:last-child:nth-child(3n + 2),
+  .works-logo-item:nth-last-child(2):nth-child(4n + 1),
+  .works-logo-item:last-child:nth-child(4n + 2) {
+    transform: none;
   }
 
   /* DOMMUNE: scale down for narrow screens */
