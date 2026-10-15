@@ -1,6 +1,16 @@
 {
-  "updated": "2026-09-30",
+  "updated": "2026-10-15",
   "events": [
+    {
+      "date": "2026-11-06",
+      "time": "",
+      "title": "DIMENSION 3周年",
+      "venue": "Somewhere in Nishiazabu",
+      "city": "",
+      "url": "",
+      "tag": "",
+      "status": "published"
+    },
     {
       "date": "2026-10-31",
       "time": "",
@@ -9,6 +19,16 @@
       "city": "",
       "url": "",
       "tag": "Free",
+      "status": "published"
+    },
+    {
+      "date": "2026-10-25",
+      "time": "",
+      "title": "LiQUiD festival in Katsuura.",
+      "venue": "Katsuura,Chiba",
+      "city": "",
+      "url": "https://liquidfes.com/?src=bio&utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZnRzaAU9fG5leHRuA2FlbQIxMQBwZG9mAmZkaWQWUQVyv-jINzP9_X--zbPJGvDRqyKoqnNydGMGYXBwX2lkDzEyNDAyNDU3NDI4NzQxNAABp-b7ubwjEA1vflBFXvPC1zCTIZz6C8jt9NJWgqptjY5teelUOiPWQ541Hmko_aem_Q8NMm6prjWV52OwSDl5gqw",
+      "tag": "",
       "status": "published"
     },
     {
