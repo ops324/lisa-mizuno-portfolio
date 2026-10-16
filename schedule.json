@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-15",
+  "updated": "2026-10-17",
   "events": [
     {
       "date": "2026-11-06",
@@ -7,6 +7,16 @@
       "title": "DIMENSION 3周年",
       "venue": "Somewhere in Nishiazabu",
       "city": "",
+      "url": "",
+      "tag": "",
+      "status": "published"
+    },
+    {
+      "date": "2026-11-05",
+      "time": "",
+      "title": "TBA",
+      "venue": "Sanka",
+      "city": "Kiyosumishirakawa,Tokyo",
       "url": "",
       "tag": "",
       "status": "published"
