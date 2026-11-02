@@ -2,6 +2,16 @@
   "updated": "2026-11-02",
   "events": [
     {
+      "date": "2026-11-22",
+      "time": "10:00",
+      "title": "Resonance at Oizumi Kojo",
+      "venue": "Oizumi Kojo",
+      "city": "Kawaguchi,Saitama",
+      "url": "https://oizumi-2026.resonance-lab.jp/",
+      "tag": "Ticket",
+      "status": "published"
+    },
+    {
       "date": "2026-11-14",
       "time": "",
       "title": "Kosmopolis",
